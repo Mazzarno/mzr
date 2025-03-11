@@ -1,26 +1,98 @@
 @import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@plugin "daisyui";
+@plugin "daisyui/theme" {
+  name: "mzr-dark";
+  default: true;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: oklch(24.353% 0 0);
+  --color-base-200: oklch(22.648% 0 0);
+  --color-base-300: oklch(20.944% 0 0);
+  --color-base-content: oklch(84.87% 0 0);
+  --color-primary: oklch(41.703% 0.099 251.473);
+  --color-primary-content: oklch(88.34% 0.019 251.473);
+  --color-secondary: oklch(64.092% 0.027 229.389);
+  --color-secondary-content: oklch(12.818% 0.005 229.389);
+  --color-accent: oklch(67.271% 0.167 35.791);
+  --color-accent-content: oklch(13.454% 0.033 35.791);
+  --color-neutral: oklch(27.441% 0.013 253.041);
+  --color-neutral-content: oklch(85.488% 0.002 253.041);
+  --color-info: oklch(62.616% 0.143 240.033);
+  --color-info-content: oklch(12.523% 0.028 240.033);
+  --color-success: oklch(70.226% 0.094 156.596);
+  --color-success-content: oklch(14.045% 0.018 156.596);
+  --color-warning: oklch(77.482% 0.115 81.519);
+  --color-warning-content: oklch(15.496% 0.023 81.519);
+  --color-error: oklch(51.61% 0.146 29.674);
+  --color-error-content: oklch(90.322% 0.029 29.674);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 1;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@plugin "daisyui/theme" {
+  name: "mzr-light";
+  default: true;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: oklch(95.127% 0.007 260.731);
+  --color-base-200: oklch(93.299% 0.01 261.788);
+  --color-base-300: oklch(89.925% 0.016 262.749);
+  --color-base-content: oklch(32.437% 0.022 264.182);
+  --color-primary: oklch(44% 0.043 257.281);
+  --color-primary-content: oklch(100% 0 0);
+  --color-secondary: oklch(44% 0.03 256.802);
+  --color-secondary-content: oklch(100% 0 0);
+  --color-accent: oklch(60% 0.126 221.723);
+  --color-accent-content: oklch(100% 0 0);
+  --color-neutral: oklch(43% 0 0);
+  --color-neutral-content: oklch(89.925% 0.016 262.749);
+  --color-info: oklch(68% 0.162 75.834);
+  --color-info-content: oklch(100% 0 0);
+  --color-success: oklch(59% 0.145 163.225);
+  --color-success-content: oklch(100% 0 0);
+  --color-warning: oklch(66% 0.179 58.318);
+  --color-warning-content: oklch(100% 0 0);
+  --color-error: oklch(57% 0.245 27.325);
+  --color-error-content: oklch(100% 0 0);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 1;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html,
+body {
+  overflow-x: hidden !important;
+}
+html,
+body,
+.app,
+.toggle,
+.theme-controller {
+  transition: all 0.5s ease !important;
+}
+@keyframes neonGlow {
+  0% {
+    stroke: rgba(55, 247, 19, 0.5);
+    filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 16px #37f713)
+      drop-shadow(0 0 32px #37f713);
+  }
+  100% {
+    stroke: rgba(55, 247, 19, 1);
+    filter: drop-shadow(0 0 16px #fff) drop-shadow(0 0 32px #37f713)
+      drop-shadow(0 0 64px #37f713);
   }
 }
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+path {
+  stroke-width: 2;
+  stroke-linecap: round;
 }
