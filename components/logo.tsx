@@ -1,7 +1,6 @@
 "use client";
-import { useState } from "react";
 import { useTheme } from "next-themes";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, animate } from "framer-motion";
 import { gsap } from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 
@@ -9,7 +8,8 @@ gsap.registerPlugin(MotionPathPlugin);
 
 export default function Logo() {
   const { resolvedTheme } = useTheme();
-  const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
   return (
     <motion.div
       key={resolvedTheme}
@@ -25,14 +25,14 @@ export default function Logo() {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         drag
-        dragConstraints={{ top: -100, left: -100, right: 100, bottom: 100 }}
+        dragConstraints={{ top: 0, left: -100, right: 100, bottom: 100 }}
         dragElastic={0.5}
-        whileDrag={{ cursor: "grabbing", scale: 1.2 }}
-        animate={{ x: dragPosition.x, y: dragPosition.y }}
+        whileDrag={{ scale: 1.2 }}
+        style={{ x, y }}
         onDragEnd={() => {
-          setTimeout(() => setDragPosition({ x: 0, y: 0 }), 10);
+          animate(x, 0, { type: "spring", stiffness: 150, damping: 15 });
+          animate(y, 0, { type: "spring", stiffness: 150, damping: 15 });
         }}
-        transition={{ type: "spring", stiffness: 150, damping: 15 }}
       >
         <path
           id="motionPath"

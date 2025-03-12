@@ -24,7 +24,7 @@ export default function RootLayoutClient({
         outerStyle={{
           border: "1px solid var(--color-base-content)",
         }}
-        trailingSpeed={20}
+        trailingSpeed={15}
       />
       <Transition>
         <ThemeProvider
