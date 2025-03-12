@@ -11,6 +11,7 @@ type AnimatedTextProps = {
 };
 
 export default function AnimatedText({ translationKey }: AnimatedTextProps) {
+  
   const t = useTranslations();
   const textRef = useRef<HTMLSpanElement>(null);
   const [displayText, setDisplayText] = useState("");

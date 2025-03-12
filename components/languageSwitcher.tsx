@@ -12,7 +12,7 @@ export default function LanguageSwitcher() {
   };
 
   return (
-    <label className="swap pr-4">
+    <label className="swap pr-4 link">
       <input
         type="checkbox"
         onChange={toggleLanguage}

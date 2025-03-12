@@ -1,5 +1,3 @@
-"use client";
-
 import { createContext, useContext, useState, useEffect } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import frMessages from "@/locales/fr.json";
@@ -36,7 +34,12 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <LanguageContext.Provider value={{ locale, setLocale }}>
-      <NextIntlClientProvider key={locale} locale={locale} messages={messages}>
+      <NextIntlClientProvider
+        key={locale}
+        locale={locale}
+        messages={messages}
+        timeZone="Europe/Paris"
+      >
         {children}
       </NextIntlClientProvider>
     </LanguageContext.Provider>

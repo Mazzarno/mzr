@@ -22,13 +22,13 @@ export default function Navbar() {
         <div className="drawer-content">
           <div className="navbar fixed top-0 z-10 w-full">
             <ul className="menu menu-horizontal w-full grid grid-cols-3 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-9 2xl:grid-cols-11 gap-x-2 justify-items-center">
-              <li className="flex justify-center items-center lg:col-start-2 xl:col-start-3 2xl:col-start-4">
-                <a>
+              <li className="flex justify-center items-center lg:col-start-2 xl:col-start-3 2xl:col-start-4 menu-title">
+                <a className="menu-title text-base-content">
                   <Logo />
                 </a>
               </li>
-              <li className="hidden md:flex justify-center items-center">
-                <details className="dropdown">
+              <li className="hidden md:flex justify-center items-center ">
+                <details className="dropdown link">
                   <summary>Websites</summary>
                   <ul className="bg-base rounded-t-none p-2">
                     <li>
@@ -38,19 +38,21 @@ export default function Navbar() {
                       <a>Vitrine</a>
                     </li>
                     <li>
-                      <a>WebGL / 3D</a>
+                      <a>3D</a>
                     </li>
                   </ul>
                 </details>
               </li>
-              <li className="hidden md:flex justify-center items-center">
+              <li className="hidden md:flex justify-center items-center ">
                 <a>Contact</a>
               </li>
-              <li className="flex justify-center items-center">
+              <li className="flex justify-center items-center ">
                 <LanguageSwitcher />
               </li>
               <li className="hidden md:flex justify-center items-center">
-                <ThemeSwitcher />
+                <a className="menu-title text-base-content">
+                  <ThemeSwitcher />
+                </a>
               </li>
               <li className="flex justify-center items-center md:hidden">
                 <label
@@ -78,7 +80,9 @@ export default function Navbar() {
           <div className="menu bg-base-200 min-h-full w-80 p-8 grid grid-rows-[auto_1fr_auto]">
             <div className="flex items-center justify-between">
               <div>
-                <Logo />
+                <a className="menu-title text-base-content">
+                  <Logo />
+                </a>
               </div>
               <label
                 htmlFor="my-drawer"
@@ -125,7 +129,9 @@ export default function Navbar() {
               </ul>
             </div>
             <div className="flex justify-center items-center">
-              <ThemeSwitcher />
+              <a className="menu-title text-base-content">
+                <ThemeSwitcher />
+              </a>
             </div>
           </div>
         </div>

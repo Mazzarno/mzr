@@ -1,5 +1,7 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  exclude: link,;
+}
 @plugin "daisyui/theme" {
   name: "mzr-dark";
   default: true;
@@ -32,7 +34,7 @@
   --size-field: 0.25rem;
   --border: 1px;
   --depth: 1;
-  --noise: 1;
+  --noise: 0;
 }
 
 @plugin "daisyui/theme" {
@@ -67,7 +69,7 @@
   --size-field: 0.25rem;
   --border: 1px;
   --depth: 1;
-  --noise: 1;
+  --noise: 0;
 }
 html,
 body {
@@ -80,6 +82,7 @@ body,
 .theme-controller {
   transition: all 0.5s ease !important;
 }
+
 @keyframes neonGlow {
   0% {
     stroke: rgba(55, 247, 19, 0.5);

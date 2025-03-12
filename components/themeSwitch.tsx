@@ -28,7 +28,7 @@ export default function ThemeSwitcher() {
     setTheme(isDark ? "light" : "dark");
   };
   return (
-    <label className="flex items-center gap-2 cursor-pointer">
+    <label className="flex items-center gap-2 cursor-pointer link">
       <Sun
         size={20}
         className={`transition-all duration-500 ${
