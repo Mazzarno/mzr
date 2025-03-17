@@ -1,4 +1,6 @@
-import { createContext, useContext, useState, useEffect } from "react";
+"use client"; // S'assurer que ce code s'exécute seulement côté client
+
+import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import frMessages from "@/locales/fr.json";
 import enMessages from "@/locales/en.json";
@@ -24,18 +26,28 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocale] = useState("fr");
 
   useEffect(() => {
-    const storedLocale = localStorage.getItem("locale");
-    if (storedLocale) {
-      setLocale(storedLocale);
+    if (typeof window !== "undefined") {
+      const storedLocale = localStorage.getItem("locale");
+      if (storedLocale) {
+        setLocale(storedLocale);
+      }
     }
   }, []);
 
-  const messages = locale === "fr" ? frMessages : enMessages;
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("locale", locale);
+    }
+  }, [locale]);
+
+  const messages = useMemo(
+    () => (locale === "fr" ? frMessages : enMessages),
+    [locale]
+  );
 
   return (
     <LanguageContext.Provider value={{ locale, setLocale }}>
       <NextIntlClientProvider
-        key={locale}
         locale={locale}
         messages={messages}
         timeZone="Europe/Paris"

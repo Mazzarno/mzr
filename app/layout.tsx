@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import localFont from "next/font/local";
+
 import RootLayoutClient from "@/components/RootLayoutClient";
 
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
 
-const inter = Inter({ subsets: ["latin"] });
+const despairs = localFont({
+  src: "../public/fonts/Despairs.ttf",
+  display: "swap",
+  variable: "--font-despairs",
+});
 
 export const metadata: Metadata = {
   title: "Alexis Germain - Web Developer",
@@ -18,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.variable} ${despairs.variable} antialiased`}>
         <RootLayoutClient>{children}</RootLayoutClient>
       </body>
     </html>

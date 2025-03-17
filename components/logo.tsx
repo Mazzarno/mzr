@@ -21,11 +21,10 @@ export default function Logo() {
     >
       <motion.svg
         viewBox="0 0 65 120"
-        className="h-15 w-auto text-base logo "
+        className="h-11 w-auto text-base logo"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         drag
-        dragConstraints={{ top: 0, left: -100, right: 100, bottom: 100 }}
         dragElastic={0.5}
         whileDrag={{ scale: 1.2 }}
         style={{ x, y }}

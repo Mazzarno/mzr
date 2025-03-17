@@ -1,11 +1,12 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+
 export default function ThemeSwitcher() {
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
     setMounted(true);
     const currentTheme =
@@ -20,13 +21,14 @@ export default function ThemeSwitcher() {
     document.documentElement.setAttribute("data-theme", currentTheme);
   }, [theme, resolvedTheme, systemTheme]);
 
-  if (!mounted) return null; 
+  if (!mounted) return null;
 
   const isDark = resolvedTheme === "dark";
 
   const toggleTheme = () => {
     setTheme(isDark ? "light" : "dark");
   };
+
   return (
     <label className="flex items-center gap-2 cursor-pointer link">
       <Sun
@@ -35,7 +37,6 @@ export default function ThemeSwitcher() {
           isDark ? "opacity-50 text-gray-500" : "opacity-100 text-yellow-500"
         }`}
       />
-
       <input
         type="checkbox"
         className="toggle theme-controller transition-all duration-1000"
