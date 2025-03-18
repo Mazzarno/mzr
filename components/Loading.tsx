@@ -1,49 +1,73 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { useTheme } from "next-themes";
 
-export default function Loading() {
+export default function Loading({ onComplete }: { onComplete?: () => void }) {
+  const titleRef = useRef(null);
+  const progressBarRef = useRef(null);
+  const loadingContainerRef = useRef(null);
+  const { resolvedTheme } = useTheme(); // 🔥 Récupère le thème actuel
+
   useEffect(() => {
-    // Animation GSAP pour faire apparaître le texte
-    gsap.from(".loading-text", {
+    const tl = gsap.timeline();
+
+    tl.from(titleRef.current, {
       duration: 1,
       opacity: 0,
       y: 50,
       ease: "power3.out",
     });
 
-    // Animation GSAP sur la barre de chargement (sur 2 secondes)
-    gsap.to(".loading-bar", {
+    tl.to(progressBarRef.current, {
       duration: 2,
       width: "100%",
-      ease: "linear",
+      ease: "power2.out",
     });
 
-    // Mise à jour de la variable CSS --loading-progress pour le gradient du texte
     let start = Date.now();
     const interval = setInterval(() => {
       const elapsed = Date.now() - start;
-      const prog = Math.min((elapsed / 2000) * 100, 100);
+      const progress = Math.min((elapsed / 2000) * 100, 100);
       document.documentElement.style.setProperty(
         "--loading-progress",
-        `${prog}%`
+        `${progress}%`
       );
-      if (prog === 100) clearInterval(interval);
+      if (progress === 100) clearInterval(interval);
     }, 50);
+
+    setTimeout(() => {
+      gsap.to(loadingContainerRef.current, {
+        y: "100%",
+        opacity: 0,
+        duration: 0.8,
+        ease: "power2.inOut",
+        onComplete: onComplete,
+      });
+    }, 3000);
+
     return () => clearInterval(interval);
-  }, []);
+  }, [onComplete]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-base">
+    <div
+      ref={loadingContainerRef}
+      className={`fixed inset-0 flex flex-col items-center justify-center h-screen transition-all duration-500 ${
+        resolvedTheme === "dark" ? "bg-base-300" : "bg-base-100"
+      } z-50`}
+    >
       <h1
-        style={{ fontFamily: "var(--font-despairs)" }}
+        ref={titleRef}
         className="text-5xl font-bold loading-text"
+        style={{ fontFamily: "var(--font-despairs)" }}
       >
         Alexis GERMAIN
       </h1>
+
       <div className="w-full max-w-sm mt-4 h-0.5 bg-base-200 rounded-full">
-        <div className="loading-bar h-full" />
+        <div ref={progressBarRef} className="loading-bar h-full" />
       </div>
+
       <style jsx>{`
         .loading-text {
           background: linear-gradient(
@@ -54,6 +78,10 @@ export default function Loading() {
           -webkit-background-clip: text;
           background-clip: text;
           color: transparent;
+        }
+        .loading-bar {
+          background: var(--color-base-content);
+          width: 0%;
         }
       `}</style>
     </div>

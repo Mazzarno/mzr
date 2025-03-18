@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -19,15 +19,21 @@ export default function ThemeSwitcher() {
         : "mzr-light";
 
     document.documentElement.setAttribute("data-theme", currentTheme);
+    const root = document.documentElement;
+    const isDark = currentTheme === "mzr-dark";
+    root.style.setProperty(
+      "--color-base-100",
+      isDark ? "oklch(24.353% 0 0)" : "oklch(95.127% 0.007 260.731)"
+    );
+    root.style.setProperty(
+      "--color-base-content",
+      isDark ? "oklch(84.87% 0 0)" : "oklch(32.437% 0.022 264.182)"
+    );
   }, [theme, resolvedTheme, systemTheme]);
 
   if (!mounted) return null;
 
   const isDark = resolvedTheme === "dark";
-
-  const toggleTheme = () => {
-    setTheme(isDark ? "light" : "dark");
-  };
 
   return (
     <label className="flex items-center gap-2 cursor-pointer link">
@@ -41,7 +47,7 @@ export default function ThemeSwitcher() {
         type="checkbox"
         className="toggle theme-controller transition-all duration-1000"
         checked={isDark}
-        onChange={toggleTheme}
+        onChange={() => setTheme(isDark ? "light" : "dark")}
       />
       <Moon
         size={20}

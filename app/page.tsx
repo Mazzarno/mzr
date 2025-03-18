@@ -20,7 +20,7 @@ export default function Home() {
           <div className="hidden 2xl:block"></div>
           <div className="hidden 2xl:block"></div>
         </div>
-        <div className="hero bg-base-200 min-h-screen">
+        <div className="hero bg-base min-h-screen">
           <section className="flex flex-col items-start max-w-4xl mx-auto relative text-center">
             <p className="text-base italic">
               <AnimatedText translationKey="hello" />
@@ -30,6 +30,14 @@ export default function Home() {
             </h1>
           </section>
         </div>
+        <section className="bg-base-200 min-h-screen" data-theme="mzr-light">
+          <h1 className="text-base-100 text-9xl">TEXT</h1>
+          <h1 className="text-base-content">TEXT2</h1>
+        </section>
+        <section className="bg-base min-h-screen" data-theme="mzr-dark">
+          <h1 className="text-base-100 text-9xl">TEXT</h1>
+          <h1 className="text-base-content">TEXT2</h1>
+        </section>
       </div>
     </>
   );

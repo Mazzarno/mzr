@@ -1,10 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
+import { ThemeProvider } from "./themeProvider";
 import AnimatedCursor from "react-animated-cursor";
 import Transition from "@/components/transition";
 import Navbar from "@/components/navbar";
 import FaviconUpdater from "@/components/faviconUpdater";
-import { ThemeProvider } from "@/components/themeProvider";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import Loading from "@/components/Loading";
 
@@ -14,17 +15,18 @@ export default function RootLayoutClient({
   children: React.ReactNode;
 }) {
   const [loading, setLoading] = useState(true);
+  const { resolvedTheme } = useTheme(); // 🔥 Synchroniser avec ThemeProvider
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 5000);
-    return () => clearTimeout(timer);
-  }, []);
+    document.documentElement.setAttribute(
+      "data-theme",
+      resolvedTheme === "dark" ? "mzr-dark" : "mzr-light"
+    );
+  }, [resolvedTheme]);
 
-  if (loading) {
-    return <Loading />;
-  }
-
-  return (
+  return loading ? (
+    <Loading onComplete={() => setLoading(false)} />
+  ) : (
     <ThemeProvider
       attribute="class"
       defaultTheme="system"

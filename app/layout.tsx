@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import localFont from "next/font/local";
-
+import { ThemeProvider } from "@/components/themeProvider";
 import RootLayoutClient from "@/components/RootLayoutClient";
 
 const inter = Inter({
@@ -29,7 +29,9 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body className={`${inter.variable} ${despairs.variable} antialiased`}>
-        <RootLayoutClient>{children}</RootLayoutClient>
+ 
+          <RootLayoutClient>{children}</RootLayoutClient>
+ 
       </body>
     </html>
   );

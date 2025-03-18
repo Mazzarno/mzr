@@ -3,7 +3,7 @@
   exclude: link;
 }
 @plugin "daisyui/theme" {
-  name: "mzr-dark";
+  name: "dark";
   default: true;
   prefersdark: true;
   color-scheme: "dark";
@@ -38,7 +38,7 @@
 }
 
 @plugin "daisyui/theme" {
-  name: "mzr-light";
+  name: "light";
   default: true;
   prefersdark: false;
   color-scheme: "light";
@@ -71,10 +71,11 @@
   --depth: 1;
   --noise: 0;
 }
-
+html,
 body {
   overflow-x: hidden !important;
   font-family: var(--font-inter), sans-serif !important;
+  background-color: var(--color-base-100) !important;
 }
 html,
 body,
