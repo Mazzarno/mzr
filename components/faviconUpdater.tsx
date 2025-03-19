@@ -1,30 +1,20 @@
-"use client";
-
-import { useEffect } from "react";
+// components/FaviconUpdater.tsx
 import { useTheme } from "next-themes";
+import { useEffect } from "react";
 
 export default function FaviconUpdater() {
-  const { resolvedTheme } = useTheme();
+  const { theme, resolvedTheme } = useTheme();
 
   useEffect(() => {
-    if (typeof document !== "undefined") {
-      const setFavicon = (faviconPath: string) => {
-        const link = document.querySelector("link[rel='icon']");
-        if (link) {
-          link.remove();
-        }
-        const newLink = document.createElement("link");
-        newLink.rel = "icon";
-        newLink.href = faviconPath;
-        newLink.type = "image/x-icon";
-        document.head.appendChild(newLink);
-      };
-
-      setFavicon(
-        resolvedTheme === "dark" ? "/favicondark.ico" : "/faviconlight.ico"
-      );
+    const currentTheme = resolvedTheme || theme;
+    let link = document.querySelector("link[rel='icon']") as HTMLLinkElement;
+    if (!link) {
+      link = document.createElement("link");
+      link.rel = "icon";
+      document.head.appendChild(link);
     }
-  }, [resolvedTheme]);
-
+    link.href =
+      currentTheme === "dark" ? "/favicondark.ico" : "/faviconlight.ico";
+  }, [theme, resolvedTheme]);
   return null;
 }

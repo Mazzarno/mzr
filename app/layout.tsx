@@ -1,9 +1,11 @@
+import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 import localFont from "next/font/local";
-import { ThemeProvider } from "@/components/themeProvider";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import RootLayoutClient from "@/components/RootLayoutClient";
+import AnimatedCursor from "react-animated-cursor";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,9 +31,30 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body className={`${inter.variable} ${despairs.variable} antialiased`}>
- 
-          <RootLayoutClient>{children}</RootLayoutClient>
- 
+        <NextThemesProvider
+          attribute="data-theme"
+          defaultTheme="system"
+          enableSystem
+          themes={["light", "dark"]}
+        >
+          <ThemeProvider>
+            <AnimatedCursor
+              innerSize={4}
+              outerSize={30}
+              innerScale={1.5}
+              outerScale={1.5}
+              outerAlpha={0}
+              innerStyle={{
+                backgroundColor: "var(--color-base-content)",
+              }}
+              outerStyle={{
+                border: "1px solid var(--color-base-content)",
+              }}
+              trailingSpeed={10}
+            />
+            <RootLayoutClient>{children}</RootLayoutClient>
+          </ThemeProvider>
+        </NextThemesProvider>
       </body>
     </html>
   );
