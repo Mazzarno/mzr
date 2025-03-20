@@ -75,7 +75,6 @@ html,
 body {
   overflow-x: hidden !important;
   font-family: var(--font-inter), sans-serif !important;
-  background-color: var(--color-base-100) !important;
 }
 html,
 body,

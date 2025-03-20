@@ -18,29 +18,46 @@ const Transition: React.FC<TransitionProps> = ({
   const loaderRef = useRef<HTMLDivElement>(null);
   const childrenRef = useRef<HTMLDivElement>(null);
   const hasAnimated = useRef(false);
+
   const handleLoadComplete = () => {
     if (loaderRef.current && !hasAnimated.current) {
       hasAnimated.current = true;
-      gsap.set(loaderRef.current, {
-        boxShadow: "0px 0px 0px rgba(0, 0, 0, 0)",
-      });
+
+      // Animation de sortie du loader
       gsap.to(loaderRef.current, {
         y: "100vh",
-        boxShadow: "0px -10px 30px rgba(0, 0, 0, 0.3)",
-        duration: 1.5,
-        ease: "power3.out",
+        duration: 1,
+        ease: "power4.inOut",
         onComplete: () => {
           setIsLoading(false);
-        },
+          
+          // Animation des éléments de la page d'accueil
+          if (childrenRef.current) {
+            gsap.from(childrenRef.current.children, {
+              y: 30,
+              opacity: 0,
+              duration: 0.8,
+              stagger: 0.1,
+              ease: "power3.out",
+              delay: 0.2
+            });
+          }
+        }
       });
     }
   };
 
   return (
     <>
-      <div ref={childrenRef} className="relative z-40" aria-hidden={isLoading}>
+      <div 
+        ref={childrenRef} 
+        className="relative z-40" 
+        aria-hidden={isLoading}
+        style={{ opacity: isLoading ? 0 : 1 }}
+      >
         {children}
       </div>
+      
       {isLoading && (
         <div
           ref={loaderRef}

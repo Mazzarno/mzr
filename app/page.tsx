@@ -1,142 +1,11 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 
 export default function HomePage() {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const projectsRef = useRef<HTMLDivElement>(null);
-  const skillsRef = useRef<HTMLDivElement>(null);
-
   const { scrollYProgress } = useScroll();
-  const parallaxY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      gsap.registerPlugin(ScrollTrigger);
-    }
-    return () => {
-      if (typeof window !== "undefined") {
-        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-      }
-    };
-  }, []);
-  useEffect(() => {
-    if (!heroRef.current || !titleRef.current) return;
-
-    const heroTl = gsap.timeline();
-
-    heroTl
-      .from(titleRef.current, {
-        opacity: 0,
-        y: 50,
-        duration: 0.8,
-        ease: "power3.out",
-      })
-      .from(
-        ".hero-subtitle",
-        {
-          opacity: 0,
-          y: 20,
-          duration: 0.8,
-          ease: "power2.out",
-        },
-        "-=0.4"
-      )
-      .from(
-        ".hero-cta",
-        {
-          scale: 0.8,
-          opacity: 0,
-          duration: 0.5,
-          ease: "power1.out",
-        },
-        "-=0.2"
-      );
-
-    // Parallax effect
-    gsap.to(heroRef.current, {
-      y: parallaxY,
-      ease: "none",
-    });
-
-    // Cleanup
-    return () => {
-      heroTl.kill();
-    };
-  }, [parallaxY]);
-
-  // Projects animation
-  useEffect(() => {
-    if (!projectsRef.current || typeof window === "undefined") return;
-
-    const projectsTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: projectsRef.current,
-        start: "top 100%",
-        end: "bottom 10%",
-        toggleActions: "play none none reverse",
-        scrub: false,
-        once: false,
-      },
-    });
-
-    const projectCards = projectsRef.current.querySelectorAll(".project-card");
-
-    projectsTl.from(projectCards, {
-      y: 100,
-
-      opacity: 0,
-
-      duration: 0.6,
-
-      stagger: 0.2,
-
-      ease: "power2.out",
-    });
-    return () => {
-
-      if (projectsTl.scrollTrigger) {
-
-        projectsTl.scrollTrigger.kill();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-
-    if (!skillsRef.current || typeof window === "undefined") return;
-
-    const skillsTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: skillsRef.current,
-        start: "top 80%",
-        end: "bottom 20%",
-        toggleActions: "play none none reverse",
-        scrub: false,
-        once: false,
-      },
-    });
-
-    const skillItems = skillsRef.current.querySelectorAll(".skill-item");
-
-    skillsTl.from(skillItems, {
-
-      x: -50,
-      opacity: 0,
-      duration: 0.5,
-      stagger: 0.1,
-      ease: "power1.out",
-    });
-
-    return () => {
-      if (skillsTl.scrollTrigger) {
-        skillsTl.scrollTrigger.kill();
-      }
-    };
-  }, []);
-
+  const y = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  
   return (
     <main className="min-h-screen bg-base-100 text-base-content overflow-hidden">
       <div className="fixed w-full min-h-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-9 2xl:grid-cols-11 divide-x-2 divide-dashed divide-base pointer-events-none opacity-10">
@@ -153,10 +22,7 @@ export default function HomePage() {
         <div className="hidden 2xl:block"></div>
       </div>
       {/* Hero Section */}
-      <section
-        ref={heroRef}
-        className="hero min-h-screen relative overflow-hidden"
-      >
+      <section className="hero min-h-screen relative overflow-hidden">
         {/* Background animated shapes */}
         <motion.div
           className="absolute top-0 right-0 w-96 h-96 rounded-full bg-primary/10 blur-3xl"
@@ -188,7 +54,6 @@ export default function HomePage() {
 
         <div className="hero-content text-center flex flex-col max-w-3xl px-4 relative z-10 text-base-content">
           <motion.h1
-            ref={titleRef}
             className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -257,7 +122,7 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      <section id="projects" ref={projectsRef} className="py-20 bg-base-200">
+      <section id="projects" className="py-20 bg-base-200">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -319,7 +184,6 @@ export default function HomePage() {
               </div>
             </motion.div>
 
-            {/* Project Card 2 */}
             <motion.div
               className="project-card card bg-base-100 shadow-xl overflow-hidden text-base-content"
               whileHover={{
@@ -366,7 +230,6 @@ export default function HomePage() {
               </div>
             </motion.div>
 
-            {/* Project Card 3 */}
             <motion.div
               className="project-card card bg-base-100 shadow-xl overflow-hidden text-base-content"
               whileHover={{
@@ -407,183 +270,6 @@ export default function HomePage() {
                   >
                     Voir le projet
                   </motion.button>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      <section
-        id="skills"
-        ref={skillsRef}
-        className="py-20 bg-base-100 text-base-content"
-      >
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-2 text-center ">
-              Mes Compétences
-            </h2>
-            <div className="h-1 w-20 bg-secondary mx-auto mb-12"></div>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-base-content">
-            {/* Frontend Skills */}
-            <motion.div
-              className="bg-base-200 p-6 rounded-box shadow-md text-base-content"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <h3 className="text-xl font-bold mb-6 text-primary">Frontend</h3>
-
-              <div className="space-y-4">
-                {/* Animation des barres de progression avec Framer Motion */}
-                <div className="skill-item">
-                  <div className="flex justify-between mb-1">
-                    <span className="font-medium">React / Next.js</span>
-                    <span className="text-primary">95%</span>
-                  </div>
-                  <div className="w-full bg-base-300 rounded-full h-2 overflow-hidden">
-                    <motion.div
-                      className="bg-primary h-2 rounded-full"
-                      initial={{ width: 0 }}
-                      whileInView={{ width: "95%" }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1, ease: "easeOut" }}
-                    />
-                  </div>
-                </div>
-
-                <div className="skill-item">
-                  <div className="flex justify-between mb-1">
-                    <span className="font-medium">Tailwind / DaisyUI</span>
-                    <span className="text-primary">90%</span>
-                  </div>
-                  <div className="w-full bg-base-300 rounded-full h-2 overflow-hidden">
-                    <motion.div
-                      className="bg-primary h-2 rounded-full"
-                      initial={{ width: 0 }}
-                      whileInView={{ width: "90%" }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
-                    />
-                  </div>
-                </div>
-
-                <div className="skill-item">
-                  <div className="flex justify-between mb-1">
-                    <span className="font-medium">GSAP / Framer Motion</span>
-                    <span className="text-primary">85%</span>
-                  </div>
-                  <div className="w-full bg-base-300 rounded-full h-2 overflow-hidden">
-                    <motion.div
-                      className="bg-primary h-2 rounded-full"
-                      initial={{ width: 0 }}
-                      whileInView={{ width: "85%" }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-                    />
-                  </div>
-                </div>
-
-                <div className="skill-item">
-                  <div className="flex justify-between mb-1">
-                    <span className="font-medium">TypeScript</span>
-                    <span className="text-primary">80%</span>
-                  </div>
-                  <div className="w-full bg-base-300 rounded-full h-2 overflow-hidden">
-                    <motion.div
-                      className="bg-primary h-2 rounded-full"
-                      initial={{ width: 0 }}
-                      whileInView={{ width: "80%" }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Backend Skills */}
-            <motion.div
-              className="bg-base-200 p-6 rounded-box shadow-md"
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <h3 className="text-xl font-bold mb-6 text-secondary">Backend</h3>
-
-              <div className="space-y-4">
-                <div className="skill-item">
-                  <div className="flex justify-between mb-1">
-                    <span className="font-medium">Node.js / Express</span>
-                    <span className="text-secondary">85%</span>
-                  </div>
-                  <div className="w-full bg-base-300 rounded-full h-2 overflow-hidden">
-                    <motion.div
-                      className="bg-secondary h-2 rounded-full"
-                      initial={{ width: 0 }}
-                      whileInView={{ width: "85%" }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1, ease: "easeOut" }}
-                    />
-                  </div>
-                </div>
-
-                <div className="skill-item">
-                  <div className="flex justify-between mb-1">
-                    <span className="font-medium">Prisma / Supabase</span>
-                    <span className="text-secondary">80%</span>
-                  </div>
-                  <div className="w-full bg-base-300 rounded-full h-2 overflow-hidden">
-                    <motion.div
-                      className="bg-secondary h-2 rounded-full"
-                      initial={{ width: 0 }}
-                      whileInView={{ width: "80%" }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
-                    />
-                  </div>
-                </div>
-
-                <div className="skill-item">
-                  <div className="flex justify-between mb-1">
-                    <span className="font-medium">GraphQL</span>
-                    <span className="text-secondary">75%</span>
-                  </div>
-                  <div className="w-full bg-base-300 rounded-full h-2 overflow-hidden">
-                    <motion.div
-                      className="bg-secondary h-2 rounded-full"
-                      initial={{ width: 0 }}
-                      whileInView={{ width: "75%" }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-                    />
-                  </div>
-                </div>
-
-                <div className="skill-item">
-                  <div className="flex justify-between mb-1">
-                    <span className="font-medium">Docker / CI/CD</span>
-                    <span className="text-secondary">70%</span>
-                  </div>
-                  <div className="w-full bg-base-300 rounded-full h-2 overflow-hidden">
-                    <motion.div
-                      className="bg-secondary h-2 rounded-full"
-                      initial={{ width: 0 }}
-                      whileInView={{ width: "70%" }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
-                    />
-                  </div>
                 </div>
               </div>
             </motion.div>

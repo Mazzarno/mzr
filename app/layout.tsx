@@ -4,8 +4,10 @@ import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import RootLayoutClient from "@/components/RootLayoutClient";
 import AnimatedCursor from "react-animated-cursor";
+import ClientLayout from "@/components/ClientLayout";
+
+
 
 const inter = Inter({
   subsets: ["latin"],
@@ -52,7 +54,9 @@ export default function RootLayout({
               }}
               trailingSpeed={10}
             />
-            <RootLayoutClient>{children}</RootLayoutClient>
+            <ClientLayout>
+              {children}
+            </ClientLayout>
           </ThemeProvider>
         </NextThemesProvider>
       </body>
