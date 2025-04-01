@@ -21,7 +21,7 @@ export default function Logo() {
     >
       <motion.svg
         viewBox="0 0 65 120"
-        className="h-11 w-auto text-base logo"
+        className="h-10 w-auto text-base logo"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         drag

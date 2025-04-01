@@ -27,7 +27,7 @@ const SectionHero = () => {
             ease: [0.215, 0.61, 0.355, 1],
           }}
         >
-  HOME
+          Contact
         </motion.h1>
         <motion.p
           className="hero-subtitle text-xl mb-8 text-base-content/90"
@@ -104,7 +104,7 @@ const SectionProjects = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      
+          {/* Project Card 1 */}
           <motion.div
             className="project-card card bg-base-100 shadow-xl text-base-content"
             whileHover={{
@@ -308,25 +308,4 @@ const SectionContact = () => {
     </section>
   );
 };
-const Footer = () => {
-  return (
-    <footer className="py-10 bg-base-300 text-base-content">
-      <div className="container mx-auto px-4">
-        <div className="flex justify-center gap-4">
-          <a href="#" className="link link-hover">
-            LinkedIn
-          </a>
-          <a href="#" className="link link-hover">
-            GitHub
-          </a>
-          <a href="#" className="link link-hover">
-            Twitter
-          </a>
-        </div>
-        <p className="text-center mt-4 text-base-content/70">
-          &copy; 2021 Alexis Germain - Tous droits réservés
-        </p>
-      </div>
-    </footer>
-  );
-};
+

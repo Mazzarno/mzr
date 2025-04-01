@@ -4,8 +4,8 @@ import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import AnimatedCursor from "react-animated-cursor";
 import ClientLayout from "@/components/ClientLayout";
+
 
 
 
@@ -40,20 +40,6 @@ export default function RootLayout({
           themes={["light", "dark"]}
         >
           <ThemeProvider>
-            <AnimatedCursor
-              innerSize={4}
-              outerSize={30}
-              innerScale={1.5}
-              outerScale={1.5}
-              outerAlpha={0}
-              innerStyle={{
-                backgroundColor: "var(--color-base-content)",
-              }}
-              outerStyle={{
-                border: "1px solid var(--color-base-content)",
-              }}
-              trailingSpeed={10}
-            />
             <ClientLayout>
               {children}
             </ClientLayout>

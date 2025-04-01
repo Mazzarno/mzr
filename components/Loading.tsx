@@ -75,7 +75,7 @@ const Loading: React.FC<LoadingProps> = ({
   }, [duration, onLoadComplete]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-full">
+    <div className="flex flex-col items-center justify-center h-full  bg-gradient-to-bl from-content-200 to-content-100">
       <h1
         ref={titleRef}
         className="text-5xl font-bold loading-text"
