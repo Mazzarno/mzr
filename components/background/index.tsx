@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useCallback, useState, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
-import Model from './Model';
+import Model from '@/components/background/Model';
 import { Environment } from '@react-three/drei'
 import { useMotionValue, useSpring } from "framer-motion"
 import { useTheme } from 'next-themes'
