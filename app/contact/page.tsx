@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import React, { useState } from "react";
-import AnimatedText from "@/components/AnimatedText";
+import AnimatedText from "@/app/components/AnimatedText";
 
 // Animation variants pour les éléments qui apparaissent
 const fadeIn = {

@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import React from "react";
-import AnimatedText from "@/components/AnimatedText";
+import AnimatedText from "@/app/components/AnimatedText";
 
 interface SkillCategory {
   title: string;

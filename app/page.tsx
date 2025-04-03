@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import AnimatedText from "../components/AnimatedText";
+import AnimatedText from "./components/AnimatedText";
 
 // Animation variants pour les éléments qui apparaissent
 const fadeIn = {

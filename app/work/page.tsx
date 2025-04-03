@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
-import AnimatedText from "@/components/AnimatedText";
+import AnimatedText from "@/app/components/AnimatedText";
 
 // Types pour les projets
 interface Project {

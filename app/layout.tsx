@@ -3,12 +3,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { ThemeProvider } from "../components/ThemeProvider";
-import { LanguageProvider } from "../components/LanguageProvider";
-import ClientLayout from "../components/ClientLayout";
+import { ThemeProvider } from "./components/ThemeProvider";
+import { LanguageProvider } from "./components/LanguageProvider";
+import ClientLayout from "./components/ClientLayout";
 import AnimatedCursor from "react-animated-cursor";
-
-
 
 
 const inter = Inter({
