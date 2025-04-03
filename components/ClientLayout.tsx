@@ -6,13 +6,13 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { motion, useMotionValue, animate } from "framer-motion";
 import { useTranslations } from "next-intl";
-import ThemeSwitcher from "@/components/ThemeSwitch";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
-import Logo from "@/components/Logo";
+import ThemeSwitcher from "../components/ThemeSwitch";
+import LanguageSwitcher from "../components/LanguageSwitcher";
+import Logo from "../components/Logo";
 import { Github, Linkedin, Mail } from "lucide-react";
-import Background from "@/components/background";
-import AnimatedText from "@/components/AnimatedText";
-import Loading from "@/components/Loading";
+import Background from "../components/background";
+import AnimatedText from "../components/AnimatedText";
+import Loading from "../components/Loading";
 
 interface ClientLayoutProps { 
   children: React.ReactNode;

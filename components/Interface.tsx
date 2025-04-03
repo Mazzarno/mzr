@@ -3,8 +3,8 @@
 import { ReactNode } from "react";
 import Link from 'next/link'; 
 
-import ThemeSwitcher from "@/components/ThemeSwitch";
-import Logo from "@/components/Logo";
+import ThemeSwitcher from "../components/ThemeSwitch";
+import Logo from "../components/Logo";
 import { motion, useMotionValue, animate } from "framer-motion";
 
 interface InterfaceProps {

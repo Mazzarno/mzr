@@ -2,7 +2,7 @@
 
 import React, { useRef } from "react";
 import { gsap } from "gsap";
-import Loading from "@/components/Loading";
+import Loading from "../components/Loading";
 
 interface TransitionProps {
   isLoading: boolean;
