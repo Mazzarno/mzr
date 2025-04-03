@@ -1,4 +1,4 @@
-"use client"; // S'assurer que ce code s'exécute seulement côté client
+"use client";
 
 import { createContext, useContext, useState, useEffect, useMemo } from "react";
 import { NextIntlClientProvider } from "next-intl";

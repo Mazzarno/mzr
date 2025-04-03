@@ -57,59 +57,58 @@
     "projects": "Projets réalisés",
     "designer": "Développeur passionné par l'expérience utilisateur",
     "learnMore": "En savoir plus",
-    "experience_details": [
-      {
+    "experience_details": {
+      "1":{
         "title": "Auto-Entreprise",
         "role": "Développeur Web Freelance",
         "period": "2019 - 2022 | 2022 - Aujourd'hui",
-        "description": [
-          "Conception et développement de sites vitrines.",
-          "Maintenance et optimisation de sites existants.",
-          "Intégration de solutions personnalisées pour répondre à des besoins spécifiques.",
-          "Support technique et formation pour garantir l'autonomie des clients."
-        ]
+        "description": {
+          "1":"Conception et développement de sites vitrines.",
+          "2":"Maintenance et optimisation de sites existants.",
+          "3":"Intégration de solutions personnalisées pour répondre à des besoins spécifiques.",
+          "4":"Support technique et formation pour garantir l'autonomie des clients."
+        }
       },
-      {
+      "2": {
         "title": "ASUS France",
         "role": "Webmaster",
         "period": "Mai 2022 - Août 2022",
-        "description": [
-          "Conception, développement, gestion et maintenance des sites web français.",
-          "Collaboration internationale : coordination avec ASUS Europe et application des correctifs techniques via Jira, en lien avec Taiwan.",
-          "Support et traduction : adaptation des contenus marketing en français et assistance technique pour les campagnes européennes.",
-          "Participation aux réunions marketing : contribution aux stratégies digitales et intégration des initiatives marketing sur les plateformes web."
-        ]
+        "description": {
+          "1":"Conception, développement, gestion et maintenance des sites web français.",
+          "2":"Collaboration internationale : coordination avec ASUS Europe et application des correctifs techniques via Jira, en lien avec Taiwan.",
+          "3":"Support et traduction : adaptation des contenus marketing en français et assistance technique pour les campagnes européennes.",
+          "4":"Participation aux réunions marketing : contribution aux stratégies digitales et intégration des initiatives marketing sur les plateformes web."
+      }
       },
-      {
+      "3": {
         "title": "MGS Informatique",
         "role": "Développeur Web Junior",
         "period": "Septembre 2018 - Février 2019",
-        "description": [
-          "Conception, développement, gestion et maintenance des sites web.",
-          "Formation de l'équipe sur HTML, CSS et WordPress.",
-          "Consultation et analyse des besoins de l'entreprise cliente."
-        ]
+        "description": {
+          "1":"Conception, développement, gestion et maintenance des sites web.",
+          "2":"Formation de l'équipe sur HTML, CSS et WordPress.",
+          "3":"Consultation et analyse des besoins de l'entreprise cliente."
+        }
       }
-    ],
-    "education_details": [
+    },
+    "education_details": 
       {
         "title": "IFOCOP",
         "degree": "Formation développeur intégrateur Web",
         "period": "Septembre 2018 - Février 2019",
-        "description": [
-          "HTML 5 / CSS 3 / JavaScript ES6",
-          "CMS Wordpress / Drupal",
-          "Intégration et gestion MySQL BDD"
-        ]
-      }
-    ],
+        "description": {
+          "1":"HTML 5 / CSS 3 / JavaScript ES6",
+          "2":"CMS Wordpress / Drupal",
+          "3":"Intégration et gestion MySQL BDD"
+        }
+      },
     "skill_details": {
-      "soft": [
-        "Empathique", "Autonome", "Coopératif", "Créatif"
-      ],
-      "hard": [
-        "Idéation", "Brainstorming", "Design", "Maquettage", "Prototypage", "Conception", "Développement", "Optimisation", "Support technique"
-      ],
+      "soft": {
+        "1":"Empathique", "2":"Autonome", "3":"Coopératif", "4":"Créatif"
+      },
+      "hard": {
+        "1":"Idéation", "2":"Brainstorming", "3":"Design", "4":"Maquettage", "5":"Prototypage", "6":"Conception", "7":"Développement", "8":"Optimisation", "9":"Support technique"
+      },
       "framework": "Vue/Nuxt3, React/Next, AngularJs",
       "data": "SQL, GraphQL",
       "backend": "Node.Js, Express",

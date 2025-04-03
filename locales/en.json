@@ -57,59 +57,58 @@
     "projects": "Completed Projects",
     "designer": "Developer passionate about user experience",
     "learnMore": "Learn more",
-    "experience_details": [
-      {
+    "experience_details": {
+      "1":   {
         "title": "Self-Employed",
         "role": "Freelance Web Developer",
         "period": "2019 - 2022 | 2022 - Present",
-        "description": [
-          "Design and development of showcase websites.",
-          "Maintenance and optimization of existing sites.",
-          "Integration of customized solutions to meet specific needs.",
-          "Technical support and training to ensure client autonomy."
-        ]
+        "description": {
+          "1":"Design and development of showcase websites.",
+          "2":"Maintenance and optimization of existing sites.",
+          "3":"Integration of customized solutions to meet specific needs.",
+          "4":"Technical support and training to ensure client autonomy."
+        }
       },
-      {
+      "2":  {
         "title": "ASUS France",
         "role": "Webmaster",
         "period": "May 2022 - August 2022",
-        "description": [
-          "Design, development, management and maintenance of French websites.",
-          "International collaboration: coordination with ASUS Europe and implementation of technical fixes via Jira, in connection with Taiwan.",
-          "Support and translation: adaptation of marketing content in French and technical assistance for European campaigns.",
-          "Participation in marketing meetings: contribution to digital strategies and integration of marketing initiatives on web platforms."
-        ]
+        "description": {
+          "1":"Design, development, management and maintenance of French websites.",
+          "2":"International collaboration: coordination with ASUS Europe and implementation of technical fixes via Jira, in connection with Taiwan.",
+          "3":"Support and translation: adaptation of marketing content in French and technical assistance for European campaigns.",
+          "4":"Participation in marketing meetings: contribution to digital strategies and integration of marketing initiatives on web platforms."
+        }
       },
-      {
+      "3": {
         "title": "MGS Informatique",
         "role": "Junior Web Developer",
         "period": "September 2018 - February 2019",
-        "description": [
-          "Design, development, management and maintenance of websites.",
-          "Team training on HTML, CSS and WordPress.",
-          "Consultation and analysis of client company needs."
-        ]
+        "description": {
+          "1":"Design, development, management and maintenance of websites.",
+          "2":"Team training on HTML, CSS and WordPress.",
+          "3":"Consultation and analysis of client company needs."
+        }
       }
-    ],
-    "education_details": [
+    },
+    "education_details": 
       {
         "title": "IFOCOP",
         "degree": "Web Developer Training",
         "period": "September 2018 - February 2019",
-        "description": [
-          "HTML 5 / CSS 3 / JavaScript ES6",
-          "CMS Wordpress / Drupal",
-          "MySQL Database Integration and Management"
-        ]
-      }
-    ],
+        "description": {
+          "1":"HTML 5 / CSS 3 / JavaScript ES6",
+          "2":"CMS Wordpress / Drupal",
+          "3":"MySQL Database Integration and Management"
+        }
+      },
     "skill_details": {
-      "soft": [
-        "Empathetic", "Autonomous", "Cooperative", "Creative"
-      ],
-      "hard": [
-        "Ideation", "Brainstorming", "Design", "Wireframing", "Prototyping", "Conception", "Development", "Optimization", "Technical Support"
-      ],
+      "soft": {
+        "1":"Empathetic", "2":"Autonomous", "3":"Cooperative", "4":"Creative"
+      },
+      "hard": {
+        "1":"Ideation", "2":"Brainstorming", "3":"Design", "4":"Wireframing", "5":"Prototyping", "6":"Conception", "7":"Development", "8":"Optimization", "9":"Technical Support"
+      },
       "framework": "Vue/Nuxt3, React/Next, AngularJs",
       "data": "SQL, GraphQL",
       "backend": "Node.Js, Express",

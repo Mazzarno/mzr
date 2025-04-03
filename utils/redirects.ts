@@ -1,9 +1,5 @@
 import { notFound } from 'next/navigation';
 
-/**
- * Redirige vers la page 404 personnalisée
- * Utilisez cette fonction lorsque vous devez rediriger manuellement vers la page 404
- */
 export function redirectTo404() {
   return notFound();
 }

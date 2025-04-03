@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useTheme } from "next-themes";
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
 
   useEffect(() => {
     // Applique le thème DaisyUI en fonction du thème next-themes
