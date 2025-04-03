@@ -1,8 +1,8 @@
 "use client";
 
-import ThemeSwitcher from "../components/ThemeSwitch";
-import Logo from "../components/Logo";
-import LanguageSwitcher from "../components/LanguageSwitcher";
+import ThemeSwitcher from "./ThemeSwitch";
+import Logo from "./Logo";
+import LanguageSwitcher from "./LanguageSwitcher";
 import {
   Menu,
   X,
