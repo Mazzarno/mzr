@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
-import { gsap } from "gsap";
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface LoadingProps {
   duration?: number;
@@ -13,104 +13,148 @@ const Loading: React.FC<LoadingProps> = ({
   onLoadComplete 
 }) => {
   const [progress, setProgress] = useState(0);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const progressBarRef = useRef<HTMLDivElement>(null);  
-  const progressContainerRef = useRef<HTMLDivElement>(null);
-  const tl = useRef<gsap.core.Timeline>();
+  const [isComplete, setIsComplete] = useState(false);
+  
+  // Texte à afficher
+  const text = "ALEXIS GERMAIN";
   
   useEffect(() => {
-    tl.current = gsap.timeline();
-
-    tl.current.from(titleRef.current, {
-      duration: 1,
-      opacity: 0,
-      y: 50,
-      ease: "power3.out",
-    });
-    
-    if (titleRef.current) {
-      titleRef.current.style.setProperty('--loading-progress', '0%');
-    }
-    
+    // Calculer la progression du chargement
     const interval = setInterval(() => {
-      setProgress((prev) => {
+      setProgress(prev => {
         const newProgress = prev + 100 / (duration * 10);
         
         if (newProgress >= 100) {
           clearInterval(interval);
           
-          if (progressBarRef.current && titleRef.current) {
-            gsap.to(progressBarRef.current, {
-              width: "100%",
-              duration: 0.3,
-              ease: "power2.out",
-              onComplete: () => {
-                if (onLoadComplete) setTimeout(onLoadComplete, 300);
-              }
-            });
-            
-            titleRef.current.style.setProperty('--loading-progress', '100%');
-          }
+          // Déclencher immédiatement l'animation de sortie
+          setTimeout(() => {
+            setIsComplete(true);
+            // Appeler onLoadComplete après un court délai pour permettre à l'animation de sortie de commencer
+            if (onLoadComplete) setTimeout(onLoadComplete, 400);
+          }, 300);
           
           return 100;
-        }
-        
-        if (titleRef.current) {
-          titleRef.current.style.setProperty('--loading-progress', `${newProgress}%`);
-        }
-        
-        if (progressBarRef.current) {
-          gsap.to(progressBarRef.current, {
-            width: `${newProgress}%`,
-            duration: 0.2,
-            ease: "power1.out"
-          });
         }
         
         return newProgress;
       });
     }, 100);
-
+    
     return () => clearInterval(interval);
   }, [duration, onLoadComplete]);
+  
+  // Animation commune pour tous les éléments
+  const commonTransition = {
+    duration: 0.5,
+    ease: [0.22, 1, 0.36, 1]
+  };
+  
+  // Animation de conteneur
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1, 
+      transition: commonTransition 
+    },
+    exit: { 
+      opacity: 0,
+      transition: {
+        ...commonTransition,
+        duration: 0.6
+      }
+    }
+  };
+  
+  // Animation du texte et de tous les éléments
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: commonTransition
+    },
+    exit: {
+      opacity: 0,
+      y: -10,
+      transition: commonTransition
+    }
+  };
+  
+  // Animation de la barre de progression
+  const progressVariants = {
+    hidden: { width: "0%" },
+    visible: { 
+      width: `${progress}%`,
+      transition: { 
+        duration: 0.3,
+        ease: "linear"
+      }
+    },
+    exit: {
+      width: "100%",
+      opacity: 0,
+      transition: commonTransition
+    }
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full  bg-gradient-to-bl from-content-200 to-content-100">
-      <h1
-        ref={titleRef}
-        className="text-5xl font-bold loading-text"
-        style={{ fontFamily: "var(--font-despairs)" }}
-      >
-        Alexis GERMAIN
-      </h1>
-
-      <div 
-        ref={progressContainerRef}
-        className="w-full max-w-sm mt-4 h-0.5 bg-base-200 rounded-full"
-      >
-        <div 
-          ref={progressBarRef} 
-          className="loading-bar h-full rounded-full" 
-        />
-      </div>
-
-      <style jsx>{`
-        .loading-text {
-          background: linear-gradient(
-            90deg,
-            var(--color-base-content) var(--loading-progress),
-            var(--color-base-100) var(--loading-progress)
-          );
-          -webkit-background-clip: text;
-          background-clip: text;
-          color: transparent;
-        }
-        .loading-bar {
-          background: var(--color-base-content);
-          width: 0%;
-        }
-      `}</style>
-    </div>
+    <AnimatePresence mode="wait">
+      {!isComplete && (
+        <motion.div
+          key="loading"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          className="flex flex-col items-center justify-center h-full bg-gradient-to-bl from-base-200/50 to-base-100"
+        >
+          <motion.div 
+            className="flex flex-col items-center space-y-10"
+            variants={itemVariants}
+          >
+            <motion.div
+              className="relative font-bold text-5xl text-transparent"
+              style={{ fontFamily: "var(--font-despairs)" }}
+              variants={itemVariants}
+            >
+              {/* Texte de fond (invisible) pour maintenir l'espace */}
+              <span className="opacity-0">{text}</span>
+              
+              {/* Texte visible qui se remplit progressivement */}
+              <div 
+                className="absolute inset-0 overflow-hidden whitespace-nowrap" 
+                style={{ 
+                  width: `${progress}%`,
+                  backgroundImage: `linear-gradient(to right, var(--color-primary), var(--color-secondary))`,
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent"
+                }}
+              >
+                {text}
+              </div>
+            </motion.div>
+            
+            <div className="w-full flex flex-col items-center space-y-3">
+              <div className="w-full max-w-sm h-[2px] bg-base-300/30 rounded-full overflow-hidden">
+                <motion.div
+                  variants={progressVariants}
+                  className="h-full bg-gradient-to-r from-primary to-secondary rounded-full"
+                />
+              </div>
+              
+              <motion.div
+                className="text-xs font-medium text-base-content/70"
+                variants={itemVariants}
+              >
+                {Math.floor(progress)}%
+              </motion.div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

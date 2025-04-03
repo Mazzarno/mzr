@@ -1,310 +1,454 @@
 "use client";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import React from "react";
+import AnimatedText from "@/components/AnimatedText";
 
-export default function page() {
+interface SkillCategory {
+  title: string;
+  skills: string[];
+}
 
+interface Experience {
+  position: string;
+  company: string;
+  period: string;
+  description: string;
+}
 
+interface Education {
+  degree: string;
+  school: string;
+  period: string;
+  description: string;
+}
+
+const fadeIn = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  })
+};
+
+const sectionVariants = {
+  hidden: { opacity: 0 },
+  visible: { 
+    opacity: 1,
+    transition: { 
+      staggerChildren: 0.2,
+      delayChildren: 0.1
+    }
+  }
+};
+
+export default function AboutPage() {
   return (
     <main className="text-base-content relative">
-        <SectionHero />
-        <SectionProjects />
-        <SectionContact />
+      <AboutHeader />
+      <div className="container mx-auto px-6">
+        <AboutBio />
+        <AboutSkills />
+        <AboutExperience />
+        <AboutEducation />
+      </div>
+      <AboutContact />
     </main>
   );
 }
 
-
-const SectionHero = () => {
+function AboutHeader() {
   return (
-    <section className="h-screen">
-      <div className="h-full text-center flex flex-col max-w-3xl px-4 relative text-base-content pt-32">
-        <motion.h1
-          className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.8,
-            ease: [0.215, 0.61, 0.355, 1],
-          }}
+    <section className="py-24 relative overflow-hidden">
+      {/* Arrière-plan décoratif */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/5 to-secondary/5"></div>
+        <div className="absolute top-20 right-20 w-64 h-64 rounded-full bg-primary/10 blur-3xl"></div>
+        <div className="absolute bottom-20 left-20 w-72 h-72 rounded-full bg-secondary/10 blur-3xl"></div>
+      </div>
+      
+      <div className="container mx-auto px-6">
+        <motion.div 
+          className="max-w-4xl"
+          initial="hidden"
+          animate="visible"
+          variants={sectionVariants}
         >
-  About
-        </motion.h1>
-        <motion.p
-          className="hero-subtitle text-xl mb-8 text-base-content/90"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.6,
-            delay: 0.3,
-            ease: [0.215, 0.61, 0.355, 1],
-          }}
-        >
-          Je conçois et développe des expériences web uniques et mémorables.
-          <br />
-          Spécialisé en React, Next.js et animations web.
-        </motion.p>
-
-        <motion.div
-          className="flex flex-col sm:flex-row gap-4 justify-center hero-cta"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{
-            duration: 0.5,
-            delay: 0.5,
-            ease: [0.175, 0.885, 0.32, 1.275],
-          }}
-        >
-          <motion.button
-            className="btn btn-primary"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <motion.span 
+            className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4 backdrop-blur-sm"
+            variants={fadeIn}
+            custom={0}
           >
-            Voir mes projets
-          </motion.button>
-          <motion.button
-            className="btn btn-outline btn-secondary"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            <AnimatedText translationKey="about.title" />
+          </motion.span>
+          
+          <motion.h1 
+            className="text-5xl md:text-6xl font-bold mb-6 tracking-tight leading-tight"
+            variants={fadeIn}
+            custom={1}
           >
-            Me contacter
-          </motion.button>
+            <AnimatedText translationKey="about.about" />
+          </motion.h1>
+          
+          <motion.p 
+            className="text-xl text-base-content/70 max-w-3xl"
+            variants={fadeIn}
+            custom={2}
+          >
+            <AnimatedText translationKey="about.intro" />
+          </motion.p>
         </motion.div>
       </div>
+    </section>
+  );
+}
 
-      <motion.div
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 1.5, repeat: Infinity }}
-      >
-        <div className="w-6 h-10 rounded-full border-2 border-base-content/30 flex justify-center pt-1">
-          <motion.div
-            className="w-1 h-2 bg-primary rounded-full"
-            animate={{ y: [0, 15, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          />
-        </div>
+function AboutBio() {
+  return (
+    <motion.section 
+      className="py-20"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      variants={sectionVariants}
+    >
+      <motion.div className="max-w-4xl mx-auto">
+        <motion.span 
+          className="inline-block px-4 py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4"
+          variants={fadeIn}
+        >
+          <AnimatedText translationKey="about.journey" />
+        </motion.span>
+        
+        <motion.h2 
+          className="text-3xl md:text-4xl font-bold mb-8"
+          variants={fadeIn}
+          custom={1}
+        >
+          Mon parcours
+        </motion.h2>
+        
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 gap-8"
+          variants={fadeIn}
+          custom={2}
+        >
+          <div className="prose prose-lg max-w-none">
+            <p className="text-base-content/80 text-lg leading-relaxed">
+              Passionate about digital creation since my early years, I&apos;ve developed a deep understanding of both design principles and technical implementation. My journey began with simple HTML websites and evolved into complex web applications with modern frameworks.
+            </p>
+          </div>
+          
+          <div className="prose prose-lg max-w-none">
+            <p className="text-base-content/80 text-lg leading-relaxed">
+              I believe in creating websites that not only look beautiful but also provide intuitive user experiences. Every project is an opportunity to blend creativity with technical precision, resulting in digital experiences that leave a lasting impression.
+            </p>
+          </div>
+        </motion.div>
+        
+        {/* Stats */}
+        <motion.div 
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 bg-base-200/50 rounded-2xl p-8 border border-base-300"
+          variants={fadeIn}
+          custom={3}
+        >
+          <div className="text-center">
+            <div className="text-4xl font-bold text-primary mb-1">5+</div>
+            <div className="text-sm text-base-content/60">
+              <AnimatedText translationKey="about.years" />
+            </div>
+          </div>
+          <div className="text-center">
+            <div className="text-4xl font-bold text-primary mb-1">30+</div>
+            <div className="text-sm text-base-content/60">
+              <AnimatedText translationKey="about.projects" />
+            </div>
+          </div>
+          <div className="text-center">
+            <div className="text-4xl font-bold text-primary mb-1">15+</div>
+            <div className="text-sm text-base-content/60">
+              <AnimatedText translationKey="about.clients" />
+            </div>
+          </div>
+          <div className="text-center">
+            <div className="text-4xl font-bold text-primary mb-1">3</div>
+            <div className="text-sm text-base-content/60">
+              Récompenses
+            </div>
+          </div>
+        </motion.div>
       </motion.div>
-    </section>
+    </motion.section>
   );
-};
-const SectionProjects = () => {
+}
+
+function AboutSkills() {
+  const skillCategories: SkillCategory[] = [
+    {
+      title: "Frontend",
+      skills: ["Vue/Nuxt3", "React/Next", "AngularJs", "Tailwind CSS", "Framer Motion"]
+    },
+    {
+      title: "Design",
+      skills: ["Figma", "PhotoShop", "UI/UX Design", "Prototypage", "Maquettage"]
+    },
+    {
+      title: "Backend",
+      skills: ["Node.js", "Express", "SQL", "GraphQL", "Strapi"]
+    },
+    {
+      title: "Other",
+      skills: ["Three.js", "Tresjs", "Fiber", "GSAP", "Motion", "Blender"]
+    }
+  ];
+  
   return (
-    <section id="projects" className="py-20 bg-base-200 min-h-screen">
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+    <motion.section 
+      className="py-20"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      variants={sectionVariants}
+    >
+      <motion.div className="max-w-4xl mx-auto">
+        <motion.span 
+          className="inline-block px-4 py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4"
+          variants={fadeIn}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-2 text-center">
-            Mes Projets Récents
-          </h2>
-          <div className="h-1 w-20 bg-accent mx-auto mb-12"></div>
+          <AnimatedText translationKey="about.skills" />
+        </motion.span>
+        
+        <motion.h2 
+          className="text-3xl md:text-4xl font-bold mb-8"
+          variants={fadeIn}
+          custom={1}
+        >
+          <AnimatedText translationKey="about.skills" />
+        </motion.h2>
+        
+        <motion.div 
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          variants={fadeIn}
+          custom={2}
+        >
+          {skillCategories.map((category, index) => (
+            <motion.div 
+              key={index}
+              whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+              className="bg-base-100 rounded-xl p-6 border border-base-300 shadow-sm transition-all duration-300"
+            >
+              <h3 className="text-xl font-bold text-primary mb-4">
+                <AnimatedText translationKey={`about.${category.title.toLowerCase()}`} />
+              </h3>
+              <ul className="space-y-2">
+                {category.skills.map((skill, skillIndex) => (
+                  <li key={skillIndex} className="flex items-center gap-2">
+                    <span className="w-2 h-2 bg-secondary rounded-full"></span>
+                    <span className="text-base-content/80">{skill}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          ))}
         </motion.div>
+      </motion.div>
+    </motion.section>
+  );
+}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Project Card 1 */}
-          <motion.div
-            className="project-card card bg-base-100 shadow-xl text-base-content"
-            whileHover={{
-              y: -10,
-              boxShadow:
-                "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-            }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            <figure className="relative h-52 ">
-              <div className="absolute inset-0 bg-primary/20 w-full h-full" />
-              <div className="w-full h-full bg-neutral-content/10 flex items-center justify-center">
-                <span className="text-xl font-semibold text-base-content/70">
-                  Image du projet
-                </span>
+function AboutExperience() {
+  const experiences: Experience[] = [
+    {
+      position: "Développeur Web Freelance",
+      company: "Auto-Entreprise",
+      period: "2019 - 2022 | 2022 - Aujourd'hui",
+      description: "Conception et développement de sites web modernes. Optimisation des performances et de l'expérience utilisateur. Intégration de solutions sur mesure pour répondre aux besoins clients. Formation et support technique."
+    },
+    {
+      position: "Webmaster",
+      company: "ASUS France",
+      period: "Mai 2022 - Août 2022",
+      description: "Gestion et maintenance des sites web français. Coordination avec les équipes internationales. Adaptation des contenus marketing et support technique pour les campagnes européennes."
+    },
+    {
+      position: "Développeur Web Junior",
+      company: "MGS Informatique",
+      period: "Septembre 2018 - Février 2019",
+      description: "Développement et maintenance de sites web. Formation de l'équipe aux technologies web. Analyse des besoins clients et implémentation de solutions."
+    }
+  ];
+  
+  return (
+    <motion.section 
+      className="py-20"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      variants={sectionVariants}
+    >
+      <motion.div className="max-w-4xl mx-auto">
+        <motion.span 
+          className="inline-block px-4 py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4"
+          variants={fadeIn}
+        >
+          <AnimatedText translationKey="about.experience" />
+        </motion.span>
+        
+        <motion.h2 
+          className="text-3xl md:text-4xl font-bold mb-8"
+          variants={fadeIn}
+          custom={1}
+        >
+          <AnimatedText translationKey="about.experience" />
+        </motion.h2>
+        
+        <motion.div 
+          className="space-y-6"
+          variants={fadeIn}
+          custom={2}
+        >
+          {experiences.map((exp, index) => (
+            <motion.div 
+              key={index}
+              whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+              className="bg-base-100 rounded-xl p-6 border border-base-300 shadow-sm transition-all duration-300"
+            >
+              <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-3">
+                <h3 className="text-xl font-bold text-primary">{exp.position}</h3>
+                <span className="px-3 py-1 bg-secondary/10 text-secondary text-sm rounded-full font-medium mt-2 md:mt-0">{exp.period}</span>
               </div>
-            </figure>
-            <div className="card-body">
-              <h3 className="card-title text-primary">Portfolio E-commerce</h3>
-              <p className="mb-4">
-                Une boutique moderne avec intégration de paiement et animation
-                des transitions de pages.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="badge badge-outline badge-primary">React</span>
-                <span className="badge badge-outline badge-secondary">
-                  Next.js
-                </span>
-                <span className="badge badge-outline">Tailwind</span>
-              </div>
-              <div className="card-actions justify-end">
-                <motion.button
-                  className="btn btn-sm btn-outline btn-accent"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Voir le projet
-                </motion.button>
-              </div>
-            </div>
-          </motion.div>
+              <h4 className="text-lg font-medium text-base-content/80 mb-3">{exp.company}</h4>
+              <p className="text-base-content/70 leading-relaxed">{exp.description}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+      </motion.div>
+    </motion.section>
+  );
+}
 
-          <motion.div
-            className="project-card card bg-base-100 shadow-xl text-base-content"
-            whileHover={{
-              y: -10,
-              boxShadow:
-                "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-            }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            <figure className="relative h-52">
-              <div className="absolute inset-0 bg-secondary/20 w-full h-full" />
-              <div className="w-full h-full bg-neutral-content/10 flex items-center justify-center">
-                <span className="text-xl font-semibold text-base-content/70">
-                  Image du projet
-                </span>
+function AboutEducation() {
+  const education: Education[] = [
+    {
+      degree: "Formation développeur intégrateur Web",
+      school: "IFOCOP",
+      period: "Septembre 2018 - Février 2019",
+      description: "HTML 5 / CSS 3 / JavaScript ES6, CMS Wordpress / Drupal, Intégration et gestion MySQL BDD"
+    }
+  ];
+  
+  return (
+    <motion.section 
+      className="py-20"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-100px" }}
+      variants={sectionVariants}
+    >
+      <motion.div className="max-w-4xl mx-auto">
+        <motion.span 
+          className="inline-block px-4 py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4"
+          variants={fadeIn}
+        >
+          <AnimatedText translationKey="about.education" />
+        </motion.span>
+        
+        <motion.h2 
+          className="text-3xl md:text-4xl font-bold mb-8"
+          variants={fadeIn}
+          custom={1}
+        >
+          <AnimatedText translationKey="about.education" />
+        </motion.h2>
+        
+        <motion.div 
+          className="space-y-6"
+          variants={fadeIn}
+          custom={2}
+        >
+          {education.map((edu, index) => (
+            <motion.div 
+              key={index}
+              whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+              className="bg-base-100 rounded-xl p-6 border border-base-300 shadow-sm transition-all duration-300"
+            >
+              <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-3">
+                <h3 className="text-xl font-bold text-primary">{edu.degree}</h3>
+                <span className="px-3 py-1 bg-secondary/10 text-secondary text-sm rounded-full font-medium mt-2 md:mt-0">{edu.period}</span>
               </div>
-            </figure>
-            <div className="card-body">
-              <h3 className="card-title text-secondary">Dashboard Analytics</h3>
-              <p className="mb-4">
-                Interface de visualisation de données avec animations et filtres
-                interactifs en temps réel.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="badge badge-outline badge-primary">React</span>
-                <span className="badge badge-outline badge-secondary">
-                  Typescript
-                </span>
-                <span className="badge badge-outline">D3.js</span>
-              </div>
-              <div className="card-actions justify-end">
-                <motion.button
-                  className="btn btn-sm btn-outline btn-accent"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Voir le projet
-                </motion.button>
-              </div>
-            </div>
-          </motion.div>
+              <h4 className="text-lg font-medium text-base-content/80 mb-3">{edu.school}</h4>
+              <p className="text-base-content/70 leading-relaxed">{edu.description}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+      </motion.div>
+    </motion.section>
+  );
+}
 
-          <motion.div
-            className="project-card card bg-base-100 shadow-xl  text-base-content"
-            whileHover={{
-              y: -10,
-              boxShadow:
-                "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-            }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            <figure className="relative h-52">
-              <div className="absolute inset-0 bg-accent/20 w-full h-full" />
-              <div className="w-full h-full bg-neutral-content/10 flex items-center justify-center">
-                <span className="text-xl font-semibold text-base-content/70">
-                  Image du projet
-                </span>
-              </div>
-            </figure>
-            <div className="card-body">
-              <h3 className="card-title text-accent">Application Mobile</h3>
-              <p className="mb-4">
-                App cross-platform avec animations fluides et transitions
-                contextuelles.
-              </p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="badge badge-outline badge-primary">
-                  React Native
-                </span>
-                <span className="badge badge-outline badge-secondary">
-                  Expo
-                </span>
-                <span className="badge badge-outline">Reanimated</span>
-              </div>
-              <div className="card-actions justify-end">
-                <motion.button
-                  className="btn btn-sm btn-outline btn-accent"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Voir le projet
-                </motion.button>
-              </div>
-            </div>
-          </motion.div>
-        </div>
+function AboutContact() {
+  return (
+    <section className="py-24 bg-base-200/30 relative overflow-hidden">
+      {/* Arrière-plan décoratif */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute top-20 right-20 w-64 h-64 rounded-full bg-primary/5 blur-3xl"></div>
+        <div className="absolute bottom-20 left-20 w-64 h-64 rounded-full bg-secondary/5 blur-3xl"></div>
       </div>
-    </section>
-  );
-};
-const SectionContact = () => {
-  return (
-    <section id="contact" className="py-20 bg-base-200">
-      <div className="container mx-auto px-4">
+      
+      <div className="container mx-auto px-6">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="text-center max-w-3xl mx-auto"
+          variants={sectionVariants}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-2 text-center">
-            Me Contacter
-          </h2>
-          <div className="h-1 w-20 bg-accent mx-auto mb-12"></div>
-        </motion.div>
-
-        <div className="max-w-md mx-auto">
-          <motion.div
-            className="bg-base-100 rounded-box shadow-lg p-6"
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-          >
-            <form>
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="label-text text-base-content">Nom</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Votre nom"
-                  className="input input-bordered w-full bg-base-200 text-base-content"
-                />
-              </div>
-
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="label-text text-base-content">Email</span>
-                </label>
-                <input
-                  type="email"
-                  placeholder="votre@email.com"
-                  className="input input-bordered w-full bg-base-200 text-base-content"
-                />
-              </div>
-
-              <div className="form-control mb-6">
-                <label className="label">
-                  <span className="label-text text-base-content">Message</span>
-                </label>
-                <textarea
-                  placeholder="Votre message"
-                  className="textarea textarea-bordered h-32 w-full bg-base-200 text-base-content"
-                ></textarea>
-              </div>
-
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="btn btn-primary w-full"
+          <motion.div variants={fadeIn} custom={0} className="space-y-6">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">
+              <AnimatedText translationKey="contact.collaborate" />
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold">
+              <AnimatedText translationKey="contact.project" />
+            </h2>
+            <p className="text-base-content/70 text-lg max-w-2xl mx-auto">
+              <AnimatedText translationKey="contact.open" />
+            </p>
+            
+            <motion.div 
+              className="pt-6"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Link 
+                href="/contact" 
+                className="btn btn-primary btn-lg px-8 rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
               >
-                Envoyer
-              </motion.button>
-            </form>
+                <AnimatedText translationKey="contact.contactMe" />
+              </Link>
+            </motion.div>
+            
+            {/* CV Download */}
+            <div className="pt-8">
+              <Link 
+                href="#" 
+                className="inline-flex items-center gap-2 text-primary hover:underline"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <AnimatedText translationKey="about.downloadCV" />
+              </Link>
+            </div>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
-};
+}

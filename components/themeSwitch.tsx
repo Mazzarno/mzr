@@ -25,8 +25,8 @@ export default function ThemeSwitcher() {
         onChange={toggleTheme}
         aria-label="Toggle theme"
       />
-      <Sun size={22} className="swap-off text-yellow-500" />
-      <Moon size={22} className="swap-on text-indigo-500" />
+      <Sun size={20} className="swap-off text-yellow-500" />
+      <Moon size={20} className="swap-on text-indigo-500" />
     </label>
   );
 }

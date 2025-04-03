@@ -1,5 +1,191 @@
 {
   "websites": "Websites",
   "hello": "Hello, I am Alexis",
-  "ido": "I create Websites"
+  "ido": "I develop Websites",
+  "navigation": {
+    "home": "Home",
+    "work": "Work",
+    "about": "About",
+    "contact": "Contact",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "home": {
+    "title": "HOME",
+    "welcome": "Welcome",
+    "portfolio": "Portfolio",
+    "designer": "Web Developer",
+    "explore": "Explore My Work",
+    "scroll": "Scroll Down",
+    "creative": "Creating powerful",
+    "innovative": "digital experiences.",
+    "modern": "Modern",
+    "intro": "I design and develop showcase websites and high-performance web applications, while ensuring maintenance and optimization of existing sites."
+  },
+  "work": {
+    "title": "WORK",
+    "projects": "Projects",
+    "realizations": "Realizations",
+    "experiences": "Experiences",
+    "selectedWorks": "Selected Works",
+    "viewProject": "View my projects",
+    "allProjects": "All projects",
+    "technologies": "Technologies",
+    "client": "Client",
+    "duration": "Duration",
+    "role": "Role",
+    "viewLive": "View Live",
+    "viewCode": "View Code",
+    "discover": "Discover some of my recent work"
+  },
+  "about": {
+    "title": "ABOUT",
+    "about": "About me",
+    "journey": "Journey",
+    "skills": "Skills",
+    "intro": "Freelance Web Developer based in Bruyères-sur-Oise, I design and develop showcase websites, ensure maintenance and optimization of existing sites, and integrate customized solutions to meet specific needs.",
+    "experience": "Experience",
+    "education": "Education",
+    "interests": "Interests",
+    "downloadCV": "Download CV",
+    "frontend": "Frontend",
+    "backend": "Backend",
+    "design": "Design",
+    "other": "Other",
+    "years": "Years of Experience",
+    "clients": "Happy Clients",
+    "projects": "Completed Projects",
+    "designer": "Developer passionate about user experience",
+    "learnMore": "Learn more",
+    "experience_details": [
+      {
+        "title": "Self-Employed",
+        "role": "Freelance Web Developer",
+        "period": "2019 - 2022 | 2022 - Present",
+        "description": [
+          "Design and development of showcase websites.",
+          "Maintenance and optimization of existing sites.",
+          "Integration of customized solutions to meet specific needs.",
+          "Technical support and training to ensure client autonomy."
+        ]
+      },
+      {
+        "title": "ASUS France",
+        "role": "Webmaster",
+        "period": "May 2022 - August 2022",
+        "description": [
+          "Design, development, management and maintenance of French websites.",
+          "International collaboration: coordination with ASUS Europe and implementation of technical fixes via Jira, in connection with Taiwan.",
+          "Support and translation: adaptation of marketing content in French and technical assistance for European campaigns.",
+          "Participation in marketing meetings: contribution to digital strategies and integration of marketing initiatives on web platforms."
+        ]
+      },
+      {
+        "title": "MGS Informatique",
+        "role": "Junior Web Developer",
+        "period": "September 2018 - February 2019",
+        "description": [
+          "Design, development, management and maintenance of websites.",
+          "Team training on HTML, CSS and WordPress.",
+          "Consultation and analysis of client company needs."
+        ]
+      }
+    ],
+    "education_details": [
+      {
+        "title": "IFOCOP",
+        "degree": "Web Developer Training",
+        "period": "September 2018 - February 2019",
+        "description": [
+          "HTML 5 / CSS 3 / JavaScript ES6",
+          "CMS Wordpress / Drupal",
+          "MySQL Database Integration and Management"
+        ]
+      }
+    ],
+    "skill_details": {
+      "soft": [
+        "Empathetic", "Autonomous", "Cooperative", "Creative"
+      ],
+      "hard": [
+        "Ideation", "Brainstorming", "Design", "Wireframing", "Prototyping", "Conception", "Development", "Optimization", "Technical Support"
+      ],
+      "framework": "Vue/Nuxt3, React/Next, AngularJs",
+      "data": "SQL, GraphQL",
+      "backend": "Node.Js, Express",
+      "design": "Figma, PhotoShop",
+      "management": "JIRA, Trello",
+      "animation": "GSAP, Motion",
+      "webgl": "Three, Tresjs, Fiber",
+      "cms": "Strapi",
+      "3d": "Blender"
+    }
+  },
+  "contact": {
+    "title": "CONTACT",
+    "letsChat": "Let's Chat",
+    "collaborate": "Let's work together",
+    "contactMe": "Contact me",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "send": "Send",
+    "success": "Message sent successfully!",
+    "error": "An error occurred. Please try again.",
+    "subject": "Subject",
+    "phone": "06.08.53.52.80",
+    "address": "Bruyères-sur-Oise, 95820",
+    "email_address": "contact@alexis-germain.fr",
+    "website": "alexis-germain.fr",
+    "social": "Social",
+    "follow": "Follow Me",
+    "required": "Required field",
+    "project": "Do you have a project in mind?",
+    "open": "I'm always open to discussing new projects, creative ideas, or opportunities to collaborate."
+  },
+  "loading": {
+    "loading": "Loading",
+    "please_wait": "Please wait",
+    "almost_ready": "Almost ready",
+    "preparing": "Preparing content"
+  },
+  "notFound": {
+    "title": "404",
+    "page": "Page",
+    "not": "Not",
+    "found": "Found",
+    "goHome": "Go Home",
+    "sorry": "Sorry, the page you are looking for does not exist."
+  },
+  "projects": {
+    "portfolio": {
+      "title": "Minimalist Portfolio",
+      "description": "Design and development of a clean portfolio for a photographer"
+    },
+    "ecommerce": {
+      "title": "E-commerce Web App",
+      "description": "Modern user interface for an online store"
+    },
+    "dashboard": {
+      "title": "Analytics Dashboard",
+      "description": "Interactive dashboard with data visualizations"
+    }
+  },
+  "footer": {
+    "rights": "All Rights Reserved",
+    "designed": "Designed & Developed by",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "cookies": "Cookies"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "language": {
+    "en": "English",
+    "fr": "French",
+    "select": "Select language"
+  }
 }

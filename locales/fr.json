@@ -1,5 +1,191 @@
 {
-  "websites": "Sitewebs",
+  "websites": "Sites Web",
   "hello": "Bonjour, je suis Alexis",
-  "ido": "Je creer des Sitewebs"
+  "ido": "Je développe des Sites Web",
+  "navigation": {
+    "home": "Accueil",
+    "work": "Projets",
+    "about": "À Propos",
+    "contact": "Contacte",
+    "previous": "Précédent",
+    "next": "Suivant"
+  },
+  "home": {
+    "title": "ACCUEIL",
+    "welcome": "Bienvenue",
+    "portfolio": "Portfolio",
+    "designer": "Développeur Web",
+    "explore": "Découvrir Mes Projets",
+    "scroll": "Défiler vers le bas",
+    "creative": "Créer des expériences",
+    "innovative": "digitales performantes.",
+    "modern": "Moderne",
+    "intro": "Je conçois et développe des sites vitrines et des applications web performantes, en assurant la maintenance et l'optimisation de sites existants."
+  },
+  "work": {
+    "title": "PROJETS",
+    "projects": "Projets",
+    "realizations": "Réalisations",
+    "experiences": "Expériences",
+    "selectedWorks": "Projets sélectionnés",
+    "viewProject": "Voir mes projets",
+    "allProjects": "Tous les projets",
+    "technologies": "Technologies",
+    "client": "Client",
+    "duration": "Durée",
+    "role": "Rôle",
+    "viewLive": "Voir en ligne",
+    "viewCode": "Voir le code",
+    "discover": "Découvrez quelques-unes de mes réalisations récentes"
+  },
+  "about": {
+    "title": "À PROPOS",
+    "about": "À propos de moi",
+    "journey": "Parcours",
+    "skills": "Compétences",
+    "intro": "Développeur Web Freelance basé à Bruyères-sur-Oise, je conçois et développe des sites vitrines, assure la maintenance et l'optimisation de sites existants, et intègre des solutions personnalisées pour répondre à des besoins spécifiques.",
+    "experience": "Expérience",
+    "education": "Formation",
+    "interests": "Centres d'intérêt",
+    "downloadCV": "Télécharger CV",
+    "frontend": "Frontend",
+    "backend": "Backend",
+    "design": "Design",
+    "other": "Autres",
+    "years": "Années d'expérience",
+    "clients": "Clients satisfaits",
+    "projects": "Projets réalisés",
+    "designer": "Développeur passionné par l'expérience utilisateur",
+    "learnMore": "En savoir plus",
+    "experience_details": [
+      {
+        "title": "Auto-Entreprise",
+        "role": "Développeur Web Freelance",
+        "period": "2019 - 2022 | 2022 - Aujourd'hui",
+        "description": [
+          "Conception et développement de sites vitrines.",
+          "Maintenance et optimisation de sites existants.",
+          "Intégration de solutions personnalisées pour répondre à des besoins spécifiques.",
+          "Support technique et formation pour garantir l'autonomie des clients."
+        ]
+      },
+      {
+        "title": "ASUS France",
+        "role": "Webmaster",
+        "period": "Mai 2022 - Août 2022",
+        "description": [
+          "Conception, développement, gestion et maintenance des sites web français.",
+          "Collaboration internationale : coordination avec ASUS Europe et application des correctifs techniques via Jira, en lien avec Taiwan.",
+          "Support et traduction : adaptation des contenus marketing en français et assistance technique pour les campagnes européennes.",
+          "Participation aux réunions marketing : contribution aux stratégies digitales et intégration des initiatives marketing sur les plateformes web."
+        ]
+      },
+      {
+        "title": "MGS Informatique",
+        "role": "Développeur Web Junior",
+        "period": "Septembre 2018 - Février 2019",
+        "description": [
+          "Conception, développement, gestion et maintenance des sites web.",
+          "Formation de l'équipe sur HTML, CSS et WordPress.",
+          "Consultation et analyse des besoins de l'entreprise cliente."
+        ]
+      }
+    ],
+    "education_details": [
+      {
+        "title": "IFOCOP",
+        "degree": "Formation développeur intégrateur Web",
+        "period": "Septembre 2018 - Février 2019",
+        "description": [
+          "HTML 5 / CSS 3 / JavaScript ES6",
+          "CMS Wordpress / Drupal",
+          "Intégration et gestion MySQL BDD"
+        ]
+      }
+    ],
+    "skill_details": {
+      "soft": [
+        "Empathique", "Autonome", "Coopératif", "Créatif"
+      ],
+      "hard": [
+        "Idéation", "Brainstorming", "Design", "Maquettage", "Prototypage", "Conception", "Développement", "Optimisation", "Support technique"
+      ],
+      "framework": "Vue/Nuxt3, React/Next, AngularJs",
+      "data": "SQL, GraphQL",
+      "backend": "Node.Js, Express",
+      "design": "Figma, PhotoShop",
+      "management": "JIRA, Trello",
+      "animation": "GSAP, Motion",
+      "webgl": "Three, Tresjs, Fiber",
+      "cms": "Strapi",
+      "3d": "Blender"
+    }
+  },
+  "contact": {
+    "title": "CONTACT",
+    "letsChat": "Échangeons",
+    "collaborate": "Travaillons ensemble",
+    "contactMe": "Me contacter",
+    "name": "Nom",
+    "email": "Email",
+    "message": "Message",
+    "send": "Envoyer",
+    "success": "Message envoyé avec succès!",
+    "error": "Une erreur est survenue. Veuillez réessayer.",
+    "subject": "Sujet",
+    "phone": "06.08.53.52.80",
+    "address": "Bruyères-sur-Oise, 95820",
+    "email_address": "contact@alexis-germain.fr",
+    "website": "alexis-germain.fr",
+    "social": "Réseaux sociaux",
+    "follow": "Suivez-moi",
+    "required": "Champ obligatoire",
+    "project": "Vous avez un projet en tête ?",
+    "open": "Je suis toujours ouvert à discuter de nouveaux projets, idées créatives ou opportunités de collaboration."
+  },
+  "loading": {
+    "loading": "Chargement",
+    "please_wait": "Veuillez patienter",
+    "almost_ready": "Presque prêt",
+    "preparing": "Préparation du contenu"
+  },
+  "notFound": {
+    "title": "404",
+    "page": "Page",
+    "not": "Non",
+    "found": "Trouvée",
+    "goHome": "Retour à l'accueil",
+    "sorry": "Désolé, la page que vous recherchez n'existe pas."
+  },
+  "projects": {
+    "portfolio": {
+      "title": "Portfolio Minimaliste",
+      "description": "Design et développement d'un portfolio épuré pour un photographe"
+    },
+    "ecommerce": {
+      "title": "Application Web E-commerce",
+      "description": "Interface utilisateur moderne pour une boutique en ligne"
+    },
+    "dashboard": {
+      "title": "Dashboard Analytics",
+      "description": "Tableau de bord interactif avec visualisations de données"
+    }
+  },
+  "footer": {
+    "rights": "Tous droits réservés",
+    "designed": "Conçu & Développé par",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "cookies": "Cookies"
+  },
+  "theme": {
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
+  },
+  "language": {
+    "en": "Anglais",
+    "fr": "Français",
+    "select": "Choisir la langue"
+  }
 }

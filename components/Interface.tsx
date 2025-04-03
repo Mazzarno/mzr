@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 import ThemeSwitcher from "./ThemeSwitch";
 import Logo from "./Logo";
+import { motion, useMotionValue, animate } from "framer-motion";
 
 interface InterfaceProps {
   children: ReactNode;
@@ -13,7 +14,8 @@ interface InterfaceProps {
 
 export default function Interface({ children, pathname }: InterfaceProps) {
 
-
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
 
   const getTitleInfo = (path: string): { title: string; expressions: string[] } => {
 
@@ -27,7 +29,6 @@ export default function Interface({ children, pathname }: InterfaceProps) {
     if (path === '/404') { 
         return { title: "404", expressions: ["Page", "Non", "Trouvée"] };
     }
-
     switch (potentialTitle) {
         case 'work':
             return { title: "WORK", expressions: ["Projets", "Réalisations", "Expériences"] };
@@ -65,7 +66,16 @@ export default function Interface({ children, pathname }: InterfaceProps) {
         ))}
       </div>
 
-      <div className="relative w-[95vw] h-[90vh] rounded-2xl shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)] overflow-hidden z-10 backdrop-blur-md ">
+      <motion.div className="relative w-[90vw] h-[90vh] rounded-2xl shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)] overflow-hidden z-10 backdrop-blur-md "
+              drag
+              dragElastic={0.5}
+              whileDrag={{ scale: 1 }}
+              style={{ x, y }}
+              onDragEnd={() => {
+                animate(x, 0, { type: "spring", stiffness: 150, damping: 15 });
+                animate(y, 0, { type: "spring", stiffness: 150, damping: 15 });
+              }}
+      >
         <div className="absolute w-full h-3 bottom-0 bg-neutral z-20" />
         <div className="absolute h-full w-3 right-0 bg-neutral z-20" />
         <div className="absolute h-full w-3 left-0 bg-neutral z-20" />
@@ -114,7 +124,7 @@ export default function Interface({ children, pathname }: InterfaceProps) {
             <span key={index} className="text-base text-neutral-content">{exp}</span>
           ))}
         </div>
-      </div> 
+      </motion.div> 
     </div> 
   );
 }
