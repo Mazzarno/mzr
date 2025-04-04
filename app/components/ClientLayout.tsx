@@ -292,9 +292,9 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     },
     visible: { 
       opacity: 1, 
-      y: 0,  // Descendre à sa position normale
+      y: 0,  
       transition: {
-        duration: 0.8, // Augmenter la durée pour qu'elle corresponde à l'animation de sortie du loading
+        duration: 0.8, 
         ease: animationConfig.easings.content
       }
     }
@@ -375,7 +375,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         <Background />
       </motion.div>
 
-      <div className="fixed inset-0 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-9 2xl:grid-cols-11 divide-x-2 divide-dashed divide-neutral-content pointer-events-none opacity-50">
+      <div className="fixed inset-0 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-9 2xl:grid-cols-11 divide-x-2 divide-dashed divide-neutral-content pointer-events-none opacity-30">
         {[...Array(11)].map((_, i) => (
           <div key={i} className={`
             ${i >= 2 ? 'hidden sm:block' : ''}
@@ -418,8 +418,8 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             <div className="absolute w-full h-3 top-0 bg-neutral z-70 draggable link" />
      
             {!isMobile && (
-              <div className="absolute top-0 left-0 right-0 flex items-center justify-between text-sm text-neutral-content bg-neutral py-2 px-4 shadow-[1px_1px_10px_0px_rgba(0,_0,_0,_0.1)] rounded-br-3xl z-60 backdrop-blur-sm draggable">
-                <div className="flex items-center space-x-4">
+              <div className="absolute top-0 left-0 w-auto h-14 flex items-center justify-between text-sm text-neutral-content bg-neutral py-2 px-4 shadow-[1px_1px_10px_0px_rgba(0,_0,_0,_0.1)] rounded-br-3xl z-60 backdrop-blur-sm">
+                <div className="flex items-center space-x-4 pr-4">
                   <Logo />  
                   <Link href="/" className="flex items-center space-x-1 group">
                     <span className={`font-bold text-base text-neutral-content transition-colors duration-200 ${isActive('/') ? 'text-neutral-content' : 'text-base-100'}`}>ALXS</span>
@@ -442,7 +442,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                           >
                               <Link
                                 href={link.href}
-                                className={`block px-2 text-neutral-content text-sm transition-all duration-200 ${
+                                className={`block px-1 text-neutral-content text-sm transition-all duration-200 ${
                                   isActive(link.href)
                                     ? 'font-semibold text-neutral-content'
                                     : 'text-neutral-content'
@@ -456,8 +456,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                                   )}
                                 </div>
                               </Link>
-                              
-                            
                               <motion.div
                                 className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary to-secondary rounded-full"
                                 variants={indicatorVariants}
@@ -471,7 +469,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                           variants={navLinkVariants}
                           initial="hidden"
                           animate="visible"
-                          className="w-[50px] flex justify-center"
+                          className=" flex justify-center"
                         >
                           <LanguageSwitcher />
                         </motion.div>
@@ -480,7 +478,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                           variants={navLinkVariants}
                           initial="hidden"
                           animate="visible"
-                          className="w-[50px] flex justify-center"
+                          className=" flex justify-center"
                         >
                           <a className="text-base-content">
                             <ThemeSwitcher />
@@ -496,7 +494,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   
             {isMobile && (
               <>
-                <div className="absolute top-0 left-0 right-0 flex items-center justify-between text-sm text-neutral-content bg-neutral py-3 px-4 shadow-[0px_1px_10px_0px_rgba(0,_0,_0,_0.1)] z-60 backdrop-blur-sm draggable">
+                <div className="absolute top-0 left-0 right-0 flex items-center justify-between text-sm text-neutral-content bg-neutral py-3 px-4 shadow-[0px_1px_10px_0px_rgba(0,_0,_0,_0.1)] z-60 backdrop-blur-sm ">
                   <div className="flex items-center space-x-2">
                     <Logo />  
                     <Link href="/" className="flex items-center space-x-0.5 group">
@@ -592,22 +590,20 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             </AnimatePresence>
             
             <motion.div 
-              className={`w-full h-full overflow-auto scrollbar-hide ${isMobile ? 'pt-16 pb-12 px-4' : 'pt-16 pb-16'} z-0`}
+              className={`w-full h-full overflow-auto scrollbar-hide z-0`}
               variants={contentVariants}
               initial="hidden"
               animate={contentVisible ? "visible" : "hidden"}
             >
-              <div className={`mx-auto max-w-6xl ${isMobile ? '' : 'px-8 md:px-12 lg:px-16'}`}>
                 <AnimatePresence mode="wait">
                   <div key={pathname}>
                     {children}
                   </div>
                 </AnimatePresence>
-              </div>
             </motion.div>
             
             {/* Barre d'information en bas - Adaptée pour mobile et desktop */}
-            <div className={`absolute bottom-0 right-0 flex items-center space-x-2 text-neutral-content bg-neutral py-3 px-4 shadow-[-1px_-1px_10px_0px_rgba(0,_0,_0,_0.1)] rounded-tl-3xl z-60 backdrop-blur-sm draggable ${isMobile ? 'text-xs' : ''}`}>
+            <div className={`absolute bottom-0 right-0 w-auto h-14 flex items-center space-x-2 text-neutral-content bg-neutral py-3 px-4 shadow-[-1px_-1px_10px_0px_rgba(0,_0,_0,_0.1)] rounded-tl-3xl z-60 backdrop-blur-sm  ${isMobile ? 'text-xs' : ''}`}>
               <span className={`font-bold ${isMobile ? 'text-xs' : 'text-sm'}`}>{title}</span>
               {expressions.length > 0 && !isMobile && <span className="text-sm text-neutral-content">—</span>}
               {!isMobile && (

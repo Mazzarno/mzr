@@ -76,6 +76,9 @@ body {
   overflow-x: hidden !important;
   font-family: var(--font-inter), sans-serif !important;
   min-height: 100vh;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overflow: hidden;
 }
 html,
 body,

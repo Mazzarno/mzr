@@ -8,7 +8,7 @@ export default function Logo() {
   return (
     <div
       key={resolvedTheme}
-      className="relative h-6"
+      className="relative h-7"
     >
       <svg
         viewBox="0 0 65 120"
@@ -24,7 +24,7 @@ export default function Logo() {
           fill="currentColor"
         />
       </svg>
-      <div className="dot w-4 h-4 bg-base rounded-full absolute top-0 left-0" />
+
     </div>
   );
 }

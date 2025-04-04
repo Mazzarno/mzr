@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useCallback, useState, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
-import Model from './Model';
+import Model from './ModelTest';
 import { Environment } from '@react-three/drei'
 import { useMotionValue, useSpring } from "framer-motion"
 import { useTheme } from 'next-themes'
@@ -18,24 +18,17 @@ export default function Background() {
     x: useMotionValue(0.5),
     y: useMotionValue(0.5)
   }
-
-  // Réduire la raideur et l'amortissement pour des animations plus fluides et moins gourmandes
   const smoothMouse = {
     x: useSpring(mouse.x, {stiffness: 50, damping: 80, mass: 2}),
     y: useSpring(mouse.y, {stiffness: 50, damping: 80, mass: 2})
   }
 
-  // Détecter les performances du système
+
   useEffect(() => {
-    // Vérifier si l'appareil est mobile (généralement moins performant)
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent
     );
-    
-    // Vérifier le nombre de cœurs CPU comme indicateur de performance
     const cpuCores = navigator.hardwareConcurrency || 4;
-    
-    // Activer le mode basse performance si mobile ou peu de cœurs CPU
     if (isMobile || cpuCores <= 4) {
       setLowPerformanceMode(true);
     }

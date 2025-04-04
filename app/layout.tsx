@@ -7,6 +7,7 @@ import { ThemeProvider } from "./components/ThemeProvider";
 import { LanguageProvider } from "./components/LanguageProvider";
 import ClientLayout from "./components/ClientLayout";
 import AnimatedCursor from "react-animated-cursor";
+import FaviconUpdater from "./components/FaviconUpdater";
 
 
 const inter = Inter({
@@ -40,7 +41,8 @@ export default function RootLayout({
           themes={["light", "dark"]}
         >
           <ThemeProvider>
-            <LanguageProvider>
+            <LanguageProvider>  
+              <FaviconUpdater />
               <AnimatedCursor
                 innerSize={4}
                 outerSize={30}

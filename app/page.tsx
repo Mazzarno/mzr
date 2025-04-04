@@ -31,7 +31,7 @@ const cardVariants = {
 
 export default function HomePage() {
   return (
-    <main className="text-base-content relative mx-auto">
+    <main className="text-base-content relative">
       <HeroSection />
       <FeaturedProjects />
       <AboutPreview />
@@ -42,20 +42,12 @@ export default function HomePage() {
 
 const HeroSection = () => {
   return (
-    <section className="min-h-[90vh] flex flex-col justify-center relative overflow-hidden py-20">
-      {/* Arrière-plan décoratif moderne */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/3 to-secondary/3"></div>
-        <div className="absolute top-20 right-20 w-96 h-96 rounded-full bg-primary/5 blur-[100px]"></div>
-        <div className="absolute bottom-20 left-20 w-96 h-96 rounded-full bg-secondary/5 blur-[100px]"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-primary/3 to-secondary/3 blur-[120px] opacity-30"></div>
-      </div>
-      
-      <div className="container mx-auto px-6">
+    <section className="min-h-screen min-w-screen flex flex-col justify-center  overflow-hidden">
+      <div className="container ">
         <motion.div
           initial="hidden"
           animate="visible"
-          className="space-y-8 max-w-4xl"
+     
         >
           <motion.div 
             variants={fadeIn} 
