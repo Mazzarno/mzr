@@ -156,6 +156,9 @@ const WorkHeader: React.FC = () => {
         <div className="absolute bottom-20 left-20 w-72 h-72 rounded-full bg-secondary/10 blur-3xl"></div>
       </div>
       
+
+
+
       <div className="container mx-auto px-6">
         <motion.div
           initial="hidden"

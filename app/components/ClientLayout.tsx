@@ -197,21 +197,16 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // Fonction pour gérer la fin du chargement
+
   const handleLoadComplete = () => {
-    // Au lieu d'ajouter un délai, on fait disparaître immédiatement le loading
-    // et on anime simultanément le contenu vers le bas
+
     setLoading(false);
-    
-    // Afficher immédiatement le contenu pour que son animation se synchronise
-    // avec la disparition du loading
+
     setContentVisible(true);
     
-    // Afficher les liens de navigation après un délai
     setTimeout(() => {
       setShowNavLinks(true);
       
-      // Afficher le background 3D en dernier
       setTimeout(() => {
         setBackgroundVisible(true);
         setAnimationSequenceComplete(true);
@@ -221,7 +216,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   };
 
   const handleInterfaceAnimationComplete = () => {
-    // Démarrer le loading une fois que l'interface est complètement visible
     setStartLoading(true);
   };
 
@@ -288,7 +282,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const contentVariants = {
     hidden: { 
       opacity: 0, 
-      y: -30 // Commencer au-dessus de sa position finale
+      y: -30 
     },
     visible: { 
       opacity: 1, 
@@ -319,10 +313,10 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     initial: { opacity: 1 },
     exit: {
       opacity: 0,
-      y: 100, // Descendre vers le bas lors de la sortie
+      y: 100,
       transition: {
-        duration: 0.8, // Augmenter la durée pour qu'elle corresponde à l'animation du contenu
-        ease: animationConfig.easings.content // Utiliser la même courbe d'accélération que le contenu
+        duration: 0.8,
+        ease: animationConfig.easings.content
       }
     }
   };
@@ -390,7 +384,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
       <AnimatePresence mode="wait">
         {interfaceVisible && (
           <motion.div 
-            className={`relative overflow-hidden z-10 backdrop-blur-md scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)] rounded-2xl
+            className={`relative overflow-hidden z-10 backdrop-blur-sm scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)] rounded-2xl
                         ${isMobile ? 'w-[95vw] h-[95vh]' : 'w-[90vw]  h-[90vh]'}`}
             id="interface"
             drag={isDragging && !isMobile}
@@ -416,14 +410,86 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             <div className="absolute h-full w-3 right-0 bg-neutral z-70 draggable link" />
             <div className="absolute h-full w-3 left-0 bg-neutral z-70 draggable link" />
             <div className="absolute w-full h-3 top-0 bg-neutral z-70 draggable link" />
-     
             {!isMobile && (
-              <div className="absolute top-0 left-0 w-auto h-14 flex items-center justify-between text-sm text-neutral-content bg-neutral py-2 px-4 shadow-[1px_1px_10px_0px_rgba(0,_0,_0,_0.1)] rounded-br-3xl z-60 backdrop-blur-sm">
-                <div className="flex items-center space-x-4 pr-4">
+              <div className="absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between text-sm text-neutral-content bg-neutral px-4 rounded-br-[20px] z-60">
+                <Logo />
+                <div className="absolute top-3 -right-5"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z" fill="var(--color-neutral)"></path>
+                </svg>
+                </div>
+                <div className="absolute -bottom-5 left-3"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z" fill="var(--color-neutral)"></path>
+                </svg>
+                </div>
+                <AnimatePresence mode="wait">
+                    {showNavLinks && (
+                      <div className="flex items-center space-x-4">
+                        {navLinks.map((link, index) => (
+                          <motion.div
+                            key={link.href}
+                            custom={index}
+                            variants={navLinkVariants}
+                            initial="hidden"
+                            animate="visible"
+                            className="relative h-8 flex items-center"
+                          >
+                              <Link
+                                href={link.href}
+                                className={`block px-1 text-neutral-content text-sm transition-all duration-200 ${
+                                  isActive(link.href)
+                                    ? 'font-semibold text-neutral-content'
+                                    : 'text-neutral-content'
+                                }`}
+                              >
+                                <div className="w-[70px] text-center">
+                                  {link.labelKey ? (
+                                    <AnimatedText translationKey={link.labelKey} className="inline-block" />
+                                  ) : (
+                                    <AnimatedText text={link.labelKey || ""} className="inline-block" />
+                                  )}
+                                </div>
+                              </Link>
+                              <motion.div
+                                className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary to-secondary rounded-full"
+                                variants={indicatorVariants}
+                                initial="initial"
+                                animate={isActive(link.href) ? "active" : "initial"}
+                              />
+                          </motion.div>
+                        ))}
+                        <motion.div
+                          custom={3}
+                          variants={navLinkVariants}
+                          initial="hidden"
+                          animate="visible"
+                          className=" flex justify-center"
+                        >
+                          <LanguageSwitcher />
+                        </motion.div>
+                        <motion.div
+                          custom={4}
+                          variants={navLinkVariants}
+                          initial="hidden"
+                          animate="visible"
+                          className=" flex justify-center"
+                        >
+                          <a className="text-base-content">
+                            <ThemeSwitcher />
+                          </a>
+                        </motion.div>
+                      </div>
+                    )}
+                  </AnimatePresence>
+                </div>
+        
+            )}
+            {isMobile && (
+              <div className="absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between text-sm text-neutral-content bg-neutral px-4 rounded-br-[20px] z-60">
+                <div className="flex items-center">
                   <Logo />  
-                  <Link href="/" className="flex items-center space-x-1 group">
-                    <span className={`font-bold text-base text-neutral-content transition-colors duration-200 ${isActive('/') ? 'text-neutral-content' : 'text-base-100'}`}>ALXS</span>
-                    <span className={`font-bold text-base text-neutral-content transition-colors duration-200 ${isActive('/') ? 'text-neutral-content' : 'text-base-100'}`}>GRMN</span>
+                  <Link href="/" className="flex items-center space-x-0.5 group">
+                    <span className={`text-base text-neutral-content transition-colors duration-200`}>ALXS</span>
+                    <span className={`text-base text-neutral-content transition-colors duration-200`}>GRMN</span>
                   </Link>
                 </div>
          
@@ -577,6 +643,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
               {loading && startLoading && (
                 <motion.div 
                   className="absolute inset-0 z-50 bg-base-100 flex items-center justify-center"
+                  id="loading"
                   initial="initial"
                   exit="exit"
                   variants={loadingExitVariants}
@@ -591,6 +658,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             
             <motion.div 
               className={`w-full h-full overflow-auto scrollbar-hide z-0`}
+              id="content"
               variants={contentVariants}
               initial="hidden"
               animate={contentVisible ? "visible" : "hidden"}
@@ -604,6 +672,13 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             
             {/* Barre d'information en bas - Adaptée pour mobile et desktop */}
             <div className={`absolute bottom-0 right-0 w-auto h-14 flex items-center space-x-2 text-neutral-content bg-neutral py-3 px-4 shadow-[-1px_-1px_10px_0px_rgba(0,_0,_0,_0.1)] rounded-tl-3xl z-60 backdrop-blur-sm  ${isMobile ? 'text-xs' : ''}`}>
+            <div className="absolute -top-4 right-0"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M16 16V0C16 8.83656 8.83656 16 0 16H16Z" fill="white"></path>
+</svg></div>
+<div className="absolute bottom-3 -left-4"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M16 16V0C16 8.83656 8.83656 16 0 16H16Z" fill="white"></path>
+</svg></div>
+
               <span className={`font-bold ${isMobile ? 'text-xs' : 'text-sm'}`}>{title}</span>
               {expressions.length > 0 && !isMobile && <span className="text-sm text-neutral-content">—</span>}
               {!isMobile && (
