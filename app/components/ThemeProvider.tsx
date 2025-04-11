@@ -6,11 +6,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const { theme } = useTheme();
 
   useEffect(() => {
-    // Applique le thème DaisyUI en fonction du thème next-themes
     if (theme === "dark" || theme === "light") {
       document.documentElement.setAttribute("data-theme", theme);
     } else if (theme === "system") {
-      // Détecte le mode système et applique le thème correspondant
       const isDarkMode = window.matchMedia(
         "(prefers-color-scheme: dark)"
       ).matches;

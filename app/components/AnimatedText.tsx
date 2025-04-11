@@ -10,7 +10,6 @@ type AnimatedTextProps = {
   className?: string;
 };
 
-// Utiliser memo pour éviter les re-rendus inutiles
 const AnimatedText = memo(({ translationKey, text, className = "" }: AnimatedTextProps) => {
   const t = useTranslations();
   const [displayText, setDisplayText] = useState("");
@@ -23,15 +22,13 @@ const AnimatedText = memo(({ translationKey, text, className = "" }: AnimatedTex
     } else if (text) {
       newText = text;
     }
-    
-    // Ne mettre à jour que si le texte a changé
     if (newText !== prevTextRef.current) {
       setDisplayText(newText);
       prevTextRef.current = newText;
     }
   }, [translationKey, text, t]);
 
-  // Animation variants pour chaque caractère - simplifiées pour de meilleures performances
+
   const letterVariants = {
     hidden: { 
       opacity: 0,
@@ -45,7 +42,7 @@ const AnimatedText = memo(({ translationKey, text, className = "" }: AnimatedTex
       transition: { 
         duration: 0.2,
         ease: "easeOut",
-        delay: Math.min(i * 0.01, 0.3) // Limiter le délai maximum à 300ms
+        delay: Math.min(i * 0.01, 0.3)
       }
     }),
     exit: {
@@ -56,8 +53,6 @@ const AnimatedText = memo(({ translationKey, text, className = "" }: AnimatedTex
       }
     }
   };
-
-  // Diviser le texte en caractères pour l'animation
   const characters = displayText.split("");
 
   return (

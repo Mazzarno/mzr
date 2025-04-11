@@ -8,94 +8,83 @@ interface LoadingProps {
   onLoadComplete?: () => void;
 }
 
-const Loading: React.FC<LoadingProps> = ({ 
-  duration = 3, 
-  onLoadComplete 
-}) => {
+const Loading: React.FC<LoadingProps> = ({ duration = 3, onLoadComplete }) => {
   const [progress, setProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
-  
-  // Texte à afficher
+
   const text = "ALEXIS GERMAIN";
-  
+
   useEffect(() => {
-    // Calculer la progression du chargement
     const interval = setInterval(() => {
-      setProgress(prev => {
+      setProgress((prev) => {
         const newProgress = prev + 100 / (duration * 10);
-        
         if (newProgress >= 100) {
           clearInterval(interval);
-          
-          // Déclencher immédiatement l'animation de sortie
           setTimeout(() => {
             setIsComplete(true);
-            // Appeler onLoadComplete après un court délai pour permettre à l'animation de sortie de commencer
             if (onLoadComplete) setTimeout(onLoadComplete, 400);
           }, 300);
-          
+
           return 100;
         }
-        
         return newProgress;
       });
     }, 100);
-    
+
     return () => clearInterval(interval);
   }, [duration, onLoadComplete]);
-  
-  // Animation commune pour tous les éléments
+
+
   const commonTransition = {
     duration: 0.5,
-    ease: [0.22, 1, 0.36, 1]
+    ease: [0.22, 1, 0.36, 1],
   };
-  
-  // Animation de conteneur
+
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1, 
-      transition: commonTransition 
+    visible: {
+      opacity: 1,
+      transition: commonTransition,
     },
-    exit: { 
+    exit: {
       opacity: 0,
       transition: {
         ...commonTransition,
-        duration: 0.6
-      }
-    }
+        duration: 0.6,
+      },
+    },
   };
-  
-  // Animation du texte et de tous les éléments
+
+
   const itemVariants = {
     hidden: { opacity: 0, y: 10 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: commonTransition
+      transition: commonTransition,
     },
     exit: {
       opacity: 0,
       y: -10,
-      transition: commonTransition
-    }
+      transition: commonTransition,
+    },
   };
-  
-  // Animation de la barre de progression
+
+
   const progressVariants = {
     hidden: { width: "0%" },
-    visible: { 
+    visible: {
       width: `${progress}%`,
-      transition: { 
+      transition: {
         duration: 0.3,
-        ease: "linear"
-      }
+        ease: "linear",
+      },
     },
     exit: {
       width: "100%",
       opacity: 0,
-      transition: commonTransition
-    }
+      transition: commonTransition,
+    },
   };
 
   return (
@@ -109,7 +98,7 @@ const Loading: React.FC<LoadingProps> = ({
           exit="exit"
           className="flex flex-col items-center justify-center h-full bg-gradient-to-bl from-base-200/50 to-base-100"
         >
-          <motion.div 
+          <motion.div
             className="flex flex-col items-center space-y-10"
             variants={itemVariants}
           >
@@ -118,24 +107,23 @@ const Loading: React.FC<LoadingProps> = ({
               style={{ fontFamily: "var(--font-despairs)" }}
               variants={itemVariants}
             >
-              {/* Texte de fond (invisible) pour maintenir l'espace */}
+          
               <span className="opacity-0">{text}</span>
-              
-              {/* Texte visible qui se remplit progressivement */}
-              <div 
-                className="absolute inset-0 overflow-hidden whitespace-nowrap" 
-                style={{ 
+
+              <div
+                className="absolute inset-0 overflow-hidden whitespace-nowrap"
+                style={{
                   width: `${progress}%`,
                   backgroundImage: `linear-gradient(to right, var(--color-primary), var(--color-secondary))`,
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
-                  color: "transparent"
+                  color: "transparent",
                 }}
               >
                 {text}
               </div>
             </motion.div>
-            
+
             <div className="w-full flex flex-col items-center space-y-3">
               <div className="w-full max-w-sm h-[2px] bg-base-300/30 rounded-full overflow-hidden">
                 <motion.div
@@ -143,7 +131,7 @@ const Loading: React.FC<LoadingProps> = ({
                   className="h-full bg-gradient-to-r from-primary to-secondary rounded-full"
                 />
               </div>
-              
+
               <motion.div
                 className="text-xs font-medium text-base-content/70"
                 variants={itemVariants}

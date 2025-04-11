@@ -8,25 +8,22 @@ export default function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
-
   if (!mounted) return null;
-
   const isDark = theme === "dark";
-
   const toggleTheme = () => {
     setTheme(isDark ? "light" : "dark");
   };
 
   return (
-    <label className="swap swap-rotate">
+    <label className="swap swap-rotate pb-0.5 link">
       <input
         type="checkbox"
         checked={isDark}
         onChange={toggleTheme}
         aria-label="Toggle theme"
       />
-      <Sun size={20} className="swap-off text-yellow-500" />
-      <Moon size={20} className="swap-on text-indigo-500" />
+      <Sun size={17} className="swap-off text-yellow-500" />
+      <Moon size={17} className="swap-on text-indigo-500" />
     </label>
   );
 }

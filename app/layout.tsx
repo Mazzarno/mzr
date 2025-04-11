@@ -5,23 +5,23 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { LanguageProvider } from "./components/LanguageProvider";
 import ClientLayout from "./components/ClientLayout";
-import AnimatedCursor from "react-animated-cursor";
-import FaviconUpdater from "./components/FaviconUpdater";
 
 const dmSans = localFont({
   src: "../public/fonts/DMSans.ttf",
   display: "swap",
   variable: "--font-dm-sans",
+  preload: true,
 });
 
 const despairs = localFont({
   src: "../public/fonts/Despairs.ttf",
   display: "swap",
   variable: "--font-despairs",
+  preload: true,
 });
 
 export const metadata: Metadata = {
-  title: "Alexis Germain - Web Developer",
+  title: "Alxs Grmn",
   description: "Alexis Germain - Web Developer",
 };
 
@@ -32,7 +32,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr" suppressHydrationWarning>
-      <body className={`${dmSans.variable} ${despairs.variable} antialiased select-none`}>
+      <body
+        className={`${dmSans.variable} ${despairs.variable} antialiased select-none`}
+      >
         <NextThemesProvider
           attribute="data-theme"
           defaultTheme="system"
@@ -40,25 +42,8 @@ export default function RootLayout({
           themes={["light", "dark"]}
         >
           <ThemeProvider>
-            <LanguageProvider>  
-              <FaviconUpdater />
-              <AnimatedCursor
-                innerSize={4}
-                outerSize={30}
-                innerScale={1.5}
-                outerScale={1.5}
-                outerAlpha={0}
-                innerStyle={{
-                  backgroundColor: "var(--color-base-content)",
-                }}
-                outerStyle={{
-                  border: "1px solid var(--color-base-content)",
-                }}
-                trailingSpeed={10}
-              />
-              <ClientLayout>
-                {children}
-              </ClientLayout>
+            <LanguageProvider>
+              <ClientLayout>{children}</ClientLayout>
             </LanguageProvider>
           </ThemeProvider>
         </NextThemesProvider>

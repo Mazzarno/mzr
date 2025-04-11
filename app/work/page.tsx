@@ -24,34 +24,34 @@ const fadeIn = {
     transition: {
       delay: i * 0.1,
       duration: 0.7,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  })
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
 };
 
 // Animation pour les cartes de projet
 const cardVariants = {
   hidden: { opacity: 0, y: 30 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { 
-      duration: 0.6, 
-      ease: [0.22, 1, 0.36, 1] 
-    } 
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1],
+    },
   },
-  hover: { 
-    y: -12, 
-    scale: 1.03, 
+  hover: {
+    y: -12,
+    scale: 1.03,
     boxShadow: "0 20px 40px -20px rgba(0, 0, 0, 0.2)",
-    transition: { duration: 0.4, ease: "easeOut" } 
-  }
+    transition: { duration: 0.4, ease: "easeOut" },
+  },
 };
 
 // Animation pour les tags
 const tagVariants = {
   initial: { scale: 1 },
-  hover: { scale: 1.1, transition: { duration: 0.2 } }
+  hover: { scale: 1.1, transition: { duration: 0.2 } },
 };
 
 // Catégories de projets
@@ -65,11 +65,12 @@ export default function WorkPage() {
     {
       id: 1,
       title: "Portfolio Minimaliste",
-      description: "Design et développement d'un portfolio épuré pour un photographe",
+      description:
+        "Design et développement d'un portfolio épuré pour un photographe",
       category: "Web Design",
       tags: ["Next.js", "Framer Motion", "Tailwind CSS"],
       image: "/medias/project1.jpg",
-      year: "2023"
+      year: "2023",
     },
     {
       id: 2,
@@ -78,7 +79,7 @@ export default function WorkPage() {
       category: "Développement",
       tags: ["React", "Redux", "Node.js"],
       image: "/medias/project2.jpg",
-      year: "2023"
+      year: "2023",
     },
     {
       id: 3,
@@ -87,7 +88,7 @@ export default function WorkPage() {
       category: "UI/UX",
       tags: ["TypeScript", "D3.js", "Firebase"],
       image: "/medias/project3.jpg",
-      year: "2022"
+      year: "2022",
     },
     {
       id: 4,
@@ -96,7 +97,7 @@ export default function WorkPage() {
       category: "Branding",
       tags: ["WordPress", "GSAP", "Figma"],
       image: "/medias/project4.jpg",
-      year: "2022"
+      year: "2022",
     },
     {
       id: 5,
@@ -105,37 +106,39 @@ export default function WorkPage() {
       category: "UI/UX",
       tags: ["React Native", "Firebase", "Figma"],
       image: "/medias/project5.jpg",
-      year: "2021"
+      year: "2021",
     },
     {
       id: 6,
       title: "Plateforme Éducative",
-      description: "Système de gestion de cours en ligne avec espace interactif",
+      description:
+        "Système de gestion de cours en ligne avec espace interactif",
       category: "Développement",
       tags: ["Vue.js", "Express", "MongoDB"],
       image: "/medias/project6.jpg",
-      year: "2021"
-    }
+      year: "2021",
+    },
   ];
 
   // Filtrer les projets par catégorie
-  const filteredProjects = activeCategory === "Tous" 
-    ? projects 
-    : projects.filter(project => project.category === activeCategory);
+  const filteredProjects =
+    activeCategory === "Tous"
+      ? projects
+      : projects.filter((project) => project.category === activeCategory);
 
   return (
     <main className="text-base-content relative min-h-screen">
       <WorkHeader />
       <div className="container mx-auto px-6 relative z-10">
-        <ProjectFilters 
-          categories={categories} 
-          activeCategory={activeCategory} 
-          setActiveCategory={setActiveCategory} 
+        <ProjectFilters
+          categories={categories}
+          activeCategory={activeCategory}
+          setActiveCategory={setActiveCategory}
         />
         <ProjectGrid projects={filteredProjects} />
       </div>
       <WorkContact />
-      
+
       {/* Éléments décoratifs de fond */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full bg-primary/5 blur-[100px]"></div>
@@ -149,30 +152,25 @@ export default function WorkPage() {
 const WorkHeader: React.FC = () => {
   return (
     <section className="py-32 relative overflow-hidden">
-      {/* Arrière-plan décoratif */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/5 via-transparent to-secondary/5"></div>
         <div className="absolute top-20 right-20 w-64 h-64 rounded-full bg-primary/10 blur-3xl"></div>
         <div className="absolute bottom-20 left-20 w-72 h-72 rounded-full bg-secondary/10 blur-3xl"></div>
       </div>
-      
-
-
-
       <div className="container mx-auto px-6">
         <motion.div
           initial="hidden"
           animate="visible"
           className="space-y-8 max-w-4xl"
         >
-          <motion.div 
-            variants={fadeIn} 
+          <motion.div
+            variants={fadeIn}
             custom={0}
             className="inline-block px-5 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4 backdrop-blur-sm border border-primary/20"
           >
             <AnimatedText translationKey="work.title" />
           </motion.div>
-          
+
           <motion.h1
             variants={fadeIn}
             custom={1}
@@ -180,7 +178,7 @@ const WorkHeader: React.FC = () => {
           >
             <AnimatedText translationKey="work.selectedWorks" />
           </motion.h1>
-          
+
           <motion.p
             variants={fadeIn}
             custom={2}
@@ -200,7 +198,11 @@ interface ProjectFiltersProps {
   setActiveCategory: (category: string) => void;
 }
 
-const ProjectFilters: React.FC<ProjectFiltersProps> = ({ categories, activeCategory, setActiveCategory }) => {
+const ProjectFilters: React.FC<ProjectFiltersProps> = ({
+  categories,
+  activeCategory,
+  setActiveCategory,
+}) => {
   return (
     <motion.div
       initial="hidden"
@@ -258,12 +260,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
       whileHover="hover"
       className="group"
     >
-      <motion.div 
+      <motion.div
         variants={cardVariants}
         className="bg-base-100/80 backdrop-blur-sm rounded-2xl overflow-hidden border border-base-200 h-full flex flex-col shadow-sm transition-all duration-300"
       >
         <div className="h-64 bg-base-300 relative overflow-hidden">
-          {/* Image placeholder - remplacer par une vraie image */}
           <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-secondary/20 group-hover:scale-110 transition-transform duration-700 ease-out"></div>
           <div className="absolute top-0 right-0 bg-base-100/70 backdrop-blur-md px-4 py-1.5 m-4 rounded-full text-xs font-medium border border-base-200/50">
             {project.year}
@@ -277,16 +278,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
         </div>
         <div className="p-8 flex-1 flex flex-col">
           <div className="flex justify-between items-start mb-4">
-            <h3 className="font-bold text-2xl group-hover:text-primary transition-colors duration-300">{project.title}</h3>
+            <h3 className="font-bold text-2xl group-hover:text-primary transition-colors duration-300">
+              {project.title}
+            </h3>
             <span className="text-xs px-4 py-1.5 bg-secondary/10 rounded-full text-secondary font-medium border border-secondary/20">
               {project.category}
             </span>
           </div>
-          <p className="text-base-content/70 text-base mb-6 flex-1 leading-relaxed">{project.description}</p>
+          <p className="text-base-content/70 text-base mb-6 flex-1 leading-relaxed">
+            {project.description}
+          </p>
           <div className="flex flex-wrap gap-2 mb-6">
             {project.tags.map((tag: string) => (
-              <motion.span 
-                key={tag} 
+              <motion.span
+                key={tag}
                 className="px-3 py-1.5 bg-base-200/80 text-xs rounded-full font-medium border border-base-300/50"
                 variants={tagVariants}
                 whileHover="hover"
@@ -295,12 +300,23 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
               </motion.span>
             ))}
           </div>
-          <Link 
-            href={`/work/${project.id}`} 
+          <Link
+            href={`/work/${project.id}`}
             className="text-primary font-medium flex items-center gap-1 mt-auto group-hover:gap-3 transition-all duration-300 py-2"
           >
             <span>Voir les détails</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transform group-hover:translate-x-1 transition-transform duration-300">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="transform group-hover:translate-x-1 transition-transform duration-300"
+            >
               <path d="M5 12h14"></path>
               <path d="m12 5 7 7-7 7"></path>
             </svg>
@@ -319,7 +335,7 @@ const WorkContact: React.FC = () => {
         <div className="absolute top-20 right-20 w-80 h-80 rounded-full bg-primary/5 blur-3xl"></div>
         <div className="absolute bottom-20 left-20 w-80 h-80 rounded-full bg-secondary/5 blur-3xl"></div>
       </div>
-      
+
       <div className="container mx-auto px-6">
         <motion.div
           initial="hidden"
@@ -337,18 +353,29 @@ const WorkContact: React.FC = () => {
             <p className="text-base-content/70 text-xl max-w-2xl mx-auto leading-relaxed">
               <AnimatedText translationKey="contact.open" />
             </p>
-            
-            <motion.div 
+
+            <motion.div
               className="pt-8"
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
             >
-              <Link 
-                href="/contact" 
+              <Link
+                href="/contact"
                 className="btn btn-primary btn-lg px-10 py-3 h-auto rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all text-base"
               >
                 <AnimatedText translationKey="contact.contactMe" />
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="ml-2"
+                >
                   <path d="M5 12h14"></path>
                   <path d="m12 5 7 7-7 7"></path>
                 </svg>
