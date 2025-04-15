@@ -13,21 +13,13 @@ const LanguageSwitcher = memo(function LanguageSwitcher() {
   }, [locale, setLocale]);
 
   return (
-    <label className="swap link">
-      <input
-        type="checkbox"
-        onChange={toggleLanguage}
-        checked={locale === "en"}
-      />
-      <div className="swap-on">
-        {" "}
-        <span className="text-sm">EN</span>
-      </div>
-      <div className="swap-off">
-        {" "}
-        <span className="text-sm">FR</span>
-      </div>
-    </label>
+    <button 
+      onClick={toggleLanguage} 
+      className="text-sm text-neutral-content focus:outline-none"
+      aria-label={`Switch to ${locale === "fr" ? "English" : "French"}`}
+    >
+      {locale === "fr" ? "FR" : "EN"}
+    </button>
   );
 });
 

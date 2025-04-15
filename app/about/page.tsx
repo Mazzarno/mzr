@@ -84,7 +84,7 @@ function AboutHeader() {
             variants={fadeIn}
             custom={0}
           >
-            <AnimatedText translationKey="about.title" />
+            <AnimatedText translationKey="about.title" animated={false} />
           </motion.span>
           
           <motion.h1 
@@ -92,7 +92,7 @@ function AboutHeader() {
             variants={fadeIn}
             custom={1}
           >
-            <AnimatedText translationKey="about.about" />
+            <AnimatedText translationKey="about.about" animated={true} />
           </motion.h1>
           
           <motion.p 
@@ -100,7 +100,7 @@ function AboutHeader() {
             variants={fadeIn}
             custom={2}
           >
-            <AnimatedText translationKey="about.intro" />
+            <AnimatedText translationKey="about.intro" animated={false} />
           </motion.p>
         </motion.div>
       </div>
@@ -122,7 +122,7 @@ function AboutBio() {
           className="inline-block px-4 py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4"
           variants={fadeIn}
         >
-          <AnimatedText translationKey="about.journey" />
+          <AnimatedText translationKey="about.journey" animated={false} />
         </motion.span>
         
         <motion.h2 
@@ -160,19 +160,19 @@ function AboutBio() {
           <div className="text-center">
             <div className="text-4xl font-bold text-primary mb-1">5+</div>
             <div className="text-sm text-base-content/60">
-              <AnimatedText translationKey="about.years" />
+              <AnimatedText translationKey="about.years" animated={false} />
             </div>
           </div>
           <div className="text-center">
             <div className="text-4xl font-bold text-primary mb-1">30+</div>
             <div className="text-sm text-base-content/60">
-              <AnimatedText translationKey="about.projects" />
+              <AnimatedText translationKey="about.projects" animated={false} />
             </div>
           </div>
           <div className="text-center">
             <div className="text-4xl font-bold text-primary mb-1">15+</div>
             <div className="text-sm text-base-content/60">
-              <AnimatedText translationKey="about.clients" />
+              <AnimatedText translationKey="about.clients" animated={false} />
             </div>
           </div>
           <div className="text-center">
@@ -220,7 +220,7 @@ function AboutSkills() {
           className="inline-block px-4 py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4"
           variants={fadeIn}
         >
-          <AnimatedText translationKey="about.skills" />
+          <AnimatedText translationKey="about.skills" animated={false} />
         </motion.span>
         
         <motion.h2 
@@ -228,7 +228,7 @@ function AboutSkills() {
           variants={fadeIn}
           custom={1}
         >
-          <AnimatedText translationKey="about.skills" />
+          <AnimatedText translationKey="about.skills" animated={true} />
         </motion.h2>
         
         <motion.div 
@@ -243,7 +243,7 @@ function AboutSkills() {
               className="bg-base-100 rounded-xl p-6 border border-base-300 shadow-sm transition-all duration-300"
             >
               <h3 className="text-xl font-bold text-primary mb-4">
-                <AnimatedText translationKey={`about.${category.title.toLowerCase()}`} />
+                <AnimatedText translationKey={`about.${category.title.toLowerCase()}`} animated={false} />
               </h3>
               <ul className="space-y-2">
                 {category.skills.map((skill, skillIndex) => (
@@ -296,7 +296,7 @@ function AboutExperience() {
           className="inline-block px-4 py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4"
           variants={fadeIn}
         >
-          <AnimatedText translationKey="about.experience" />
+          <AnimatedText translationKey="about.experience" animated={false} />
         </motion.span>
         
         <motion.h2 
@@ -304,7 +304,7 @@ function AboutExperience() {
           variants={fadeIn}
           custom={1}
         >
-          <AnimatedText translationKey="about.experience" />
+          <AnimatedText translationKey="about.experience" animated={true} />
         </motion.h2>
         
         <motion.div 
@@ -355,7 +355,7 @@ function AboutEducation() {
           className="inline-block px-4 py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4"
           variants={fadeIn}
         >
-          <AnimatedText translationKey="about.education" />
+          <AnimatedText translationKey="about.education" animated={false} />
         </motion.span>
         
         <motion.h2 
@@ -363,7 +363,7 @@ function AboutEducation() {
           variants={fadeIn}
           custom={1}
         >
-          <AnimatedText translationKey="about.education" />
+          <AnimatedText translationKey="about.education" animated={true} />
         </motion.h2>
         
         <motion.div 
@@ -410,13 +410,13 @@ function AboutContact() {
         >
           <motion.div variants={fadeIn} custom={0} className="space-y-6">
             <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">
-              <AnimatedText translationKey="contact.collaborate" />
+              <AnimatedText translationKey="contact.collaborate" animated={false} />
             </span>
             <h2 className="text-3xl md:text-4xl font-bold">
-              <AnimatedText translationKey="contact.project" />
+              <AnimatedText translationKey="contact.project" animated={true} />
             </h2>
             <p className="text-base-content/70 text-lg max-w-2xl mx-auto">
-              <AnimatedText translationKey="contact.open" />
+              <AnimatedText translationKey="contact.open" animated={false} />
             </p>
             
             <motion.div 
@@ -428,7 +428,7 @@ function AboutContact() {
                 href="/contact" 
                 className="btn btn-primary btn-lg px-8 rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
               >
-                <AnimatedText translationKey="contact.contactMe" />
+                <AnimatedText translationKey="contact.contactMe" animated={false} />
               </Link>
             </motion.div>
             
@@ -443,7 +443,7 @@ function AboutContact() {
                   <polyline points="7 10 12 15 17 10"></polyline>
                   <line x1="12" y1="15" x2="12" y2="3"></line>
                 </svg>
-                <AnimatedText translationKey="about.downloadCV" />
+                <AnimatedText translationKey="about.downloadCV" animated={false} />
               </Link>
             </div>
           </motion.div>

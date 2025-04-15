@@ -54,7 +54,7 @@ const HeroSection = () => {
             custom={0}
             className="inline-block px-5 py-2 rounded-full bg-primary/5 backdrop-blur-sm border border-primary/10 text-primary text-sm font-medium mb-2"
           >
-            <AnimatedText translationKey="home.designer" />
+            <AnimatedText translationKey="home.designer" animated={false} />
           </motion.div>
           
           <motion.h1
@@ -63,10 +63,10 @@ const HeroSection = () => {
             className="text-6xl md:text-7xl font-bold tracking-tight leading-tight"
           >
             <span className="block">
-              <AnimatedText translationKey="home.creative" />
+              <AnimatedText translationKey="home.creative" animated={true} />
             </span>
             <span className="block mt-1 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              <AnimatedText translationKey="home.innovative" />
+              <AnimatedText translationKey="home.innovative" animated={true} />
             </span>
           </motion.h1>
           
@@ -75,7 +75,7 @@ const HeroSection = () => {
             custom={2}
             className="text-xl md:text-2xl text-base-content/70 max-w-2xl mt-4 leading-relaxed"
           >
-            <AnimatedText translationKey="home.intro" />
+            <AnimatedText translationKey="home.intro" animated={false} />
           </motion.p>
           
           <motion.div
@@ -84,7 +84,7 @@ const HeroSection = () => {
             className="flex flex-wrap gap-5 pt-6"
           >
             <Link href="/work" className="group relative overflow-hidden btn border-0 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white btn-lg px-8 rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all">
-              <span className="relative z-10"><AnimatedText translationKey="work.viewProject" /></span>
+              <span className="relative z-10"><AnimatedText translationKey="work.viewProject" animated={false} /></span>
               <motion.span 
                 className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"
                 initial={{ x: "-100%" }}
@@ -93,7 +93,7 @@ const HeroSection = () => {
               />
             </Link>
             <Link href="/contact" className="group relative btn btn-outline backdrop-blur-sm bg-white/5 border-primary/20 hover:border-primary/40 hover:bg-white/10 btn-lg px-8 rounded-full transition-all">
-              <span className="relative z-10"><AnimatedText translationKey="contact.contactMe" /></span>
+              <span className="relative z-10"><AnimatedText translationKey="contact.contactMe" animated={false} /></span>
               <motion.span 
                 className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full"
                 initial={{ scale: 0.8 }}
@@ -113,7 +113,7 @@ const HeroSection = () => {
         className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
       >
         <span className="text-sm text-base-content/60 mb-2">
-          <AnimatedText translationKey="home.scroll" />
+          <AnimatedText translationKey="home.scroll" animated={false} />
         </span>
         <motion.div 
           animate={{ y: [0, 10, 0] }} 
@@ -174,17 +174,17 @@ const FeaturedProjects = () => {
           <motion.div variants={fadeIn} className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
             <div>
               <span className="inline-block px-5 py-2 rounded-full bg-secondary/5 backdrop-blur-sm border border-secondary/10 text-secondary text-sm font-medium mb-4">
-                <AnimatedText translationKey="work.title" />
+                <AnimatedText translationKey="work.title" animated={false} />
               </span>
               <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-base-content to-base-content/70 bg-clip-text text-transparent">
-                <AnimatedText translationKey="work.selectedWorks" />
+                <AnimatedText translationKey="work.selectedWorks" animated={true} />
               </h2>
               <p className="text-base-content/70 mt-3 max-w-xl">
-                <AnimatedText translationKey="work.discover" />
+                <AnimatedText translationKey="work.discover" animated={false} />
               </p>
             </div>
             <Link href="/work" className="group text-primary flex items-center gap-2 font-medium relative">
-              <span className="relative z-10"><AnimatedText translationKey="work.allProjects" /></span>
+              <span className="relative z-10"><AnimatedText translationKey="work.allProjects" animated={false} /></span>
               <motion.span 
                 className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"
                 whileHover={{ width: "100%" }}
@@ -235,10 +235,10 @@ const FeaturedProjects = () => {
                   </div>
                   <div className="p-8 flex-1 flex flex-col">
                     <h3 className="font-bold text-xl mb-3 group-hover:text-primary transition-colors duration-300">
-                      <AnimatedText translationKey={project.titleKey} />
+                      <AnimatedText translationKey={project.titleKey} animated={true} />
                     </h3>
                     <p className="text-base-content/70 text-base mb-5 flex-1 leading-relaxed">
-                      <AnimatedText translationKey={project.descriptionKey} />
+                      <AnimatedText translationKey={project.descriptionKey} animated={false} />
                     </p>
                     <div className="flex flex-wrap gap-2 mb-5">
                       {project.tags.map((tag) => (
@@ -251,7 +251,7 @@ const FeaturedProjects = () => {
                       href={`/work/${project.id}`} 
                       className="text-primary font-medium flex items-center gap-1 mt-auto group-hover:gap-2 transition-all duration-300 relative w-fit"
                     >
-                      <span><AnimatedText translationKey="work.viewProject" /></span>
+                      <span><AnimatedText translationKey="work.viewProject" animated={false} /></span>
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M5 12h14"></path>
                         <path d="m12 5 7 7-7 7"></path>
@@ -287,13 +287,13 @@ const AboutPreview = () => {
         >
           <motion.div variants={fadeIn} className="space-y-8 order-2 md:order-1">
             <span className="inline-block px-5 py-2 rounded-full bg-secondary/5 backdrop-blur-sm border border-secondary/10 text-secondary text-sm font-medium mb-2">
-              <AnimatedText translationKey="about.about" />
+              <AnimatedText translationKey="about.about" animated={false} />
             </span>
             <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-base-content to-base-content/70 bg-clip-text text-transparent">
-              <AnimatedText translationKey="about.designer" />
+              <AnimatedText translationKey="about.designer" animated={true} />
             </h2>
             <p className="text-base-content/70 text-lg leading-relaxed">
-              <AnimatedText translationKey="about.intro" />
+              <AnimatedText translationKey="about.intro" animated={false} />
             </p>
             
             <div className="grid grid-cols-2 gap-6 pt-4">
@@ -303,7 +303,7 @@ const AboutPreview = () => {
               >
                 <div className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">4+</div>
                 <div className="text-sm text-base-content/60">
-                  <AnimatedText translationKey="about.years" />
+                  <AnimatedText translationKey="about.years" animated={false} />
                 </div>
               </motion.div>
               <motion.div 
@@ -312,7 +312,7 @@ const AboutPreview = () => {
               >
                 <div className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">25+</div>
                 <div className="text-sm text-base-content/60">
-                  <AnimatedText translationKey="about.projects" />
+                  <AnimatedText translationKey="about.projects" animated={false} />
                 </div>
               </motion.div>
             </div>
@@ -325,7 +325,7 @@ const AboutPreview = () => {
                 href="/about" 
                 className="group relative overflow-hidden inline-flex items-center gap-2 btn border-0 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white btn-lg px-8 rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
               >
-                <span className="relative z-10"><AnimatedText translationKey="about.learnMore" /></span>
+                <span className="relative z-10"><AnimatedText translationKey="about.learnMore" animated={false} /></span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="relative z-10">
                   <path d="M5 12h14"></path>
                   <path d="m12 5 7 7-7 7"></path>
@@ -386,13 +386,13 @@ const ContactSection = () => {
         >
           <motion.div variants={fadeIn} custom={0} className="space-y-8">
             <span className="inline-block px-5 py-2 rounded-full bg-primary/5 backdrop-blur-sm border border-primary/10 text-primary text-sm font-medium">
-              <AnimatedText translationKey="contact.collaborate" />
+              <AnimatedText translationKey="contact.collaborate" animated={false} />
             </span>
             <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-base-content to-base-content/70 bg-clip-text text-transparent">
-              <AnimatedText translationKey="contact.project" />
+              <AnimatedText translationKey="contact.project" animated={true} />
             </h2>
             <p className="text-base-content/70 text-lg max-w-2xl mx-auto leading-relaxed">
-              <AnimatedText translationKey="contact.open" />
+              <AnimatedText translationKey="contact.open" animated={false} />
             </p>
             
             <motion.div 
@@ -404,7 +404,7 @@ const ContactSection = () => {
                 href="/contact" 
                 className="group relative overflow-hidden btn border-0 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white btn-lg px-8 rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
               >
-                <span className="relative z-10"><AnimatedText translationKey="contact.contactMe" /></span>
+                <span className="relative z-10"><AnimatedText translationKey="contact.contactMe" animated={false} /></span>
                 <motion.span 
                   className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"
                   initial={{ x: "-100%" }}

@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { motion, useMotionValue, animate } from "framer-motion";
 import ThemeSwitcher from "./ThemeSwitch";
-import LanguageSwitcher from "./LanguageSwitcher";
 import Logo from "./Logo";
 import { Github, Linkedin, Mail } from "lucide-react";
 import Background from "./background";
@@ -16,7 +15,6 @@ interface ClientLayoutProps {
   children: React.ReactNode;
 }
 
-// Composants dynamiques pour améliorer les performances initiales
 const AnimatedCursor = dynamic(() => import("react-animated-cursor"), {
   ssr: false,
   loading: () => <div className="cursor" />,
@@ -26,7 +24,6 @@ const FaviconUpdater = dynamic(() => import("./FaviconUpdater"), {
   ssr: false,
 });
 
-// Éléments mémoïsés pour éviter les re-rendus inutiles
 const MemoizedGrid = memo(function Grid() {
   return (
     <div className="fixed inset-0 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-9 2xl:grid-cols-11 divide-x-2 divide-dashed divide-neutral-content pointer-events-none opacity-30">
@@ -46,7 +43,6 @@ const MemoizedGrid = memo(function Grid() {
   );
 });
 
-// Navigation mémoïsée
 const MemoizedNavigation = memo(function Navigation({
   navLinks,
 }: {
@@ -54,6 +50,7 @@ const MemoizedNavigation = memo(function Navigation({
 }) {
   return (
     <div className="flex items-center space-x-5 px-1 transition-all duration-100">
+      {/* Logo avec animation hover */}
       <Link href="/" className="flex items-center space-x-3">
         <Logo />
         <div className="relative inline-block overflow-hidden h-5 group">
@@ -66,38 +63,109 @@ const MemoizedNavigation = memo(function Navigation({
           </div>
         </div>
       </Link>
+
+      {/* Liens de navigation avec animation hover */}
       {navLinks.map((link) => (
         <div key={link.href} className="relative flex items-center">
           <Link
             href={link.href}
-            className="block text-neutral-content text-sm transition-all duration-100"
+            className="block text-neutral-content text-sm transition-colors duration-100"
           >
-            <div className="text-center">
-              {link.labelKey ? (
-                <AnimatedText
-                  translationKey={link.labelKey}
-                  className="inline-block"
-                />
-              ) : (
-                <AnimatedText
-                  text={link.labelKey || ""}
-                  className="inline-block"
-                />
-              )}
+            <div className="text-center relative overflow-hidden h-5 group">
+              <div
+                className="transition-transform duration-300 transform group-hover:-translate-y-5"
+                style={{ transformStyle: "preserve-3d" }}
+              >
+                <div className="block">
+                  {link.labelKey ? (
+                    <AnimatedText
+                      translationKey={link.labelKey}
+                      className="inline-block"
+                      animated={false}
+                    />
+                  ) : (
+                    <AnimatedText
+                      text={link.labelKey || ""}
+                      className="inline-block"
+                      animated={false}
+                    />
+                  )}
+                </div>
+                <div className="block">
+                  {link.labelKey ? (
+                    <AnimatedText
+                      translationKey={link.labelKey}
+                      className="inline-block"
+                      animated={false}
+                    />
+                  ) : (
+                    <AnimatedText
+                      text={link.labelKey || ""}
+                      className="inline-block"
+                      animated={false}
+                    />
+                  )}
+                </div>
+              </div>
             </div>
           </Link>
           <div className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary to-secondary rounded-full" />
         </div>
       ))}
-      <LanguageSwitcher />
-      <a className="text-base-content link">
-        <ThemeSwitcher />
-      </a>
+
+      {/* LanguageSwitcher avec animation hover */}
+      <div className="relative overflow-hidden h-5 group">
+        <div
+          className="transition-transform duration-300 transform group-hover:-translate-y-5"
+          style={{ transformStyle: "preserve-3d" }}
+        >
+          <div className="block">
+            <button
+              onClick={() => {
+                const currentLocale = localStorage.getItem("locale") || "fr";
+                const newLocale = currentLocale === "fr" ? "en" : "fr";
+                localStorage.setItem("locale", newLocale);
+                window.location.reload();
+              }}
+              className="text-sm text-neutral-content focus:outline-none"
+            >
+              {localStorage.getItem("locale") === "en" ? "EN" : "FR"}
+            </button>
+          </div>
+          <div className="block">
+            <button
+              onClick={() => {
+                const currentLocale = localStorage.getItem("locale") || "fr";
+                const newLocale = currentLocale === "fr" ? "en" : "fr";
+                localStorage.setItem("locale", newLocale);
+                window.location.reload();
+              }}
+              className="text-sm text-neutral-content focus:outline-none"
+            >
+              {localStorage.getItem("locale") === "en" ? "FR" : "EN"}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ThemeSwitcher avec animation hover */}
+      <div className="relative overflow-hidden h-5 group">
+        <div
+          className="transition-transform duration-300 transform group-hover:-translate-y-5"
+          style={{ transformStyle: "preserve-3d" }}
+        >
+          <div className="block">
+            <ThemeSwitcher position="top" />
+          </div>
+          <div className="block">
+            <ThemeSwitcher position="bottom" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 });
 
-// Footer mémoïsé
 const MemoizedFooter = memo(function Footer({
   isMobile,
 }: {
@@ -167,42 +235,38 @@ const MemoizedFooter = memo(function Footer({
   );
 });
 
-// Composant principal pour les bordures draggables
 const DraggableBorders = memo(function DraggableBorders({
   onDragStart,
 }: {
   onDragStart: () => void;
 }) {
   const handlePointerDown = (e: React.PointerEvent) => {
-    // Empêcher la propagation pour éviter de déclencher d'autres événements
     e.stopPropagation();
-    // Déclencher le début du drag
     onDragStart();
   };
 
   return (
     <>
       <div
-        className="absolute w-full h-3 bottom-0 bg-neutral z-70 "
+        className="absolute w-full h-3 bottom-0 bg-neutral z-70"
         onPointerDown={handlePointerDown}
       />
       <div
-        className="absolute h-full w-3 right-0 bg-neutral z-70 "
+        className="absolute h-full w-3 right-0 bg-neutral z-70"
         onPointerDown={handlePointerDown}
       />
       <div
-        className="absolute h-full w-3 left-0 bg-neutral z-70 "
+        className="absolute h-full w-3 left-0 bg-neutral z-70"
         onPointerDown={handlePointerDown}
       />
       <div
-        className="absolute w-full h-3 top-0 bg-neutral z-70 "
+        className="absolute w-full h-3 top-0 bg-neutral z-70"
         onPointerDown={handlePointerDown}
       />
     </>
   );
 });
 
-// Composant principal optimisé
 export default function ClientLayout({ children }: ClientLayoutProps) {
   const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
@@ -212,7 +276,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [shouldRenderBackground, setShouldRenderBackground] = useState(false);
 
-  // Référence au contenu pour la détection d'intersection
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -226,7 +289,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     };
     window.addEventListener("resize", handleResize);
 
-    // Charger le fond après que le contenu principal soit chargé
     setShouldRenderBackground(true);
 
     return () => {
@@ -234,14 +296,12 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     };
   }, []);
 
-  // Définir les liens de navigation une seule fois
   const navLinks = [
     { href: "/work", labelKey: "navigation.work" },
     { href: "/about", labelKey: "navigation.about" },
     { href: "/contact", labelKey: "navigation.contact" },
   ];
 
-  // Fonction pour démarrer le drag uniquement à partir des bordures
   const handleDragStart = () => {
     if (!isMobile) {
       setIsDragging(true);
@@ -264,6 +324,20 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             border: "1px solid var(--color-base-content)",
           }}
           trailingSpeed={10}
+          clickables={[
+            'a', 
+            'button', 
+            '.link',
+            'input[type="text"]',
+            'input[type="email"]',
+            'input[type="number"]',
+            'input[type="submit"]',
+            'input[type="image"]',
+            'label[for]',
+            'select',
+            'textarea',
+            '.cursor-grab'
+          ]}
         />
       )}
       <FaviconUpdater />
@@ -302,12 +376,19 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
           <DraggableBorders onDragStart={handleDragStart} />
 
           {!isMobile && (
-            <div className="absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between text-sm text-neutral-content bg-neutral px-4 rounded-br-[20px] z-60">
+            <div
+              className="absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between text-sm text-neutral-content bg-neutral px-4 rounded-br-[20px] z-60 cursor-grab"
+              onPointerDown={(e) => {
+                e.stopPropagation();
+                handleDragStart();
+              }}
+            >
               <div className="absolute top-3 -right-5">
                 <svg
                   width="20"
                   height="20"
                   viewBox="0 0 20 20"
+                  fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
@@ -321,6 +402,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                   width="20"
                   height="20"
                   viewBox="0 0 20 20"
+                  fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path

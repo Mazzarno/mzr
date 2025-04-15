@@ -3,7 +3,11 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 
-export default function ThemeSwitcher() {
+interface ThemeSwitcherProps {
+  position?: "top" | "bottom";
+}
+
+export default function ThemeSwitcher({ position = "top" }: ThemeSwitcherProps) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -14,16 +18,20 @@ export default function ThemeSwitcher() {
     setTheme(isDark ? "light" : "dark");
   };
 
+  // Si position est "top", on affiche l'icône actuelle
+  // Si position est "bottom", on affiche l'icône alternative
+  const showCurrentIcon = position === "top";
+  const showIcon = showCurrentIcon 
+    ? (isDark ? <Moon size={17} className="text-indigo-500" /> : <Sun size={17} className="text-yellow-500" />)
+    : (isDark ? <Sun size={17} className="text-yellow-500" /> : <Moon size={17} className="text-indigo-500" />);
+
   return (
-    <label className="swap swap-rotate pb-0.5 link">
-      <input
-        type="checkbox"
-        checked={isDark}
-        onChange={toggleTheme}
-        aria-label="Toggle theme"
-      />
-      <Sun size={17} className="swap-off text-yellow-500" />
-      <Moon size={17} className="swap-on text-indigo-500" />
-    </label>
+    <button
+      onClick={toggleTheme}
+      className="focus:outline-none"
+      aria-label="Toggle theme"
+    >
+      {showIcon}
+    </button>
   );
 }

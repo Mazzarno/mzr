@@ -70,7 +70,7 @@ const ContactHeader: React.FC = () => {
             custom={0}
             className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-2 backdrop-blur-sm"
           >
-            <AnimatedText translationKey="contact.title" />
+            <AnimatedText translationKey="contact.title" animated={false} />
           </motion.div>
           
           <motion.h1
@@ -78,7 +78,7 @@ const ContactHeader: React.FC = () => {
             custom={1}
             className="text-5xl md:text-6xl font-bold tracking-tight leading-tight"
           >
-            <AnimatedText translationKey="contact.letsChat" />
+            <AnimatedText translationKey="contact.letsChat" animated={true} />
           </motion.h1>
           
           <motion.p
@@ -86,7 +86,7 @@ const ContactHeader: React.FC = () => {
             custom={2}
             className="text-xl text-base-content/70 max-w-2xl mt-4"
           >
-            <AnimatedText translationKey="contact.open" />
+            <AnimatedText translationKey="contact.open" animated={false} />
           </motion.p>
         </motion.div>
       </div>
@@ -144,10 +144,10 @@ const ContactForm: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           <motion.div variants={fadeIn} className="lg:col-span-1">
             <h2 className="text-3xl font-bold mb-6">
-              <AnimatedText translationKey="contact.contactMe" />
+              <AnimatedText translationKey="contact.contactMe" animated={false} />
             </h2>
             <p className="text-base-content/70 text-lg mb-8">
-              <AnimatedText translationKey="contact.project" />
+              <AnimatedText translationKey="contact.project" animated={false} />
             </p>
             
             {/* Contact information preview */}
@@ -165,7 +165,7 @@ const ContactForm: React.FC = () => {
                 <div>
                   <h3 className="font-medium text-lg mb-1">Email</h3>
                   <a href="mailto:contact@alexis-germain.fr" className="text-primary hover:underline transition-all">
-                    <AnimatedText translationKey="contact.email_address" />
+                    <AnimatedText translationKey="contact.email_address" animated={false} />
                   </a>
                 </div>
               </motion.div>
@@ -182,7 +182,7 @@ const ContactForm: React.FC = () => {
                 <div>
                   <h3 className="font-medium text-lg mb-1">Téléphone</h3>
                   <p className="text-base-content/70">
-                    <AnimatedText translationKey="contact.phone" />
+                    <AnimatedText translationKey="contact.phone" animated={false} />
                   </p>
                 </div>
               </motion.div>
@@ -200,7 +200,7 @@ const ContactForm: React.FC = () => {
                 <div>
                   <h3 className="font-medium text-lg mb-1">Adresse</h3>
                   <p className="text-base-content/70">
-                    <AnimatedText translationKey="contact.address" />
+                    <AnimatedText translationKey="contact.address" animated={false} />
                   </p>
                 </div>
               </motion.div>
@@ -216,7 +216,7 @@ const ContactForm: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label htmlFor="name" className="block text-sm font-medium">
-                      <AnimatedText translationKey="contact.name" />
+                      <AnimatedText translationKey="contact.name" animated={false} />
                     </label>
                     <input
                       type="text"
@@ -232,7 +232,7 @@ const ContactForm: React.FC = () => {
                   
                   <div className="space-y-2">
                     <label htmlFor="email" className="block text-sm font-medium">
-                      <AnimatedText translationKey="contact.email" />
+                      <AnimatedText translationKey="contact.email" animated={false} />
                     </label>
                     <input
                       type="email"
@@ -249,7 +249,7 @@ const ContactForm: React.FC = () => {
                 
                 <div className="space-y-2">
                   <label htmlFor="subject" className="block text-sm font-medium">
-                    <AnimatedText translationKey="contact.subject" />
+                    <AnimatedText translationKey="contact.subject" animated={false} />
                   </label>
                   <select
                     id="subject"
@@ -269,7 +269,7 @@ const ContactForm: React.FC = () => {
                 
                 <div className="space-y-2">
                   <label htmlFor="message" className="block text-sm font-medium">
-                    <AnimatedText translationKey="contact.message" />
+                    <AnimatedText translationKey="contact.message" animated={false} />
                   </label>
                   <textarea
                     id="message"
@@ -297,7 +297,7 @@ const ContactForm: React.FC = () => {
                         Envoi en cours...
                       </>
                     ) : (
-                      <AnimatedText translationKey="contact.send" />
+                      <AnimatedText translationKey="contact.send" animated={false} />
                     )}
                   </motion.button>
                   
@@ -307,7 +307,7 @@ const ContactForm: React.FC = () => {
                       animate={{ opacity: 1, y: 0 }}
                       className="mt-4 p-4 bg-success/20 text-success rounded-lg"
                     >
-                      <AnimatedText translationKey="contact.success" />
+                      <AnimatedText translationKey="contact.success" animated={false} />
                     </motion.div>
                   )}
                   
@@ -317,7 +317,7 @@ const ContactForm: React.FC = () => {
                       animate={{ opacity: 1, y: 0 }}
                       className="mt-4 p-4 bg-error/20 text-error rounded-lg"
                     >
-                      <AnimatedText translationKey="contact.error" />
+                      <AnimatedText translationKey="contact.error" animated={false} />
                     </motion.div>
                   )}
                 </div>
@@ -394,10 +394,10 @@ const ContactInfo: React.FC = () => {
         >
           <motion.div variants={fadeIn} className="text-center mb-16">
             <span className="inline-block px-4 py-1.5 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4">
-              <AnimatedText translationKey="contact.social" />
+              <AnimatedText translationKey="contact.social" animated={false} />
             </span>
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              <AnimatedText translationKey="contact.follow" />
+              <AnimatedText translationKey="contact.follow" animated={true} />
             </h2>
             <p className="text-base-content/70 text-lg max-w-2xl mx-auto">
               Retrouvez-moi sur les réseaux sociaux pour suivre mes dernières réalisations et actualités.
