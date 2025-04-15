@@ -63,9 +63,6 @@ export default function Background() {
     window.addEventListener("mousemove", throttledMouseMove);
     return () => {
       window.removeEventListener("mousemove", throttledMouseMove);
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
-      }
     };
   }, [handleMouseMove]);
 
@@ -82,11 +79,7 @@ export default function Background() {
     >
       <Suspense fallback={null}>
         <Model mouse={smoothMouse} currentTheme={currentTheme} />
-        <Environment
-          preset="city"
-          background={false}
-          blur={0.5}
-        />
+        <Environment preset="city" background={false} blur={0.5} />
       </Suspense>
     </Canvas>
   );

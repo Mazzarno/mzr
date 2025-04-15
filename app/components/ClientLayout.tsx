@@ -10,6 +10,7 @@ import { Github, Linkedin, Mail } from "lucide-react";
 import Background from "./background";
 import AnimatedText from "./AnimatedText";
 import dynamic from "next/dynamic";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -50,7 +51,6 @@ const MemoizedNavigation = memo(function Navigation({
 }) {
   return (
     <div className="flex items-center space-x-5 px-1 transition-all duration-100">
-      {/* Logo avec animation hover */}
       <Link href="/" className="flex items-center space-x-3">
         <Logo />
         <div className="relative inline-block overflow-hidden h-5 group">
@@ -63,8 +63,6 @@ const MemoizedNavigation = memo(function Navigation({
           </div>
         </div>
       </Link>
-
-      {/* Liens de navigation avec animation hover */}
       {navLinks.map((link) => (
         <div key={link.href} className="relative flex items-center">
           <Link
@@ -112,43 +110,7 @@ const MemoizedNavigation = memo(function Navigation({
           <div className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary to-secondary rounded-full" />
         </div>
       ))}
-
-      {/* LanguageSwitcher avec animation hover */}
-      <div className="relative overflow-hidden h-5 group">
-        <div
-          className="transition-transform duration-300 transform group-hover:-translate-y-5"
-          style={{ transformStyle: "preserve-3d" }}
-        >
-          <div className="block">
-            <button
-              onClick={() => {
-                const currentLocale = localStorage.getItem("locale") || "fr";
-                const newLocale = currentLocale === "fr" ? "en" : "fr";
-                localStorage.setItem("locale", newLocale);
-                window.location.reload();
-              }}
-              className="text-sm text-neutral-content focus:outline-none"
-            >
-              {localStorage.getItem("locale") === "en" ? "EN" : "FR"}
-            </button>
-          </div>
-          <div className="block">
-            <button
-              onClick={() => {
-                const currentLocale = localStorage.getItem("locale") || "fr";
-                const newLocale = currentLocale === "fr" ? "en" : "fr";
-                localStorage.setItem("locale", newLocale);
-                window.location.reload();
-              }}
-              className="text-sm text-neutral-content focus:outline-none"
-            >
-              {localStorage.getItem("locale") === "en" ? "FR" : "EN"}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* ThemeSwitcher avec animation hover */}
+      <LanguageSwitcher />
       <div className="relative overflow-hidden h-5 group">
         <div
           className="transition-transform duration-300 transform group-hover:-translate-y-5"

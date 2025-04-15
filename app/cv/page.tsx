@@ -1,4 +1,5 @@
-import {
+    /* @ts-expect-error Server Component 
+    import {
   Calendar,
   MapPin,
   Phone,
@@ -10,7 +11,7 @@ import {
 
 export default function CV() {
   return {
-    /* @ts-expect-error Server Component 
+
     <div className=" bg-base-200/70 text-base-content min-h-screen p-8 mx-auto py-16">
       <div className="max-w-4xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between">
