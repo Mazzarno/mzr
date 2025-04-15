@@ -1,13 +1,19 @@
-
-import { Calendar, MapPin, Phone, Mail, Globe, Github, Linkedin } from 'lucide-react';
+import {
+  Calendar,
+  MapPin,
+  Phone,
+  Mail,
+  Globe,
+  Github,
+  Linkedin,
+} from "lucide-react";
 
 export default function CV() {
-
-  return (
+  return {
+    /* @ts-expect-error Server Component 
     <div className=" bg-base-200/70 text-base-content min-h-screen p-8 mx-auto py-16">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between ">
+        <div className="flex flex-col md:flex-row justify-between">
           <div className="max-w-md">
             <h1 className="text-2xl font-bold text-base-content">Alexis GERMAIN, Développeur Web.</h1>
           </div>
@@ -45,7 +51,6 @@ export default function CV() {
         </div>
 
         <main>
-          {/* Experience */}
           <section className="mb-8">
             <h2 className="text-xl text-base-content font-normal mb-4">Experience</h2>
             
@@ -55,7 +60,7 @@ export default function CV() {
                   <h3 className="text-base font-semibold inline">Auto-Entreprise</h3>
                   <span className="text-gray-500 ml-1">• Développeur Web Freelance</span>
                 </div>
-                <div className="text-gray-500 text-sm">2019 - 2022 | 2022 - Aujourd'hui</div>
+                <div className="text-gray-500 text-sm">2019 - 2022 | 2022 - Aujourdhui</div>
               </div>
               <div className="text-sm space-y-1">
                 <p>Conception et développement de sites vitrines.</p>
@@ -97,7 +102,7 @@ export default function CV() {
             </div>
           </section>
 
-          {/* Education */}
+     
           <section className="mb-8">
             <h2 className="text-xl text-base-content font-normal mb-4">Education</h2>
             
@@ -117,7 +122,7 @@ export default function CV() {
             </div>
           </section>
 
-          {/* Skills & Tools */}
+  
           <div className="flex flex-col md:flex-row gap-8">
             <section className="w-full md:w-1/2">
               <h2 className="text-xl text-base-content font-normal mb-4">Soft Skills & Skills</h2>
@@ -181,6 +186,7 @@ export default function CV() {
           </div>
         </main>
       </div>
-    </div>
-  );
+    </div >
+      */
+  };
 }
