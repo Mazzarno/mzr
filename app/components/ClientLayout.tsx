@@ -136,7 +136,6 @@ const MemoizedNavigation = memo(function Navigation({
     className="transition-transform duration-300 transform group-hover:-translate-y-5"
     style={{ transformStyle: "preserve-3d" }}
   >
-
     <div className="block position-top">
       <button
         aria-label={isReduced ? "Maximiser" : "Réduire"}
