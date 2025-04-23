@@ -16,7 +16,6 @@ export default function Background() {
   const { theme, resolvedTheme } = useTheme();
   const currentTheme = theme === "system" ? resolvedTheme : theme;
   const lastMoveTime = useRef(Date.now());
-  const animationFrameId = useRef<number | null>(null);
 
   const springConfig = useMemo(
     () => ({
