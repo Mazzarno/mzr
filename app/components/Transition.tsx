@@ -11,10 +11,14 @@ interface TransitionProps {
   children: React.ReactNode;
 }
 
-/**
- * Affiche une animation moderne lors des changements de page.
- * L'animation ne s'affiche PAS au chargement initial, seulement lors d'un changement de route.
- */
+interface Pixel {
+  id: number;
+  delay: number;
+  gridX: number;
+  gridY: number;
+}
+
+
 const Transition: React.FC<TransitionProps> = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -23,25 +27,61 @@ const Transition: React.FC<TransitionProps> = ({ children }) => {
   const [displayChildren, setDisplayChildren] = useState(children);
   const prevPath = useRef(pathname);
   const isInitialRender = useRef(true);
+  
+  
+  const gridCols = 12; 
+  const gridRows = 8; 
+  
+ 
+  const generatePixels = () => {
+    const pixels: Pixel[] = [];
+    const totalPixels = gridCols * gridRows;
+    
 
-  // Fonction appelée par TransitionLink pour démarrer la transition
+    const indices = Array.from({ length: totalPixels }, (_, i) => i);
+    for (let i = indices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+
+    indices.forEach((index, i) => {
+      const gridX = index % gridCols;
+      const gridY = Math.floor(index / gridCols);
+      
+      pixels.push({
+        id: index,
+        delay: i * 0.003,
+        gridX,
+        gridY
+      });
+    });
+    
+    return pixels;
+  };
+
+
+  const pixelsRef = useRef<Pixel[]>();
+  
+  
+  if (!pixelsRef.current) {
+    pixelsRef.current = generatePixels();
+  }
+
+
   const startTransition = (to: string) => {
     if (isTransitioning || to === pathname) return;
     setNextPath(to);
     setIsTransitioning(true);
   };
 
-  // Quand la transition démarre, attendre la fin de l'animation avant de naviguer
   useEffect(() => {
     if (isTransitioning && nextPath && nextPath !== pathname) {
       const timer = setTimeout(() => {
         router.push(nextPath);
-      }, 700); // durée de l'animation d'entrée
+      }, 800); 
       return () => clearTimeout(timer);
     }
   }, [isTransitioning, nextPath, pathname, router]);
-
-  // Quand la route change, attendre la fin de l'animation de sortie avant d'afficher le nouveau contenu
   useEffect(() => {
     if (isInitialRender.current) {
       isInitialRender.current = false;
@@ -50,42 +90,81 @@ const Transition: React.FC<TransitionProps> = ({ children }) => {
       return;
     }
     if (pathname !== prevPath.current) {
-      // Attendre avant d'afficher le nouveau contenu
       const timer = setTimeout(() => {
         setDisplayChildren(children);
         setIsTransitioning(false);
         prevPath.current = pathname;
         setNextPath(null);
-      }, 300); // durée de l'animation de sortie
+      }, 700); 
       return () => clearTimeout(timer);
     }
   }, [pathname, children]);
+
+  const pixels = pixelsRef.current || [];
 
   return (
     <TransitionContext.Provider value={{ startTransition, isTransitioning }}>
       <AnimatePresence>
         {isTransitioning && (
-          <motion.div
-            key="transition-overlay"
-            initial={{ y: "100%", opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: "-100%", opacity: 0 }}
-            transition={{ duration: 0.7, ease: [0.77, 0, 0.18, 1] }}
-            className="fixed inset-0 z-50 bg-gradient-to-br from-base-content via-base-300 to-base-100 flex items-center justify-center pointer-events-none"
-          >
-            <motion.span
-              initial={{ scale: 0.5, opacity: 0.5 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 20, opacity: 0, y: "-100%" }}
-              transition={{ duration: 0.5, ease: [0.77, 0, 0.18, 1] }}
-              className="text-4xl font-bold text-white drop-shadow-lg drop-shadow-base-content"
+          <div className="fixed inset-1 z-40 pointer-events-none">
+            <div 
+              className="w-full h-full"
+              style={{
+                display: "grid",
+                gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
+                gridTemplateRows: `repeat(${gridRows}, 1fr)`,
+    
+              }}
             >
-              {getTitleInfo(nextPath || pathname)}
-            </motion.span>
-          </motion.div>
+              {pixels.map((pixel) => (
+                <motion.div
+                  key={`pixel-${pixel.id}`}
+                  className="w-full h-full bg-base-300 shadow-sm"
+                  style={{
+                    gridColumn: pixel.gridX + 1,
+                    gridRow: pixel.gridY + 1,
+                    originX: 0.5,
+                    originY: 0.5,
+             
+                  }}
+                  initial={{ y: "100vh", opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: "-100vh", opacity: 0 }}
+                  transition={{
+                    duration: 0.3,
+                    delay: pixel.delay,
+                    exit: { 
+                      delay: pixel.delay * 0.2,
+                      duration: 0.3
+                    }
+                  }}
+                />
+              ))}
+            </div>
+            
+            <div className="absolute inset-0 flex items-center justify-center z-40 pointer-events-none">
+              <motion.span
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 5, opacity: 0 }}
+                transition={{   
+                  duration: 0.4   ,
+                  delay: 0.1,
+                  exit: { delay: 0.1 }
+                }}
+                className="text-4xl font-bold text-base-content drop-shadow-lg pointer-events-none"
+                style={{ fontFamily: "var(--font-despairs)" }}
+              >
+                {getTitleInfo(nextPath || pathname)}
+              </motion.span>
+            </div>
+          </div>
         )}
       </AnimatePresence>
-      <div style={{ opacity: isTransitioning ? 0.3 : 1, transition: 'opacity 0.3s' }}>
+      <div 
+        className="transition-opacity duration-300"
+        style={{ opacity: isTransitioning ? 0.3 : 1 }}
+      >
         {displayChildren}
       </div>
     </TransitionContext.Provider>
