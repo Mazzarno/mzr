@@ -11,17 +11,33 @@
     "next": "Suivant"
   },
   "home": {
-    "title": "ACCUEIL",
-    "welcome": "Bienvenue",
-    "portfolio": "Portfolio",
-    "designer": "Développeur Web",
-    "explore": "Découvrir Mes Projets",
-    "scroll": "Défiler vers le bas",
-    "creative": "Créer des expériences",
-    "innovative": "digitales performantes.",
-    "modern": "Moderne",
-    "intro": "Je conçois et développe des sites vitrines et des applications web performantes, en assurant la maintenance et l'optimisation de sites existants."
+    "heroTitle": "Créons votre présence digitale.",
+    "heroSubtitle": "Développeur web passionné, je conçois des sites modernes, performants et sur-mesure.",
+    "seeProjects": "Voir mes projets",
+    "contactMe": "Me contacter",
+    "quickAboutTitle": "À propos de moi",
+  "quickAboutText": "Développeur web freelance basé en France, spécialisé dans la création de solutions digitales innovantes.",
+  "featuredProjects": "Projets en vedette",
+  "project1": {
+    "title": "Portfolio Minimaliste",
+    "desc": "Design et développement d'un portfolio épuré pour un photographe",
+    "stack": "Next.js, TailwindCSS"
   },
+  "project2": {
+    "title": "Application E-commerce",
+    "desc": "Boutique en ligne moderne et performante pour PME",
+    "stack": "Shopify, React"
+  },
+  "project3": {
+    "title": "Dashboard Analytics",
+    "desc": "Tableau de bord interactif avec visualisations de données",
+    "stack": "React, D3.js"
+  },
+  "allProjects": "Tous les projets",
+  "seeDetails": "Voir le projet",
+  "ctaTitle": "Prêt à collaborer ?",
+  "ctaText": "Contactez-moi pour discuter de votre projet ou de vos idées."
+},  
   "work": {
     "title": "PROJETS",
     "projects": "Projets",

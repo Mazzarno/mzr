@@ -11,16 +11,32 @@
     "next": "Next"
   },
   "home": {
-    "title": "HOME",
-    "welcome": "Welcome",
-    "portfolio": "Portfolio",
-    "designer": "Web Developer",
-    "explore": "Explore My Work",
-    "scroll": "Scroll Down",
-    "creative": "Creating powerful",
-    "innovative": "digital experiences.",
-    "modern": "Modern",
-    "intro": "I design and develop showcase websites and high-performance web applications, while ensuring maintenance and optimization of existing sites."
+    "heroTitle": "Let's build your digital presence.",
+    "heroSubtitle": "Passionate web developer crafting modern, high-performing, and tailor-made websites.",
+    "seeProjects": "See my projects",
+    "contactMe": "Contact me",
+    "quickAboutTitle": "About me",
+    "quickAboutText": "Freelance web developer based in France, specializing in innovative digital solutions.",
+    "featuredProjects": "Featured Projects",
+    "project1": {
+      "title": "Minimalist Portfolio",
+      "desc": "Design and development of a clean portfolio for a photographer",
+      "stack": "Next.js, TailwindCSS"
+    },
+    "project2": {
+      "title": "E-commerce Application",
+      "desc": "Modern and high-performance online store for SMBs",
+      "stack": "Shopify, React"
+    },
+    "project3": {
+      "title": "Analytics Dashboard",
+      "desc": "Interactive dashboard with data visualizations",
+      "stack": "React, D3.js"
+    },
+    "allProjects": "All projects",
+    "seeDetails": "See project",
+    "ctaTitle": "Ready to collaborate?",
+    "ctaText": "Contact me to discuss your project or ideas."
   },
   "work": {
     "title": "WORK",

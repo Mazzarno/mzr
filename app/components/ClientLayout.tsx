@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, memo } from "react";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
+import TransitionLink from "./TransitionLink";
 import { motion, useMotionValue, animate } from "framer-motion";
 import ThemeSwitcher from "./ThemeSwitch";
 import Logo from "./Logo";
@@ -11,6 +11,8 @@ import Background from "./background";
 import AnimatedText from "./AnimatedText";
 import dynamic from "next/dynamic";
 import LanguageSwitcher from "./LanguageSwitcher";
+import Transition from "./Transition";
+import { Maximize, Minimize } from "lucide-react";
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -46,12 +48,16 @@ const MemoizedGrid = memo(function Grid() {
 
 const MemoizedNavigation = memo(function Navigation({
   navLinks,
+  isReduced,
+  onToggleResize,
 }: {
   navLinks: Array<{ href: string; labelKey: string }>;
+  isReduced: boolean;
+  onToggleResize: () => void;
 }) {
   return (
     <div className="flex items-center space-x-5 px-1 transition-all duration-100">
-      <Link href="/" className="flex items-center space-x-3">
+      <TransitionLink href="/" className="flex items-center space-x-3">
         <Logo />
         <div className="relative inline-block overflow-hidden h-5 group">
           <div
@@ -62,10 +68,10 @@ const MemoizedNavigation = memo(function Navigation({
             <span className="block">Alexis</span>
           </div>
         </div>
-      </Link>
+      </TransitionLink>
       {navLinks.map((link) => (
         <div key={link.href} className="relative flex items-center">
-          <Link
+          <TransitionLink
             href={link.href}
             className="block text-neutral-content text-sm transition-colors duration-100"
           >
@@ -106,7 +112,7 @@ const MemoizedNavigation = memo(function Navigation({
                 </div>
               </div>
             </div>
-          </Link>
+          </TransitionLink>
           <div className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary to-secondary rounded-full" />
         </div>
       ))}
@@ -124,14 +130,51 @@ const MemoizedNavigation = memo(function Navigation({
           </div>
         </div>
       </div>
+          <div className="relative overflow-hidden h-5 group">
+  <div
+    key={isReduced ? "reduced" : "expanded"}
+    className="transition-transform duration-300 transform group-hover:-translate-y-5"
+    style={{ transformStyle: "preserve-3d" }}
+  >
+
+    <div className="block position-top">
+      <button
+        aria-label={isReduced ? "Maximiser" : "Réduire"}
+        onClick={onToggleResize}
+        className="focus:outline-none"
+      >
+        {isReduced
+          ? <Minimize size={17} className="text-base-content" />
+          : <Maximize size={17} className="text-base-content" />}
+      </button>
+    </div>
+
+    <div className="block position-bottom">
+      <button
+        onClick={onToggleResize}
+        className="focus:outline-none"
+        aria-label={!isReduced ? "Maximiser" : "Réduire"}
+      >
+        {isReduced
+          ? <Maximize size={17} className="text-base-content" />
+          : <Minimize size={17} className="text-base-content" />}
+      </button>
+    </div>
+  </div>
+</div>
     </div>
   );
 });
 
+import { getTitleInfo } from "./getTitleInfo";
+
 const MemoizedFooter = memo(function Footer({
   isMobile,
+  pathname,
 }: {
   isMobile: boolean;
+  pathname: string;
+
 }) {
   return (
     <div
@@ -165,7 +208,7 @@ const MemoizedFooter = memo(function Footer({
           ></path>
         </svg>
       </div>
-      <span className={`font-bold ${isMobile ? "text-xs" : "text-sm"}`}></span>
+      <span className={`font-bold ${isMobile ? "text-xs" : "text-sm"}`}>{getTitleInfo(pathname)}</span>
       <span className="text-sm text-neutral-content">—</span>
       <div className="flex items-center space-x-3 ml-2">
         <a
@@ -237,7 +280,8 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const constraintsRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [shouldRenderBackground, setShouldRenderBackground] = useState(false);
-
+  const [isReduced, setIsReduced] = useState(false);
+console.log(isReduced);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -319,11 +363,16 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         )}
 
         <MemoizedGrid />
-
+   
         <motion.div
-          className={`relative overflow-hidden z-10 backdrop-blur-sm scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)] rounded-2xl
-          ${isMobile ? "w-[95vw] h-[95vh]" : "w-[90vw] h-[90vh]"}`}
-          drag={isDragging}
+          className={"relative overflow-hidden z-10 backdrop-blur-sm scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)]"}
+          animate={{
+            width: isReduced ? "90vw" : "100vw",
+            height: isReduced ? "90vh" : "100vh",
+            borderRadius: isReduced ? "1rem" : "0rem",
+          }}
+          transition={{ type: "spring", stiffness: 180, damping: 20 }}
+          drag={!isReduced ? false : isDragging}
           dragElastic={0.7}
           whileDrag={{ scale: 1 }}
           style={{ x, y }}
@@ -336,11 +385,39 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
           }}
         >
           <DraggableBorders onDragStart={handleDragStart} />
+          <div className="absolute bottom-3 left-3 -rotate-90">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
+                    fill="var(--color-neutral)"
+                  ></path>
+                </svg>
+              </div>
+              <div className="absolute top-3 right-3 rotate-90">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
+                    fill="var(--color-neutral)"
+                  ></path>
+                </svg>
+              </div>
 
           {!isMobile && (
             <div
-              className="absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between text-sm text-neutral-content bg-neutral px-4 rounded-br-[20px] z-60 cursor-grab"
-              onPointerDown={(e) => {
+              className={`absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between text-sm text-neutral-content bg-neutral px-4 rounded-br-[20px] z-60${isReduced ? '' : ' cursor-grab'}`}
+              onPointerDown={isReduced ? undefined : (e) => {
                 e.stopPropagation();
                 handleDragStart();
               }}
@@ -359,22 +436,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                   ></path>
                 </svg>
               </div>
-              <div className="absolute -bottom-5 left-3">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
-                    fill="var(--color-neutral)"
-                  ></path>
-                </svg>
-              </div>
-
-              <MemoizedNavigation navLinks={navLinks} />
+                <MemoizedNavigation navLinks={navLinks} isReduced={isReduced} onToggleResize={() => setIsReduced((v) => !v)} />
             </div>
           )}
 
@@ -383,11 +445,47 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             id="content"
             ref={contentRef}
           >
-            <div key={pathname}>{children}</div>
+            <Transition>
+              <>
+                {!isMobile && (
+                  <div
+                    className="absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between text-sm text-neutral-content bg-neutral px-4 rounded-br-[20px] z-60 cursor-grab"
+                    onPointerDown={(e) => {
+                      e.stopPropagation();
+                      handleDragStart();
+                    }}
+                  >
+                    <div className="absolute -bottom-5 left-3">
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
+                          fill="var(--color-neutral)"
+                        ></path>
+                      </svg>
+                    </div>
+                    <MemoizedNavigation navLinks={navLinks} isReduced={isReduced} onToggleResize={() => setIsReduced((v) => !v)} />
+                  </div>
+                )}
+                <motion.div
+                  className="w-full h-full overflow-auto scrollbar-hide z-0"
+                  id="content"
+                  ref={contentRef}
+                >
+                  {/* Utilise la clé pathname pour déclencher la transition lors du changement de page */}
+                  <div key={pathname}>{children}</div>
+                </motion.div>
+                <MemoizedFooter isMobile={isMobile} pathname={pathname} />
+              </>
+            </Transition>
           </motion.div>
 
-          <MemoizedFooter isMobile={isMobile} />
-        </motion.div>
+          </motion.div>
       </div>
     </>
   );

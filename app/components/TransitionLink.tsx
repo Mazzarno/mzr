@@ -1,0 +1,31 @@
+"use client";
+import React from "react";
+import { LinkProps } from "next/link";
+
+// Ce contexte servira à déclencher la transition depuis n'importe quel lien
+export const TransitionContext = React.createContext<{
+  startTransition: (to: string) => void;
+  isTransitioning: boolean;
+}>({ startTransition: () => {}, isTransitioning: false });
+
+interface TransitionLinkProps extends LinkProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export default function TransitionLink({ href, children, className, ...props }: TransitionLinkProps) {
+  const { startTransition, isTransitioning } = React.useContext(TransitionContext);
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (isTransitioning) {
+      e.preventDefault();
+      return;
+    }
+    e.preventDefault();
+    startTransition(typeof href === "string" ? href : href.toString());
+  };
+  return (
+    <a href={typeof href === "string" ? href : href.toString()} onClick={handleClick} className={className} {...props}>
+      {children}
+    </a>
+  );
+}
