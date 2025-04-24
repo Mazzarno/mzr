@@ -60,7 +60,7 @@ const Transition: React.FC<TransitionProps> = ({ children }) => {
   };
 
 
-  const pixelsRef = useRef<Pixel[]>();
+  const pixelsRef = useRef<Pixel[] | undefined>(undefined);
   
   
   if (!pixelsRef.current) {
@@ -101,6 +101,15 @@ const Transition: React.FC<TransitionProps> = ({ children }) => {
   }, [pathname, children]);
 
   const pixels = pixelsRef.current || [];
+
+  // Flatten children (unwrap fragment if needed)
+  const rawChildrenArray = React.Children.toArray(displayChildren);
+  const childrenArray = rawChildrenArray.length === 1 && React.isValidElement(rawChildrenArray[0]) && (rawChildrenArray[0] as React.ReactElement).type === React.Fragment
+    ? React.Children.toArray((rawChildrenArray[0] as React.ReactElement).props.children as React.ReactNode)
+    : rawChildrenArray;
+  const navChild = childrenArray[0];
+  const contentChild = childrenArray[1];
+  const footerChild = childrenArray[2];
 
   return (
     <TransitionContext.Provider value={{ startTransition, isTransitioning }}>
@@ -161,12 +170,17 @@ const Transition: React.FC<TransitionProps> = ({ children }) => {
           </div>
         )}
       </AnimatePresence>
+      {/* Navigation above transition */}
+      {navChild}
+      {/* Main content fades */}
       <div 
         className="transition-opacity duration-300"
         style={{ opacity: isTransitioning ? 0.3 : 1 }}
       >
-        {displayChildren}
+        {contentChild}
       </div>
+      {/* Footer above transition */}
+      {footerChild}
     </TransitionContext.Provider>
   );
 };

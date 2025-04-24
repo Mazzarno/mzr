@@ -7,7 +7,7 @@ import TransitionLink from "./TransitionLink";
 import { motion, useMotionValue, animate } from "framer-motion";
 import ThemeSwitcher from "./ThemeSwitch";
 import Logo from "./Logo";
-import { Github, Linkedin, Mail, Maximize, Minimize } from "lucide-react";
+import { Github, Linkedin, Mail, Maximize, Menu, Minimize } from "lucide-react";
 import Background from "./background";
 import AnimatedText from "./AnimatedText";
 import dynamic from "next/dynamic";
@@ -102,7 +102,7 @@ const MemoizedNavigation = memo(function Navigation({
           </div>
         </TransitionLink>
         {navLinks.map((link) => (
-          <div key={link.href} className="relative flex items-center">
+          <div key={link.href} className="relative hidden items-center md:flex">
             <TransitionLink
               href={link.href}
               className="block text-neutral-content text-sm transition-colors duration-100"
@@ -322,7 +322,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [shouldRenderBackground, setShouldRenderBackground] = useState(false);
   const [isReduced, setIsReduced] = useState(false);
-  console.log(isReduced);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -454,8 +453,8 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
               ></path>
             </svg>
           </div>
-          {/* top right corner */}
-          <div className="absolute top-3 right-3 rotate-90">
+          {/* top right corner NEED HIDDEN ON MOBILE */}
+          <div className="absolute top-3 right-3 rotate-90 hidden sm:block">
             <svg
               width="20"
               height="20"
@@ -486,6 +485,51 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                   />
                 </div>
 
+                <div
+                  id="mobile-nav"
+                  className="absolute top-0 right-0 w-auto h-[47px]  items-center justify-between text-sm text-neutral-content bg-neutral px-4 rounded-bl-[20px] z-50 cursor-grab flex md:hidden"
+                >
+                  <div
+                    className="absolute top-3 -left-5 rotate-90"
+                    id="BLOCK MOBILE NAV"
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
+                        fill="var(--color-neutral)"
+                      ></path>
+                    </svg>
+                  </div>
+
+                  <div
+                    className="absolute -bottom-5 right-3 rotate-90"
+                    id="BLOCK MOBILE NAV"
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
+                        fill="var(--color-neutral)"
+                      ></path>
+                    </svg>
+                  </div>
+
+                  <div className=" items-center space-x-5 px-1 transition-all duration-100 z-50">
+                    <Menu size={17} className="text-base-content" />
+                  </div>
+                </div>
+
                 <motion.div
                   className="w-full h-full overflow-auto scrollbar-hide z-0"
                   id="content"
@@ -493,9 +537,9 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                 >
                   <div key={pathname}>{children}</div>
                 </motion.div>
-                <MemoizedFooter isMobile={isMobile} pathname={pathname} />
               </>
             </Transition>
+            <MemoizedFooter isMobile={isMobile} pathname={pathname} />
           </motion.div>
         </motion.div>
       </div>
