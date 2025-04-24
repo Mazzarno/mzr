@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useHotkeys } from 'react-hotkeys-hook';
 
 
-export default function SmoothScrollLeni() {
+export default function SmoothScroll() {
   const [, forceRender] = useState(0);
   const percentRef = useRef<number>(0);
   const dirRef = useRef<'down' | 'up' | null>(null);

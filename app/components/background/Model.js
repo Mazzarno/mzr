@@ -47,7 +47,6 @@ export default function Model({ mouse, currentTheme }) {
       initial={{ scaleX: 0, y: 500 }}
       animate={{ scaleX: 1, y: 0 }}
       transition={{
-        delay: 0.1,
         duration: 1.5,
         ease: [0.215, 0.61, 0.355, 1],
       }}

@@ -10,12 +10,11 @@ import Logo from "./Logo";
 import { Github, Linkedin, Mail, Maximize, Menu, Minimize } from "lucide-react";
 import Background from "./background";
 import AnimatedText from "./AnimatedText";
-import SmoothScrollLeni from "./SmoothScrollLeni";
-
 import dynamic from "next/dynamic";
 import LanguageSwitcher from "./LanguageSwitcher";
 import Transition from "./Transition";
 import { getTitleInfo } from "./getTitleInfo";
+import SmoothScroll from "./SmoothScroll";
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -561,8 +560,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                   <div className="lenis-content w-full h-full">
                     <div key={pathname}>{children}</div>
                   </div>
-                  {/* Smooth scroll + titre dynamique */}
-                  <SmoothScrollLeni />
+                  <SmoothScroll />
                 </motion.div>
               </>
             </Transition>
