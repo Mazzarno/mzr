@@ -102,22 +102,7 @@ const Transition: React.FC<TransitionProps> = ({ children }) => {
 
   const pixels = pixelsRef.current || [];
 
-  
-  const rawChildrenArray = React.Children.toArray(displayChildren);
-
-let childrenArray: React.ReactNode[];
-if (
-  rawChildrenArray.length === 1 &&
-  React.isValidElement(rawChildrenArray[0]) &&
-  (rawChildrenArray[0] as React.ReactElement).type === React.Fragment
-) {
-  const fragment = rawChildrenArray[0] as React.ReactElement<React.PropsWithChildren<any>>;
-  childrenArray = fragment.props.children
-    ? React.Children.toArray(fragment.props.children)
-    : [];
-} else {
-  childrenArray = rawChildrenArray;
-}
+const childrenArray = React.Children.toArray(displayChildren);
   const navChild = childrenArray[0];
   const contentChild = childrenArray[1];
   const footerChild = childrenArray[2];
