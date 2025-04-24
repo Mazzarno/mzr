@@ -104,9 +104,26 @@ const Transition: React.FC<TransitionProps> = ({ children }) => {
 
   
   const rawChildrenArray = React.Children.toArray(displayChildren);
-  const childrenArray = rawChildrenArray.length === 1 && React.isValidElement(rawChildrenArray[0]) && (rawChildrenArray[0] as React.ReactElement).type === React.Fragment
-    ? React.Children.toArray((rawChildrenArray[0] as React.ReactElement).props.children as React.ReactNode)
-    : rawChildrenArray;
+
+let childrenArray: React.ReactNode[];
+if (
+  rawChildrenArray.length === 1 &&
+  React.isValidElement(rawChildrenArray[0]) &&
+  (rawChildrenArray[0] as React.ReactElement).type === React.Fragment
+) {
+  const fragment = rawChildrenArray[0] as React.ReactElement;
+  if (
+    fragment.props &&
+    Object.prototype.hasOwnProperty.call(fragment.props, "children") &&
+    fragment.props.children !== undefined
+  ) {
+    childrenArray = React.Children.toArray(fragment.props.children);
+  } else {
+    childrenArray = [];
+  }
+} else {
+  childrenArray = rawChildrenArray;
+}
   const navChild = childrenArray[0];
   const contentChild = childrenArray[1];
   const footerChild = childrenArray[2];
