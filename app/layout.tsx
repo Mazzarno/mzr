@@ -21,7 +21,7 @@ const despairs = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Alxs Grmn",
+  title: "Alexis Germain",
   description: "Alexis Germain - Web Developer",
 };
 

@@ -10,6 +10,8 @@ import Logo from "./Logo";
 import { Github, Linkedin, Mail, Maximize, Menu, Minimize } from "lucide-react";
 import Background from "./background";
 import AnimatedText from "./AnimatedText";
+import SmoothScrollLeni from "./SmoothScrollLeni";
+
 import dynamic from "next/dynamic";
 import LanguageSwitcher from "./LanguageSwitcher";
 import Transition from "./Transition";
@@ -51,10 +53,13 @@ const MemoizedNavigation = memo(function Navigation({
   navLinks,
   isReduced,
   onToggleResize,
+  navAnimation = false,
 }: {
   navLinks: Array<{ href: string; labelKey: string }>;
   isReduced: boolean;
   onToggleResize: () => void;
+  navAnimation?: boolean;
+
 }) {
   return (
     <>
@@ -101,8 +106,15 @@ const MemoizedNavigation = memo(function Navigation({
             </div>
           </div>
         </TransitionLink>
-        {navLinks.map((link) => (
-          <div key={link.href} className="relative hidden items-center md:flex">
+        {navLinks.map((link, i) => {
+          return (
+            <motion.div
+              key={link.href}
+              className="relative hidden items-center md:flex"
+              initial={navAnimation ? { opacity: 0, x: 40 } : false}
+              animate={navAnimation ? { opacity: 1, x: 0 } : false}
+              transition={navAnimation ? { delay: 0.2 + i * 0.15, duration: 0.5, type: 'spring', stiffness: 60 } : {}}
+            >
             <TransitionLink
               href={link.href}
               className="block text-neutral-content text-sm transition-colors duration-100"
@@ -146,8 +158,9 @@ const MemoizedNavigation = memo(function Navigation({
               </div>
             </TransitionLink>
             <div className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary to-secondary rounded-full" />
-          </div>
-        ))}
+            </motion.div>
+          );
+        })}
         <LanguageSwitcher />
         <div className="relative overflow-hidden h-5 group">
           <div
@@ -312,6 +325,7 @@ const DraggableBorders = memo(function DraggableBorders({
 export default function ClientLayout({ children }: ClientLayoutProps) {
   // Loader initial
   const [showLoader, setShowLoader] = useState(true);
+  const [showNavAnimation, setShowNavAnimation] = useState(false);
   // Pour éviter d'afficher le loader lors des changements de page
   const isInitialRender = useRef(true);
   const [isMobile, setIsMobile] = useState(false);
@@ -330,6 +344,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
       setShowLoader(true);
       isInitialRender.current = false;
     }
+    setShowNavAnimation(false);
 
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -362,7 +377,13 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
 
   if (showLoader) {
     return (
-      <Loading duration={2.2} onLoadComplete={() => setShowLoader(false)} />
+      <Loading
+        duration={2.2}
+        onLoadComplete={() => {
+          setShowLoader(false);
+          setTimeout(() => setShowNavAnimation(true), 100); // petit délai pour la transition
+        }}
+      />
     );
   }
 
@@ -482,6 +503,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                     navLinks={navLinks}
                     isReduced={isReduced}
                     onToggleResize={() => setIsReduced((v) => !v)}
+                    navAnimation={showNavAnimation}
                   />
                 </div>
 
@@ -531,11 +553,16 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                 </div>
 
                 <motion.div
-                  className="w-full h-full overflow-auto scrollbar-hide z-0"
+                  className="w-full h-full overflow-hidden z-0"
                   id="content"
                   ref={contentRef}
+                  tabIndex={0}
                 >
-                  <div key={pathname}>{children}</div>
+                  <div className="lenis-content w-full h-full">
+                    <div key={pathname}>{children}</div>
+                  </div>
+                  {/* Smooth scroll + titre dynamique */}
+                  <SmoothScrollLeni />
                 </motion.div>
               </>
             </Transition>

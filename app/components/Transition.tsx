@@ -102,7 +102,7 @@ const Transition: React.FC<TransitionProps> = ({ children }) => {
 
   const pixels = pixelsRef.current || [];
 
-  // Flatten children (unwrap fragment if needed)
+  
   const rawChildrenArray = React.Children.toArray(displayChildren);
   const childrenArray = rawChildrenArray.length === 1 && React.isValidElement(rawChildrenArray[0]) && (rawChildrenArray[0] as React.ReactElement).type === React.Fragment
     ? React.Children.toArray((rawChildrenArray[0] as React.ReactElement).props.children as React.ReactNode)
