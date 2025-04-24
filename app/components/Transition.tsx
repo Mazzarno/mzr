@@ -111,16 +111,10 @@ if (
   React.isValidElement(rawChildrenArray[0]) &&
   (rawChildrenArray[0] as React.ReactElement).type === React.Fragment
 ) {
-  const fragment = rawChildrenArray[0] as React.ReactElement;
-  if (
-    fragment.props &&
-    Object.prototype.hasOwnProperty.call(fragment.props, "children") &&
-    fragment.props.children !== undefined
-  ) {
-    childrenArray = React.Children.toArray(fragment.props.children);
-  } else {
-    childrenArray = [];
-  }
+  const fragment = rawChildrenArray[0] as React.ReactElement<React.PropsWithChildren<any>>;
+  childrenArray = fragment.props.children
+    ? React.Children.toArray(fragment.props.children)
+    : [];
 } else {
   childrenArray = rawChildrenArray;
 }
