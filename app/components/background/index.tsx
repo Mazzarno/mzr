@@ -54,16 +54,36 @@ export default function Background() {
     [mouse.x, mouse.y]
   );
 
+  // Handler pour le tactile
+  const handleTouchMove = useCallback(
+    (e: TouchEvent) => {
+      if (!e.touches || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      const { innerWidth, innerHeight } = window;
+      const x = touch.clientX / innerWidth;
+      const y = touch.clientY / innerHeight;
+      mouse.x.set(x);
+      mouse.y.set(y);
+    },
+    [mouse.x, mouse.y]
+  );
+
   useEffect(() => {
     const throttledMouseMove = (e: MouseEvent) => {
       requestAnimationFrame(() => handleMouseMove(e));
     };
+    const throttledTouchMove = (e: TouchEvent) => {
+      requestAnimationFrame(() => handleTouchMove(e));
+    };
 
     window.addEventListener("mousemove", throttledMouseMove);
+    window.addEventListener("touchmove", throttledTouchMove, { passive: false });
+
     return () => {
       window.removeEventListener("mousemove", throttledMouseMove);
+      window.removeEventListener("touchmove", throttledTouchMove);
     };
-  }, [handleMouseMove]);
+  }, [handleMouseMove, handleTouchMove]);
 
   return (
     <Canvas

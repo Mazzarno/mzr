@@ -4,6 +4,30 @@ import { useTransform } from "framer-motion";
 import { motion } from "framer-motion-3d";
 
 export default function Model({ mouse, currentTheme }) {
+  const [scaleFactor, setScaleFactor] = useState(1);
+
+  const computeScale = () => {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
+    if (w < 600) {
+      return Math.min(w, h) / 400;
+    } else if (w < 900) {
+      return Math.min(w, h) / 600;
+    } else {
+      return Math.min(w, h) / 900;
+    }
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScaleFactor(computeScale());
+    };
+    handleResize(); // set au mount
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const [activeShape, setActiveShape] = useState(1);
   const isDarkTheme = currentTheme === "dark";
   const intervalRef = useRef(null);
@@ -50,6 +74,7 @@ export default function Model({ mouse, currentTheme }) {
         duration: 1.5,
         ease: [0.215, 0.61, 0.355, 1],
       }}
+      scale={[scaleFactor, scaleFactor, scaleFactor]}
     >
       <Mesh
         node={nodes.Sphere001}

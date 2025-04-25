@@ -74,6 +74,12 @@ export default function SmoothScroll() {
   }, { enableOnFormTags: true });
 
   useEffect(() => {
+    // Détection mobile simple
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+    if (isMobile) {
+      // Sur mobile, scroll natif, pas de Lenis
+      return;
+    }
     const wrapper = document.getElementById("content");
     if (!wrapper) return;
     const content = wrapper.querySelector(".lenis-content") as HTMLElement | null;

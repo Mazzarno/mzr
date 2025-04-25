@@ -20,6 +20,9 @@ export default function TransitionLink({ href, children, className, ...props }: 
       e.preventDefault();
       return;
     }
+    if (props.onClick) {
+      props.onClick(e);
+    }
     e.preventDefault();
     startTransition(typeof href === "string" ? href : href.toString());
   };
