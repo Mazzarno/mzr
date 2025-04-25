@@ -74,62 +74,12 @@ export default function SmoothScroll() {
   }, { enableOnFormTags: true });
 
   useEffect(() => {
-    const isMobileOrTablet = () => {
-      if (typeof window === 'undefined') return false;
-      return (
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-        (window.innerWidth <= 1024 && 'ontouchstart' in window)
-      );
-    };
-
     const wrapper = document.getElementById("content");
     if (!wrapper) return;
     const content = wrapper.querySelector(".lenis-content") as HTMLElement | null;
     if (!content) return;
     wrapperRef.current = wrapper;
     contentRef.current = content;
-
-    // If mobile/tablet: just update percent on scroll, no Lenis
-    if (isMobileOrTablet()) {
-      function update() {
-        if (!wrapper || !content) return;
-        const scrollTop = wrapper.scrollTop;
-        const scrollHeight = content.scrollHeight - wrapper.clientHeight;
-        const p = scrollHeight > 0 ? Math.round((scrollTop / scrollHeight) * 100) : 0;
-        let newDir: 'down' | 'up' | null = null;
-        if (p > lastPercentRef.current) newDir = 'down';
-        else if (p < lastPercentRef.current) newDir = 'up';
-        let shouldRender = false;
-        if (p === 0 && lastEdgeRef.current !== 0) {
-          lastEmojiRef.current = pickOne(['🚀', '🟢', '▶️']);
-          lastEdgeRef.current = 0;
-          shouldRender = true;
-        } else if (p === 100 && lastEdgeRef.current !== 100) {
-          lastEmojiRef.current = pickOne(['🏁', '🎯', '💯']);
-          lastEdgeRef.current = 100;
-          shouldRender = true;
-        } else if (p > 0 && p < 100) {
-          if (newDir !== dirRef.current) {
-            if (newDir === 'down') {
-              lastEmojiRef.current = pickOne(['👇', '⬇️', '⏬']);
-            } else if (newDir === 'up') {
-              lastEmojiRef.current = pickOne(['👆', '⬆️', '⏫']);
-            }
-            dirRef.current = newDir;
-            lastEdgeRef.current = -1;
-            shouldRender = true;
-          }
-        }
-        percentRef.current = p;
-        lastPercentRef.current = p;
-        if (shouldRender) forceRender(x => x + 1);
-      }
-      wrapper.addEventListener("scroll", update);
-      update();
-      return () => {
-        wrapper.removeEventListener("scroll", update);
-      };
-    }
 
     const lenis = new Lenis({
       wrapper,
@@ -138,9 +88,7 @@ export default function SmoothScroll() {
       lerp: 0.1,
     });
     lenisRef.current = lenis;
-
     let animationId: number;
-
 
     function updateFromLenis() {
       const scrollTop = lenis.scroll;
