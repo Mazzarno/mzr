@@ -92,6 +92,8 @@ export default function SmoothScroll() {
       content,
       smoothWheel: true,
       lerp: 0.1,
+      smoothTouch: false, // Désactive le smooth scroll Lenis sur mobile, laisse le scroll natif
+      gestureOrientation: 'vertical', // S'assure que le scroll vertical fonctionne
     });
     lenisRef.current = lenis;
     let animationId: number;
@@ -154,7 +156,7 @@ export default function SmoothScroll() {
   const showPercent = percent > 0 && percent < 100;
   return (
     <title>
-      {`Alexis Germain\xa0${showPercent ? percent : ''}${emoji}`}
+      {`Alexis Germain\xa0${showPercent ? percent : ''}\xa0${emoji}`}
     </title>
   );
 }
