@@ -223,7 +223,46 @@ const MemoizedNavigation = memo(function Navigation({
     </>
   );
 });
-
+const MemoizedMobileNavigation = memo(function MobileNavigation({
+  show,
+  navLinks,
+  onClose,
+}: {
+  show: boolean;
+  navLinks: Array<{ href: string; labelKey: string }>;
+  onClose: () => void;
+}) {
+  if (!show) return null;
+  return (
+    <Transition>
+      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-neutral/95 backdrop-blur-md">
+        <button
+          className="absolute top-7 right-7 text-base-content focus:outline-none text-2xl"
+          aria-label="Fermer la navigation"
+          onClick={onClose}
+        >
+          &times;
+        </button>
+        <nav className="flex flex-col items-center space-y-8">
+          {navLinks.map((link) => (
+            <TransitionLink
+              key={link.href}
+              href={link.href}
+              className="text-3xl font-bold text-base-content hover:text-primary transition-colors duration-200"
+              onClick={onClose}
+            >
+              <AnimatedText
+                translationKey={link.labelKey}
+                className="inline-block"
+                animated={true}
+              />
+            </TransitionLink>
+          ))}
+        </nav>
+      </div>
+    </Transition>
+  );
+});
 const MemoizedFooter = memo(function Footer({
   isMobile,
   pathname,
@@ -298,7 +337,6 @@ const MemoizedFooter = memo(function Footer({
     </div>
   );
 });
-
 const DraggableBorders = memo(function DraggableBorders({
   onDragStart,
 }: {
@@ -343,52 +381,11 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [shouldRenderBackground, setShouldRenderBackground] = useState(false);
   const [isReduced, setIsReduced] = useState(false);
-  // Permet de réduire/agrandir la fenêtre (mobile & desktop)
   const onToggleResize = () => setIsReduced((v) => !v);
-  // Contrôle l'affichage de la nav mobile full screen
   const [showMobileNav, setShowMobileNav] = useState(false);
 
-  // Composant navigation mobile full page animé
-  const MemoizedMobileNavigation = React.memo(function MobileNavigation({
-    show,
-    navLinks,
-    onClose,
-  }: {
-    show: boolean;
-    navLinks: Array<{ href: string; labelKey: string }>;
-    onClose: () => void;
-  }) {
-    if (!show) return null;
-    return (
-      <Transition>
-        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-neutral/95 backdrop-blur-md">
-          <button
-            className="absolute top-7 right-7 text-base-content focus:outline-none text-2xl"
-            aria-label="Fermer la navigation"
-            onClick={onClose}
-          >
-            &times;
-          </button>
-          <nav className="flex flex-col items-center space-y-8">
-            {navLinks.map((link) => (
-              <TransitionLink
-                key={link.href}
-                href={link.href}
-                className="text-3xl font-bold text-base-content hover:text-primary transition-colors duration-200"
-                onClick={onClose}
-              >
-                <AnimatedText
-                  translationKey={link.labelKey}
-                  className="inline-block"
-                  animated={true}
-                />
-              </TransitionLink>
-            ))}
-          </nav>
-        </div>
-      </Transition>
-    );
-  });
+
+  
   const contentRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (isInitialRender.current) {
@@ -646,8 +643,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                 </motion.div>
               </>
             </Transition>
-
-            {/* Navigation mobile full page animée */}
             <MemoizedMobileNavigation
               show={showMobileNav}
               navLinks={navLinks}
