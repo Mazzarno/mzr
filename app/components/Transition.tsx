@@ -29,8 +29,10 @@ const Transition: React.FC<TransitionProps> = ({ children }) => {
   const isInitialRender = useRef(true);
   
   
-  const gridCols = 12; 
-  const gridRows = 8; 
+    // Responsive grid size
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+  const gridCols = isMobile ? 6 : 12;
+  const gridRows = isMobile ? 12 : 8; 
   
  
   const generatePixels = () => {
@@ -111,9 +113,9 @@ const childrenArray = React.Children.toArray(displayChildren);
     <TransitionContext.Provider value={{ startTransition, isTransitioning }}>
       <AnimatePresence>
         {isTransitioning && (
-          <div className="fixed inset-1 z-40 pointer-events-none">
+          <div className="fixed inset-0 z-40 pointer-events-none">
             <div 
-              className="w-full h-full"
+              className="w-full h-full overflow-hidden"
               style={{
                 display: "grid",
                 gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
@@ -157,7 +159,7 @@ const childrenArray = React.Children.toArray(displayChildren);
                   delay: 0.1,
                   exit: { delay: 0.1 }
                 }}
-                className="text-4xl font-bold text-base-content drop-shadow-lg pointer-events-none"
+                className="text-2xl sm:text-4xl font-bold text-base-content drop-shadow-lg pointer-events-none text-center px-2"
                 style={{ fontFamily: "var(--font-despairs)" }}
               >
                 {getTitleInfo(nextPath || pathname)}

@@ -107,14 +107,14 @@ const Loading: React.FC<LoadingProps> = ({
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="flex flex-col items-center justify-center h-screen w-screen bg-gradient-to-bl from-base-200/50 to-base-100"
+          className="flex flex-col items-center justify-center min-h-screen min-w-full bg-gradient-to-bl from-base-200/50 to-base-100 px-2 sm:px-0"
         >
           <motion.div 
             className="flex flex-col items-center space-y-10"
             variants={itemVariants}
           >
             <motion.div
-              className="relative font-bold text-5xl text-transparent"
+              className="relative font-bold text-3xl sm:text-5xl text-transparent text-center leading-tight sm:leading-[1.1] px-2"
               style={{ fontFamily: "var(--font-despairs)" }}
               variants={itemVariants}
             >
@@ -137,7 +137,7 @@ const Loading: React.FC<LoadingProps> = ({
             </motion.div>
             
             <div className="w-full flex flex-col items-center space-y-3">
-              <div className="w-full max-w-sm h-[2px] bg-base-300/30 rounded-full overflow-hidden">
+              <div className="w-full max-w-[90vw] sm:max-w-sm h-[2.5px] bg-base-300/30 rounded-full overflow-hidden">
                 <motion.div
                   variants={progressVariants}
                   className="h-full bg-gradient-to-r from-primary to-secondary rounded-full"
@@ -145,7 +145,7 @@ const Loading: React.FC<LoadingProps> = ({
               </div>
               
               <motion.div
-                className="text-xs font-medium text-base-content/70"
+                className="text-xs sm:text-sm font-medium text-base-content/70 text-center"
                 variants={itemVariants}
               >
                 {Math.floor(progress)}%

@@ -74,11 +74,11 @@
 html,
 body {
   overflow-x: hidden !important;
+  overflow-y: auto !important;
   font-family: var(--font-dm-sans), sans-serif !important;
   min-height: 100vh;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  overflow: hidden;
 }
 html,
 body,
@@ -94,21 +94,6 @@ body,
 
 .color-inverted {
   filter: invert(100%);
-}
-.corner-top-left {
-  width: 18px;
-  height: 18px;
-  overflow: hidden;
-}
-
-.corner-top-left.bottom {
-  position: absolute;
-  inset: auto auto -18px 0px;
-}
-
-.corner-top-left.top {
-  position: absolute;
-  inset: 0% -18px auto auto;
 }
 .cursor {
   position: fixed;

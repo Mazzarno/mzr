@@ -58,13 +58,12 @@ const MemoizedNavigation = memo(function Navigation({
   isReduced: boolean;
   onToggleResize: () => void;
   navAnimation?: boolean;
-
 }) {
   return (
     <>
-      <div className="flex items-center space-x-5 px-1 transition-all duration-100 z-50">
+      <div className="flex items-center md:space-x-5 px-1 transition-all duration-100 z-50">
         {/* Nav right Border */}
-        <div className="absolute top-3 -right-10">
+        <div className="absolute md:top-3 md:-right-10  top-2.5 -right-5">
           <svg
             width="20"
             height="20"
@@ -109,59 +108,70 @@ const MemoizedNavigation = memo(function Navigation({
           return (
             <motion.div
               key={link.href}
-              className="relative hidden items-center md:flex"
+              className="relative  items-center hidden md:flex"
               initial={navAnimation ? { opacity: 0, x: 40 } : false}
               animate={navAnimation ? { opacity: 1, x: 0 } : false}
-              transition={navAnimation ? { delay: 0.2 + i * 0.15, duration: 0.5, type: 'spring', stiffness: 60 } : {}}
+              transition={
+                navAnimation
+                  ? {
+                      delay: 0.2 + i * 0.15,
+                      duration: 0.5,
+                      type: "spring",
+                      stiffness: 60,
+                    }
+                  : {}
+              }
             >
-            <TransitionLink
-              href={link.href}
-              className="block text-neutral-content text-sm transition-colors duration-100"
-            >
-              <div className="text-center relative overflow-hidden h-5 group">
-                <div
-                  className="transition-transform duration-300 transform group-hover:-translate-y-5"
-                  style={{ transformStyle: "preserve-3d" }}
-                >
-                  <div className="block">
-                    {link.labelKey ? (
-                      <AnimatedText
-                        translationKey={link.labelKey}
-                        className="inline-block"
-                        animated={false}
-                      />
-                    ) : (
-                      <AnimatedText
-                        text={link.labelKey || ""}
-                        className="inline-block"
-                        animated={false}
-                      />
-                    )}
-                  </div>
-                  <div className="block">
-                    {link.labelKey ? (
-                      <AnimatedText
-                        translationKey={link.labelKey}
-                        className="inline-block"
-                        animated={false}
-                      />
-                    ) : (
-                      <AnimatedText
-                        text={link.labelKey || ""}
-                        className="inline-block"
-                        animated={false}
-                      />
-                    )}
+              <TransitionLink
+                href={link.href}
+                className="block text-neutral-content text-sm transition-colors duration-100"
+              >
+                <div className="text-center relative overflow-hidden h-5 group">
+                  <div
+                    className="transition-transform duration-300 transform group-hover:-translate-y-5"
+                    style={{ transformStyle: "preserve-3d" }}
+                  >
+                    <div className="block">
+                      {link.labelKey ? (
+                        <AnimatedText
+                          translationKey={link.labelKey}
+                          className="inline-block"
+                          animated={false}
+                        />
+                      ) : (
+                        <AnimatedText
+                          text={link.labelKey || ""}
+                          className="inline-block"
+                          animated={false}
+                        />
+                      )}
+                    </div>
+                    <div className="block">
+                      {link.labelKey ? (
+                        <AnimatedText
+                          translationKey={link.labelKey}
+                          className="inline-block"
+                          animated={false}
+                        />
+                      ) : (
+                        <AnimatedText
+                          text={link.labelKey || ""}
+                          className="inline-block"
+                          animated={false}
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </TransitionLink>
-            <div className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary to-secondary rounded-full" />
+              </TransitionLink>
+              <div className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary to-secondary rounded-full" />
             </motion.div>
           );
         })}
-        <LanguageSwitcher />
-        <div className="relative overflow-hidden h-5 group">
+        <div className="md:pl-0 pl-3">
+          <LanguageSwitcher />
+        </div>
+        <div className="relative overflow-hidden h-5 group hidden md:flex">
           <div
             className="transition-transform duration-300 transform group-hover:-translate-y-5"
             style={{ transformStyle: "preserve-3d" }}
@@ -174,7 +184,7 @@ const MemoizedNavigation = memo(function Navigation({
             </div>
           </div>
         </div>
-        <div className="relative overflow-hidden h-5 group">
+        <div className="relative overflow-hidden h-5 group hidden md:flex">
           <div
             key={isReduced ? "reduced" : "expanded"}
             className="transition-transform duration-300 transform group-hover:-translate-y-5"
@@ -322,10 +332,8 @@ const DraggableBorders = memo(function DraggableBorders({
 });
 
 export default function ClientLayout({ children }: ClientLayoutProps) {
-  // Loader initial
   const [showLoader, setShowLoader] = useState(true);
   const [showNavAnimation, setShowNavAnimation] = useState(false);
-  // Pour éviter d'afficher le loader lors des changements de page
   const isInitialRender = useRef(true);
   const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
@@ -335,10 +343,54 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [shouldRenderBackground, setShouldRenderBackground] = useState(false);
   const [isReduced, setIsReduced] = useState(false);
-  const contentRef = useRef<HTMLDivElement>(null);
+  // Permet de réduire/agrandir la fenêtre (mobile & desktop)
+  const onToggleResize = () => setIsReduced((v) => !v);
+  // Contrôle l'affichage de la nav mobile full screen
+  const [showMobileNav, setShowMobileNav] = useState(false);
 
+  // Composant navigation mobile full page animé
+  const MemoizedMobileNavigation = React.memo(function MobileNavigation({
+    show,
+    navLinks,
+    onClose,
+  }: {
+    show: boolean;
+    navLinks: Array<{ href: string; labelKey: string }>;
+    onClose: () => void;
+  }) {
+    if (!show) return null;
+    return (
+      <Transition>
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-neutral/95 backdrop-blur-md">
+          <button
+            className="absolute top-7 right-7 text-base-content focus:outline-none text-2xl"
+            aria-label="Fermer la navigation"
+            onClick={onClose}
+          >
+            &times;
+          </button>
+          <nav className="flex flex-col items-center space-y-8">
+            {navLinks.map((link) => (
+              <TransitionLink
+                key={link.href}
+                href={link.href}
+                className="text-3xl font-bold text-base-content hover:text-primary transition-colors duration-200"
+                onClick={onClose}
+              >
+                <AnimatedText
+                  translationKey={link.labelKey}
+                  className="inline-block"
+                  animated={true}
+                />
+              </TransitionLink>
+            ))}
+          </nav>
+        </div>
+      </Transition>
+    );
+  });
+  const contentRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    // Affiche le loader uniquement au tout premier rendu
     if (isInitialRender.current) {
       setShowLoader(true);
       isInitialRender.current = false;
@@ -380,12 +432,11 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         duration={2.2}
         onLoadComplete={() => {
           setShowLoader(false);
-          setTimeout(() => setShowNavAnimation(true), 100); // petit délai pour la transition
+          setTimeout(() => setShowNavAnimation(true), 100);
         }}
       />
     );
   }
-
   return (
     <>
       {!isMobile && (
@@ -433,9 +484,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             <Background />
           </motion.div>
         )}
-
         <MemoizedGrid />
-
         <motion.div
           className={
             "relative overflow-hidden z-10 backdrop-blur-sm scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)]"
@@ -473,7 +522,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
               ></path>
             </svg>
           </div>
-          {/* top right corner NEED HIDDEN ON MOBILE */}
+          {/* top right corner */}
           <div className="absolute top-3 right-3 rotate-90 hidden sm:block">
             <svg
               width="20"
@@ -506,14 +555,22 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                   />
                 </div>
 
-                <div
-                  id="mobile-nav"
-                  className="absolute top-0 right-0 w-auto h-[47px]  items-center justify-between text-sm text-neutral-content bg-neutral px-4 rounded-bl-[20px] z-50 cursor-grab flex md:hidden"
-                >
-                  <div
-                    className="absolute top-3 -left-5 rotate-90"
-                    id="BLOCK MOBILE NAV"
-                  >
+                <div className="absolute top-0 right-0 w-auto h-[47px]  items-center justify-between text-sm text-neutral-content bg-neutral px-4 rounded-bl-[20px] z-50 cursor-grab flex md:hidden">
+                  <div className="absolute top-3 -left-5 rotate-90">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
+                        fill="var(--color-neutral)"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div className="absolute -bottom-5 right-3 rotate-90">
                     <svg
                       width="20"
                       height="20"
@@ -528,26 +585,51 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                     </svg>
                   </div>
 
-                  <div
-                    className="absolute -bottom-5 right-3 rotate-90"
-                    id="BLOCK MOBILE NAV"
-                  >
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 20 20"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+                  <div className="flex items-center space-x-5 px-1 transition-all duration-100 z-50">
+                    <div className="relative overflow-hidden h-5 group">
+                      <div
+                        className="transition-transform duration-300 transform group-hover:-translate-y-5"
+                        style={{ transformStyle: "preserve-3d" }}
+                      >
+                        <div className="block">
+                          <ThemeSwitcher />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="relative overflow-hidden h-5 group">
+                      <div
+                        key={isReduced ? "reduced" : "expanded"}
+                        className="transition-transform duration-300 transform group-hover:-translate-y-5"
+                        style={{ transformStyle: "preserve-3d" }}
+                      >
+                        <div className="block">
+                          <button
+                            aria-label={isReduced ? "Maximiser" : "Réduire"}
+                            onClick={onToggleResize}
+                            className="focus:outline-none"
+                          >
+                            {isReduced ? (
+                              <Minimize
+                                size={17}
+                                className="text-base-content"
+                              />
+                            ) : (
+                              <Maximize
+                                size={17}
+                                className="text-base-content"
+                              />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      className="focus:outline-none"
+                      aria-label="Toggle Mobile Nav"
+                      onClick={() => setShowMobileNav(true)}
                     >
-                      <path
-                        d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
-                        fill="var(--color-neutral)"
-                      ></path>
-                    </svg>
-                  </div>
-
-                  <div className=" items-center space-x-5 px-1 transition-all duration-100 z-50">
-                    <Menu size={17} className="text-base-content" />
+                      <Menu size={20} className="text-base-content mb-[2px]" />
+                    </button>
                   </div>
                 </div>
 
@@ -564,6 +646,13 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                 </motion.div>
               </>
             </Transition>
+
+            {/* Navigation mobile full page animée */}
+            <MemoizedMobileNavigation
+              show={showMobileNav}
+              navLinks={navLinks}
+              onClose={() => setShowMobileNav(false)}
+            />
             <MemoizedFooter isMobile={isMobile} pathname={pathname} />
           </motion.div>
         </motion.div>

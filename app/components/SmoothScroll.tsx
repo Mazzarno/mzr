@@ -148,7 +148,7 @@ export default function SmoothScroll() {
   const showPercent = percent > 0 && percent < 100;
   return (
     <title>
-      {`Alexis Germain ${showPercent ? percent : ''}${emoji}`}
+      {`Alexis Germain\xa0${showPercent ? percent : ''}${emoji}`}
     </title>
   );
 }
