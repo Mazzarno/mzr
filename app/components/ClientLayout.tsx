@@ -379,7 +379,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const y = useMotionValue(0);
   const constraintsRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [shouldRenderBackground, setShouldRenderBackground] = useState(false);
   const [isReduced, setIsReduced] = useState(false);
   const onToggleResize = () => setIsReduced((v) => !v);
   const [showMobileNav, setShowMobileNav] = useState(false);
@@ -404,7 +403,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     };
     window.addEventListener("resize", handleResize);
 
-    setShouldRenderBackground(true);
 
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -471,16 +469,16 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         className="flex items-center justify-center min-h-screen bg-gradient-to-bl from-content-200 to-content-100"
         ref={constraintsRef}
       >
-        {shouldRenderBackground && (
+      
           <motion.div
-            className="absolute h-screen w-screen pointer-events-none z-10"
+            className="absolute h-full w-full pointer-events-none z-10"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
             <Background />
           </motion.div>
-        )}
+   
         <MemoizedGrid />
         <motion.div
           className={
@@ -631,12 +629,12 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                 </div>
 
                 <motion.div
-                  className="w-full h-full overflow-hidden z-0"
+                  className="w-full h-full overflow-y-auto overflow-x-hidden z-0"
                   id="content"
                   ref={contentRef}
                   tabIndex={0}
                 >
-                  <div className="lenis-content w-full h-full">
+                  <div className="lenis-content">
                     <div key={pathname}>{children}</div>
                   </div>
                   <SmoothScroll />
