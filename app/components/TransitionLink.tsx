@@ -2,7 +2,6 @@
 import React from "react";
 import { LinkProps } from "next/link";
 
-// Ce contexte servira à déclencher la transition depuis n'importe quel lien
 export const TransitionContext = React.createContext<{
   startTransition: (to: string) => void;
   isTransitioning: boolean;

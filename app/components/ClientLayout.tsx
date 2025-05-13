@@ -15,6 +15,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import Transition from "./Transition";
 import { getTitleInfo } from "./getTitleInfo";
 import SmoothScroll from "./SmoothScroll";
+import MobileMenu from "./MobileMenu";
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -61,9 +62,9 @@ const MemoizedNavigation = memo(function Navigation({
 }) {
   return (
     <>
-      <div className="flex items-center md:space-x-5 px-1 transition-all duration-100 z-50">
-        {/* Nav right Border */}
-        <div className="absolute md:top-3 md:-right-10  top-2.5 -right-5">
+      <div className="flex items-center md:space-x-5 px-1 transition-all duration-100 z-70">
+        {/* CustomBorderRadius Nav right Border */}
+        <div className="absolute md:top-3 md:-right-10  top-3 -right-[19.8px] z-70">
           <svg
             width="20"
             height="20"
@@ -77,8 +78,8 @@ const MemoizedNavigation = memo(function Navigation({
             ></path>
           </svg>
         </div>
-        {/* Nav left Border */}
-        <div className="absolute -bottom-5 left-3">
+        {/* CustomBorderRadius Nav left Border */}
+        <div className="absolute -bottom-5 left-3 z-70">
           <svg
             width="20"
             height="20"
@@ -92,7 +93,7 @@ const MemoizedNavigation = memo(function Navigation({
             ></path>
           </svg>
         </div>
-        <TransitionLink href="/" className="flex items-center space-x-3">
+        <TransitionLink href="/contact" className="flex items-center space-x-3">
           <Logo />
           <div className="relative inline-block overflow-hidden h-5 group">
             <div
@@ -223,46 +224,7 @@ const MemoizedNavigation = memo(function Navigation({
     </>
   );
 });
-const MemoizedMobileNavigation = memo(function MobileNavigation({
-  show,
-  navLinks,
-  onClose,
-}: {
-  show: boolean;
-  navLinks: Array<{ href: string; labelKey: string }>;
-  onClose: () => void;
-}) {
-  if (!show) return null;
-  return (
-    <Transition>
-      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-neutral/95 backdrop-blur-md">
-        <button
-          className="absolute top-7 right-7 text-base-content focus:outline-none text-2xl"
-          aria-label="Fermer la navigation"
-          onClick={onClose}
-        >
-          &times;
-        </button>
-        <nav className="flex flex-col items-center space-y-8">
-          {navLinks.map((link) => (
-            <TransitionLink
-              key={link.href}
-              href={link.href}
-              className="text-3xl font-bold text-base-content hover:text-primary transition-colors duration-200"
-              onClick={onClose}
-            >
-              <AnimatedText
-                translationKey={link.labelKey}
-                className="inline-block"
-                animated={true}
-              />
-            </TransitionLink>
-          ))}
-        </nav>
-      </div>
-    </Transition>
-  );
-});
+
 const MemoizedFooter = memo(function Footer({
   isMobile,
   pathname,
@@ -274,8 +236,8 @@ const MemoizedFooter = memo(function Footer({
     <div
       className={`absolute bottom-0 right-0 w-auto h-[47px] flex items-center space-x-2 text-neutral-content bg-neutral px-4 shadow-[-1px_-1px_10px_0px_rgba(0,_0,_0,_0.1)] rounded-tl-3xl z-70 ${isMobile ? "text-xs" : ""}`}
     >
-      {/* Footer Top right corner */}
-      <div className="absolute -top-4 right-1">
+      {/* CustomBorderRadius Footer Top right corner */}
+      <div className="absolute -top-4 right-1 z-70">
         <svg
           width="16"
           height="16"
@@ -289,8 +251,8 @@ const MemoizedFooter = memo(function Footer({
           ></path>
         </svg>
       </div>
-      {/* Footer Bottom left corner */}
-      <div className="absolute bottom-3 -left-4">
+      {/* CustomBorderRadius Footer Bottom left corner */}
+      <div className="absolute bottom-3 -left-[15px] md:bottom-3 md:-left-4 z-70">
         <svg
           width="16"
           height="16"
@@ -350,19 +312,19 @@ const DraggableBorders = memo(function DraggableBorders({
   return (
     <>
       <div
-        className="absolute w-full h-3 bottom-0 bg-neutral z-70"
+        className="absolute w-full h-3 bottom-0 bg-neutral z-[999] pointer-events-none"
         onPointerDown={handlePointerDown}
       />
       <div
-        className="absolute h-full w-3 right-0 bg-neutral z-70"
+        className="absolute h-full w-3 right-0 bg-neutral z-[999] pointer-events-none"
         onPointerDown={handlePointerDown}
       />
       <div
-        className="absolute h-full w-3 left-0 bg-neutral z-70"
+        className="absolute h-full w-3 left-0 bg-neutral z-[999] pointer-events-none"
         onPointerDown={handlePointerDown}
       />
       <div
-        className="absolute w-full h-3 top-0 bg-neutral z-70"
+        className="absolute w-full h-3 top-0 bg-neutral z-[999] pointer-events-none"
         onPointerDown={handlePointerDown}
       />
     </>
@@ -383,8 +345,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const onToggleResize = () => setIsReduced((v) => !v);
   const [showMobileNav, setShowMobileNav] = useState(false);
 
-
-  
   const contentRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (isInitialRender.current) {
@@ -402,7 +362,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
       checkIfMobile();
     };
     window.addEventListener("resize", handleResize);
-
 
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -424,7 +383,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   if (showLoader) {
     return (
       <Loading
-        duration={2.2}
+        duration={0.1}
         onLoadComplete={() => {
           setShowLoader(false);
           setTimeout(() => setShowNavAnimation(true), 100);
@@ -435,58 +394,58 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   return (
     <>
       {!isMobile && (
-        <AnimatedCursor
-          innerSize={4}
-          outerSize={30}
-          innerScale={1.5}
-          outerScale={1.5}
-          outerAlpha={0}
-          innerStyle={{
-            backgroundColor: "var(--color-base-content)",
-          }}
-          outerStyle={{
-            border: "1px solid var(--color-base-content)",
-          }}
-          trailingSpeed={10}
-          clickables={[
-            "a",
-            "button",
-            ".link",
-            'input[type="text"]',
-            'input[type="email"]',
-            'input[type="number"]',
-            'input[type="submit"]',
-            'input[type="image"]',
-            "label[for]",
-            "select",
-            "textarea",
-            ".cursor-grab",
-          ]}
-        />
+        <>
+          <FaviconUpdater />
+          <AnimatedCursor
+            innerSize={4}
+            outerSize={30}
+            innerScale={1.5}
+            outerScale={1.5}
+            outerAlpha={0}
+            innerStyle={{
+              backgroundColor: "var(--color-base-content)",
+            }}
+            outerStyle={{
+              border: "1px solid var(--color-base-content)",
+            }}
+            trailingSpeed={10}
+            clickables={[
+              "a",
+              "button",
+              ".link",
+              'input[type="text"]',
+              'input[type="email"]',
+              'input[type="number"]',
+              'input[type="submit"]',
+              'input[type="image"]',
+              "label[for]",
+              "select",
+              "textarea",
+              ".cursor-grab",
+            ]}
+          />
+        </>
       )}
-      <FaviconUpdater />
       <div
-        className="flex items-center justify-center min-h-screen bg-gradient-to-bl from-content-200 to-content-100"
+        className="flex items-center justify-center min-h-[100dvh] bg-gradient-to-bl from-content-200 to-content-100"
         ref={constraintsRef}
       >
-      
-          <motion.div
-            className="absolute h-full w-full pointer-events-none z-10"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Background />
-          </motion.div>
-   
+        <motion.div
+          className="absolute h-full w-full pointer-events-none z-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Background />
+        </motion.div>
         <MemoizedGrid />
         <motion.div
           className={
-            "relative overflow-hidden z-10 backdrop-blur-sm scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)]"
+            "relative overflow-hidden z-10 backdrop-blur-sm  scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)] "
           }
           animate={{
             width: isReduced ? "90vw" : "100vw",
-            height: isReduced ? "90vh" : "100vh",
+            height: isReduced ? "90dvh" : "100dvh",
             borderRadius: isReduced ? "1rem" : "0rem",
           }}
           drag={!isReduced ? false : isDragging}
@@ -502,8 +461,8 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
           }}
         >
           <DraggableBorders onDragStart={handleDragStart} />
-          {/*  Bottom left corner */}
-          <div className="absolute bottom-3 left-3 -rotate-90">
+          {/* CustomBorderRadius Bottom left corner */}
+          <div className="absolute bottom-3 left-3 -rotate-90 z-70">
             <svg
               width="20"
               height="20"
@@ -517,8 +476,8 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
               ></path>
             </svg>
           </div>
-          {/* top right corner */}
-          <div className="absolute top-3 right-3 rotate-90 hidden sm:block">
+          {/* CustomBorderRadius top right corner */}
+          <div className="absolute top-3 right-3 rotate-90 hidden sm:block z-70">
             <svg
               width="20"
               height="20"
@@ -536,7 +495,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             <Transition>
               <>
                 <div
-                  className="absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between text-sm text-neutral-content bg-neutral px-4 rounded-br-[20px] z-50 cursor-grab"
+                  className="absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between text-sm text-neutral-content bg-neutral px-4 rounded-br-[20px] z-70 cursor-grab"
                   onPointerDown={(e) => {
                     e.stopPropagation();
                     handleDragStart();
@@ -550,8 +509,24 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                   />
                 </div>
 
-                <div className="absolute top-0 right-0 w-auto h-[47px]  items-center justify-between text-sm text-neutral-content bg-neutral px-4 rounded-bl-[20px] z-50 cursor-grab flex md:hidden">
-                  <div className="absolute top-3 -left-5 rotate-90">
+                <div className="absolute top-0 right-0 w-auto h-[47px]  items-center justify-between text-sm text-neutral-content bg-neutral px-4 rounded-bl-[20px] z-70 cursor-grab flex md:hidden">
+                  {/* CustomBorderRadius MobileNav left Border */}
+                  <div className="absolute top-3 -left-5 rotate-90 z-70">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
+                        fill="var(--color-neutral)"
+                      ></path>
+                    </svg>
+                  </div>{" "}
+                  {/* CustomBorderRadius MobileNav right Border */}
+                  <div className="absolute -bottom-5 right-3 rotate-90 z-70">
                     <svg
                       width="20"
                       height="20"
@@ -565,21 +540,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                       ></path>
                     </svg>
                   </div>
-                  <div className="absolute -bottom-5 right-3 rotate-90">
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 20 20"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
-                        fill="var(--color-neutral)"
-                      ></path>
-                    </svg>
-                  </div>
-
                   <div className="flex items-center space-x-5 px-1 transition-all duration-100 z-50">
                     <div className="relative overflow-hidden h-5 group">
                       <div
@@ -641,11 +601,12 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                 </motion.div>
               </>
             </Transition>
-            <MemoizedMobileNavigation
-              show={showMobileNav}
-              navLinks={navLinks}
+            <MobileMenu
+              isOpen={showMobileNav}
               onClose={() => setShowMobileNav(false)}
+              navLinks={navLinks}
             />
+
             <MemoizedFooter isMobile={isMobile} pathname={pathname} />
           </motion.div>
         </motion.div>

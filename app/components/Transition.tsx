@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { getTitleInfo } from "./getTitleInfo";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,6 +9,8 @@ import { TransitionContext } from "./TransitionLink";
 
 interface TransitionProps {
   children: React.ReactNode;
+  transitionDuration?: number; 
+  pixelDensity?: 'low' | 'medium' | 'high'; 
 }
 
 interface Pixel {
@@ -18,72 +20,113 @@ interface Pixel {
   gridY: number;
 }
 
-
-const Transition: React.FC<TransitionProps> = ({ children }) => {
+const Transition: React.FC<TransitionProps> = ({ 
+  children, 
+  transitionDuration = 800,
+  pixelDensity = 'medium'
+}) => {
   const router = useRouter();
   const pathname = usePathname();
   const [nextPath, setNextPath] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [displayChildren, setDisplayChildren] = useState(children);
+  const [transitionEnded, setTransitionEnded] = useState(true);
   const prevPath = useRef(pathname);
   const isInitialRender = useRef(true);
-  
-  
-    // Responsive grid size
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
-  const gridCols = isMobile ? 6 : 12;
-  const gridRows = isMobile ? 12 : 8; 
-  
- 
-  const generatePixels = () => {
-    const pixels: Pixel[] = [];
-    const totalPixels = gridCols * gridRows;
-    
 
+  // Responsive grid configuration
+  const getGridConfig = useCallback(() => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+    const isTablet = typeof window !== 'undefined' && window.innerWidth >= 640 && window.innerWidth < 1024;
+    
+    let cols, rows;
+    
+    // Adjust density based on preference
+    const densityMultiplier = pixelDensity === 'low' ? 0.7 : pixelDensity === 'high' ? 1.5 : 1;
+    
+    if (isMobile) {
+      cols = Math.floor(6 * densityMultiplier);
+      rows = Math.floor(12 * densityMultiplier);
+    } else if (isTablet) {
+      cols = Math.floor(10 * densityMultiplier);
+      rows = Math.floor(10 * densityMultiplier);
+    } else {
+      cols = Math.floor(12 * densityMultiplier);
+      rows = Math.floor(8 * densityMultiplier);
+    }
+    
+    return { cols, rows };
+  }, [pixelDensity]);
+  
+  const [gridConfig, setGridConfig] = useState(() => getGridConfig());
+
+ 
+  const generatePixels = useCallback((cols: number, rows: number) => {
+    const pixels: Pixel[] = [];
+    const totalPixels = cols * rows;
+    
     const indices = Array.from({ length: totalPixels }, (_, i) => i);
+    
+    // Fisher-Yates shuffle algorithm for randomizing pixels
     for (let i = indices.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [indices[i], indices[j]] = [indices[j], indices[i]];
     }
 
     indices.forEach((index, i) => {
-      const gridX = index % gridCols;
-      const gridY = Math.floor(index / gridCols);
+      const gridX = index % cols;
+      const gridY = Math.floor(index / cols);
+      
+      // Calculate delay with slight variation for more organic feel
+      const baseDelay = i * 0.003;
+      const randomVariation = Math.random() * 0.001; // Small random variation
       
       pixels.push({
         id: index,
-        delay: i * 0.003,
+        delay: baseDelay + randomVariation,
         gridX,
         gridY
       });
     });
     
     return pixels;
-  };
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setGridConfig(getGridConfig());
+      pixelsRef.current = generatePixels(gridConfig.cols, gridConfig.rows);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [getGridConfig, gridConfig.cols, gridConfig.rows, generatePixels]);
 
 
-  const pixelsRef = useRef<Pixel[] | undefined>(undefined);
-  
+  const pixelsRef = useRef<Pixel[] | null>(null);
   
   if (!pixelsRef.current) {
-    pixelsRef.current = generatePixels();
+    pixelsRef.current = generatePixels(gridConfig.cols, gridConfig.rows);
   }
 
-
-  const startTransition = (to: string) => {
+  const startTransition = useCallback((to: string) => {
     if (isTransitioning || to === pathname) return;
     setNextPath(to);
     setIsTransitioning(true);
-  };
+    setTransitionEnded(false);
+  }, [isTransitioning, pathname]);
+
+  const animationDuration = 0.3; // Base animation duration in seconds
 
   useEffect(() => {
     if (isTransitioning && nextPath && nextPath !== pathname) {
       const timer = setTimeout(() => {
         router.push(nextPath);
-      }, 800); 
+      }, transitionDuration * 0.75); // Slightly shorter than full transition to ensure smooth experience
       return () => clearTimeout(timer);
     }
-  }, [isTransitioning, nextPath, pathname, router]);
+  }, [isTransitioning, nextPath, pathname, router, transitionDuration]);
+
   useEffect(() => {
     if (isInitialRender.current) {
       isInitialRender.current = false;
@@ -91,23 +134,35 @@ const Transition: React.FC<TransitionProps> = ({ children }) => {
       setDisplayChildren(children);
       return;
     }
+    
     if (pathname !== prevPath.current) {
       const timer = setTimeout(() => {
         setDisplayChildren(children);
         setIsTransitioning(false);
         prevPath.current = pathname;
         setNextPath(null);
-      }, 700); 
+        
+        // Mark transition as fully complete after all animations
+        setTimeout(() => {
+          setTransitionEnded(true);
+        }, 100);
+      }, transitionDuration * 0.7); 
+      
       return () => clearTimeout(timer);
     }
-  }, [pathname, children]);
+  }, [pathname, children, transitionDuration]);
 
   const pixels = pixelsRef.current || [];
 
-const childrenArray = React.Children.toArray(displayChildren);
+  const childrenArray = React.Children.toArray(displayChildren);
   const navChild = childrenArray[0];
   const contentChild = childrenArray[1];
   const footerChild = childrenArray[2];
+
+
+
+  // Calculate title for the page
+  const pageTitle = getTitleInfo(nextPath || pathname);
 
   return (
     <TransitionContext.Provider value={{ startTransition, isTransitioning }}>
@@ -118,15 +173,14 @@ const childrenArray = React.Children.toArray(displayChildren);
               className="w-full h-full overflow-hidden"
               style={{
                 display: "grid",
-                gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
-                gridTemplateRows: `repeat(${gridRows}, 1fr)`,
-    
+                gridTemplateColumns: `repeat(${gridConfig.cols}, 1fr)`,
+                gridTemplateRows: `repeat(${gridConfig.rows}, 1fr)`,
               }}
             >
               {pixels.map((pixel) => (
                 <motion.div
                   key={`pixel-${pixel.id}`}
-                  className="w-full h-full bg-base-300 shadow-sm"
+                  className="w-full h-full bg-base-300"
                   style={{
                     gridColumn: pixel.gridX + 1,
                     gridRow: pixel.gridY + 1,
@@ -136,47 +190,73 @@ const childrenArray = React.Children.toArray(displayChildren);
                   }}
                   initial={{ y: "100vh", opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: "-100vh", opacity: 0 }}
+                  exit={{ y: "100vh", opacity: 0 }}
                   transition={{
-                    duration: 0.3,
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 20,
+                    duration: animationDuration,
                     delay: pixel.delay,
                     exit: { 
-                      delay: pixel.delay * 0.2,
-                      duration: 0.3
+                      type: "tween",
+                      ease: "easeIn",
+                      delay: pixel.delay * 0.3,
+                      duration: animationDuration
                     }
                   }}
                 />
               ))}
             </div>
             
-            <div className="absolute inset-0 flex items-center justify-center z-40 pointer-events-none">
+            <motion.div 
+              className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ 
+                duration: 0.2,
+                delay: 0.1,
+              }}
+            >
               <motion.span
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 5, opacity: 0 }}
+                initial={{ scale: 0.8, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 1.2, opacity: 0, y: -20 }}
                 transition={{   
-                  duration: 0.4   ,
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 20,
                   delay: 0.1,
-                  exit: { delay: 0.1 }
+                  exit: { delay: 0.1, duration: 0.3 }
                 }}
-                className="text-2xl sm:text-4xl font-bold text-base-content drop-shadow-lg pointer-events-none text-center px-2"
-                style={{ fontFamily: "var(--font-despairs)" }}
+                className="text-2xl sm:text-4xl md:text-5xl font-bold text-base-content drop-shadow-lg pointer-events-none text-center px-4 py-2 rounded-lg"
+                style={{ 
+                  fontFamily: "var(--font-despairs)",
+                  textShadow: "0 0 10px rgba(0,0,0,0.15)"
+                }}
               >
-                {getTitleInfo(nextPath || pathname)}
+                {pageTitle}
               </motion.span>
-            </div>
+            </motion.div>
           </div>
         )}
       </AnimatePresence>
+      
       {/* Navigation above transition */}
       {navChild}
-      {/* Main content fades */}
-      <div 
-        className="transition-opacity duration-300"
-        style={{ opacity: isTransitioning ? 0.3 : 1 }}
+      
+      {/* Main content with enhanced transitions */}
+      <motion.div 
+        initial={isInitialRender.current ? {} : { opacity: 0, y: 10 }}
+        animate={{ opacity: isTransitioning ? 0.3 : 1, y: 0 }}
+        transition={{ 
+          duration: 0.3,
+          delay: transitionEnded ? 0 : 0.1
+        }}
       >
         {contentChild}
-      </div>
+      </motion.div>
+      
       {/* Footer above transition */}
       {footerChild}
     </TransitionContext.Provider>

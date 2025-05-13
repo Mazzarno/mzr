@@ -7,10 +7,14 @@ import React, {
   Suspense,
 } from "react";
 import { Canvas } from "@react-three/fiber";
+import { EffectComposer, ChromaticAberration, Noise } from "@react-three/postprocessing";
+import { BlendFunction } from "postprocessing";
+import { Vector2 } from "three";
 import Model from "./Model";
 import { Environment } from "@react-three/drei";
 import { useMotionValue, useSpring } from "framer-motion";
 import { useTheme } from "next-themes";
+
 
 export default function Background() {
   const { theme, resolvedTheme } = useTheme();
@@ -97,8 +101,15 @@ export default function Background() {
       }}
     >
       <Suspense fallback={null}>
+        <EffectComposer enableNormalPass={false}>
+          <ChromaticAberration
+            blendFunction={BlendFunction.NORMAL}
+            offset={new Vector2(0.0005, 0.0005)}
+          />
+          <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} opacity={0.01} />
+        </EffectComposer>
         <Model mouse={smoothMouse} currentTheme={currentTheme} />
-        <Environment preset="city" background={false} blur={0.5} />
+        <Environment preset="city" background={false} />
       </Suspense>
     </Canvas>
   );
