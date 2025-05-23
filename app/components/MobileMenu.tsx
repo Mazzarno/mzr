@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect, useState, useMemo, useRef } from "react";
+import React, { useEffect, useState, useMemo, useCallback, useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { TransitionContext } from "./TransitionLink";
 
 interface Pixel {
   id: number;
@@ -25,106 +25,81 @@ interface MobileMenuProps {
   navLinks: NavLink[];
 }
 
-let staticPixelsCache: Pixel[] | null = null;
+// Static cache pour les pixels
+const staticPixelsCache: Record<string, Pixel[]> = {};
 
-function getStaticPixels(generatePixels: () => Pixel[]): Pixel[] {
-  if (!staticPixelsCache) {
-    staticPixelsCache = generatePixels();
-  }
-  return staticPixelsCache;
-}
+// Configuration de la grille
+const GRID_COLS = 6;
+const GRID_ROWS = 12;
+const ANIMATION_DURATION = 600;
 
-const MobileMenu: React.FC<MobileMenuProps> = ({
-  isOpen,
-  onClose,
-  navLinks,
-}) => {
+const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, navLinks }) => {
   const t = useTranslations();
+  const { startTransition, isTransitioning } = useContext(TransitionContext);
   const [isClosing, setIsClosing] = useState(false);
   const [selectedLink, setSelectedLink] = useState<string | null>(null);
-  const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
-  const navigatedRef = useRef(false);
 
-  const gridCols = 6;
-  const gridRows = 12;
-
-  const generatePixels = () => {
+  // Génération des pixels pour l'animation
+  const generatePixels = useCallback(() => {
+    const cacheKey = `${GRID_COLS}-${GRID_ROWS}`;
+    
+    if (staticPixelsCache[cacheKey]) {
+      return staticPixelsCache[cacheKey];
+    }
+    
     const pixels: Pixel[] = [];
-    const totalPixels = gridCols * gridRows;
+    const totalPixels = GRID_COLS * GRID_ROWS;
 
+    // Création d'une séquence d'indices mélangée
     const indices = Array.from({ length: totalPixels }, (_, i) => i);
     for (let i = indices.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [indices[i], indices[j]] = [indices[j], indices[i]];
     }
 
+    // Génération des pixels avec délais randomisés
     indices.forEach((index, i) => {
-      const gridX = index % gridCols;
-      const gridY = Math.floor(index / gridCols);
-
-      const baseDelay = i * 0.003;
-      const randomVariation = Math.random() * 0.001;
-
       pixels.push({
         id: index,
-        delay: baseDelay + randomVariation,
-        gridX,
-        gridY,
+        delay: i * 0.003 + Math.random() * 0.001,
+        gridX: index % GRID_COLS,
+        gridY: Math.floor(index / GRID_COLS),
       });
     });
 
+    staticPixelsCache[cacheKey] = pixels;
     return pixels;
-  };
+  }, []);
 
-  const pixels = useMemo(() => getStaticPixels(generatePixels), []);
-  const router = useRouter();
+  const pixels = useMemo(generatePixels, [generatePixels]);
 
-  const handleLinkClick = (href: string) => {
+  // Gestion de la fermeture du menu
+  const handleClose = useCallback(() => {
     if (isClosing) return;
     
-    setSelectedLink(href);
     setIsClosing(true);
-    setPendingNavigation(href);
-    
-    // Fermer d'abord le menu
     onClose();
     
-    // Réinitialiser les états après l'animation
     setTimeout(() => {
       setIsClosing(false);
       setSelectedLink(null);
-    }, 600);
-  };
+    }, ANIMATION_DURATION);
+  }, [isClosing, onClose]);
 
-  // Effectuer la navigation après la fermeture du menu
-  useEffect(() => {
-    if (!isOpen && pendingNavigation && !navigatedRef.current) {
-      navigatedRef.current = true;
-      const timeout = setTimeout(() => {
-        router.push(pendingNavigation);
-        setPendingNavigation(null);
-        navigatedRef.current = false;
-      }, 100);
-      
-      return () => clearTimeout(timeout);
-    }
-  }, [isOpen, pendingNavigation, router]);
+  // Gestion des clics sur les liens
+  const handleLinkClick = useCallback((href: string) => {
+    if (isClosing || isTransitioning) return;
+    
+    setSelectedLink(href);
+    handleClose();
+    
+    // On utilise le système de transition après que le menu soit fermé
+    setTimeout(() => {
+      startTransition(href);
+    }, 100);
+  }, [isClosing, isTransitioning, handleClose, startTransition]);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
-        setIsClosing(true);
-        onClose();
-        setTimeout(() => {
-          setIsClosing(false);
-        }, 600);
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
-
+  // Effet pour gérer la navigation après fermeture
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -132,39 +107,29 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
       document.body.style.overflow = "";
     }
     
-    // Réinitialiser le drapeau de navigation quand le menu s'ouvre à nouveau
-    if (isOpen) {
-      navigatedRef.current = false;
-    }
-    
     return () => {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
 
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      setIsClosing(true);
-      onClose();
-      setTimeout(() => {
-        setIsClosing(false);
-      }, 600);
-    }
-  };
-
   return (
     <AnimatePresence initial={false}>
       {isOpen && (
-        <div
+        <motion.div
           className="fixed inset-0 z-50 flex items-center justify-center"
-          onClick={handleBackdropClick}
+          onClick={(e) => e.target === e.currentTarget && handleClose()}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
         >
+          {/* Background pixel grid */}
           <div
             className="absolute inset-0 z-0"
             style={{
               display: "grid",
-              gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
-              gridTemplateRows: `repeat(${gridRows}, 1fr)`,
+              gridTemplateColumns: `repeat(${GRID_COLS}, 1fr)`,
+              gridTemplateRows: `repeat(${GRID_ROWS}, 1fr)`,
             }}
           >
             {pixels.map((pixel) => (
@@ -191,16 +156,12 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
             ))}
           </div>
 
+          {/* Menu content */}
           <div className="relative z-10 w-full h-full flex flex-col items-center justify-center px-6 py-16">
+            {/* Close button */}
             <motion.button
               className="absolute top-14 right-6 p-2 rounded-full bg-base-200 text-base-content hover:bg-base-300 transition-colors"
-              onClick={() => {
-                setIsClosing(true);
-                onClose();
-                setTimeout(() => {
-                  setIsClosing(false);
-                }, 600);
-              }}
+              onClick={handleClose}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
@@ -210,6 +171,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
               <X size={24} />
             </motion.button>
 
+            {/* Header */}
             <motion.h2
               className="text-3xl font-bold mb-8 text-base-content text-center leading-tight"
               style={{ fontFamily: "var(--font-despairs)" }}
@@ -218,10 +180,10 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
               exit={{ opacity: 0, y: -20 }}
               transition={{ delay: 0.2, duration: 0.3 }}
             >
-              <span className="ml-2"> ALEXIS GERMAIN</span>
+              <span className="ml-2">ALEXIS GERMAIN</span>
             </motion.h2>
 
-            {/* Links */}
+            {/* Nav links */}
             <nav className="flex flex-col items-center w-full max-w-xs">
               <ul className="w-full space-y-4">
                 {navLinks.map((link, index) => (
@@ -243,11 +205,11 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
                   >
                     <button
                       onClick={() => handleLinkClick(link.href)}
-                      className={`w-full flex items-center justify-center p-3 rounded-lg text-xl font-medium ${
-                        selectedLink === link.href
+                      className={`w-full flex items-center justify-center p-3 rounded-lg text-xl font-medium 
+                        ${selectedLink === link.href
                           ? "bg-primary text-primary-content"
                           : "bg-base-200 text-base-content hover:bg-base-300"
-                      } transition-colors`}
+                        } transition-colors`}
                       disabled={isClosing}
                       style={isClosing ? { pointerEvents: 'none', opacity: 0.7 } : {}}
                     >
@@ -259,7 +221,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
               </ul>
             </nav>
           </div>
-        </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );

@@ -93,7 +93,7 @@ const MemoizedNavigation = memo(function Navigation({
             ></path>
           </svg>
         </div>
-        <TransitionLink href="/contact" className="flex items-center space-x-3">
+        <TransitionLink href="/" className="flex items-center space-x-3">
           <Logo />
           <div className="relative inline-block overflow-hidden h-5 group">
             <div

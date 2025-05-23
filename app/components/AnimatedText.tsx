@@ -70,13 +70,14 @@ const AnimatedText = memo(({
       <span className={`inline-flex relative ${className}`} key={displayText}>
         {words.map((word, index) => (
           <motion.span
+
             key={`${index}-${word}`}
             custom={index}
             variants={wordVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="inline-block"
+            className="inline-block text-base-content"
             style={{ 
               display: "inline-block",
               marginRight: "0.3em",

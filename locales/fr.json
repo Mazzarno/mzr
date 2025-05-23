@@ -11,10 +11,20 @@
     "next": "Suivant"
   },
   "home": {
-    "heroTitle": "Créons votre présence digitale.",
+    "greeting": "Bienvenue sur mon portfolio",
+    "heroTitle": "Bonjour, je suis Alexis.",
     "heroSubtitle": "Développeur web passionné, je conçois des sites modernes, performants et sur-mesure.",
+    "viewWork": "Voir mes projets",
     "seeProjects": "Voir mes projets",
     "contactMe": "Me contacter",
+    "scrollDown": "Défiler vers le bas",
+    "phrases": {
+      "1": "Je conçois des interfaces épurées et centrées utilisateur.",
+      "2": "Je développe des sites web ultra-rapides et responsives.",
+      "3": "Je répare, installe et optimise votre parc informatique.",
+      "4": "Je forme à des compétences numériques concrètes et utiles.",
+      "5": "J'automatise vos processus pour maximiser votre productivité."
+    },
     "quickAboutTitle": "À propos de moi",
   "quickAboutText": "Développeur web freelance basé en France, spécialisé dans la création de solutions digitales innovantes.",
   "featuredProjects": "Projets en vedette",

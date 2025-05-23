@@ -11,10 +11,20 @@
     "next": "Next"
   },
   "home": {
-    "heroTitle": "Let's build your digital presence.",
+    "greeting": "Welcome to my portfolio",
+    "heroTitle": "Hello, I'm Alexis.",
     "heroSubtitle": "Passionate web developer crafting modern, high-performing, and tailor-made websites.",
+    "viewWork": "View my work",
     "seeProjects": "See my projects",
     "contactMe": "Contact me",
+    "scrollDown": "Scroll down",
+    "phrases": {
+      "1": "I craft sleek, user-focused interfaces.",
+      "2": "I engineer blazing-fast, responsive websites.",
+      "3": "I repair, install, and optimize your tech setup.",
+      "4": "I empower real-world digital learning experiences.",
+      "5": "I automate workflows to supercharge productivity."
+    },
     "quickAboutTitle": "About me",
     "quickAboutText": "Freelance web developer based in France, specializing in innovative digital solutions.",
     "featuredProjects": "Featured Projects",
