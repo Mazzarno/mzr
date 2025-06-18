@@ -97,8 +97,6 @@ const HeroSection = () => {
     }, 10000);
     return () => clearInterval(interval);
   }, [index, phrases]);
-
-  // Variants d'animation pour le conteneur
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -109,8 +107,6 @@ const HeroSection = () => {
       },
     },
   };
-
-  // Variants d'animation pour les éléments
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
@@ -418,11 +414,9 @@ const ResponsiveIphone = () => {
           </p>
         </div>
       </div>
-
     </section>
   );
 };
-
 
 const ProjectCard = ({
   index,
