@@ -7,7 +7,7 @@ import TransitionLink from "./TransitionLink";
 import { motion, useMotionValue, animate } from "framer-motion";
 import ThemeSwitcher from "./ThemeSwitch";
 import Logo from "./Logo";
-import { Github, Linkedin, Mail, Maximize, Menu, Minimize } from "lucide-react";
+import { Github, Linkedin, Mail, Maximize, Minimize } from "lucide-react";
 import Background from "./background";
 import dynamic from "next/dynamic";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -207,7 +207,6 @@ const DraggableBorders = memo(function DraggableBorders({
 
 export default function ClientLayout({ children }: ClientLayoutProps) {
   const [showLoader, setShowLoader] = useState(true);
-  const [showNavAnimation, setShowNavAnimation] = useState(false);
   const isInitialRender = useRef(true);
   const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
@@ -225,7 +224,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
       setShowLoader(true);
       isInitialRender.current = false;
     }
-    setShowNavAnimation(false);
 
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -260,7 +258,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         duration={0.1}
         onLoadComplete={() => {
           setShowLoader(false);
-          setTimeout(() => setShowNavAnimation(true), 100);
         }}
       />
     );
