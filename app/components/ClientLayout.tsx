@@ -9,7 +9,6 @@ import ThemeSwitcher from "./ThemeSwitch";
 import Logo from "./Logo";
 import { Github, Linkedin, Mail, Maximize, Menu, Minimize } from "lucide-react";
 import Background from "./background";
-import AnimatedText from "./AnimatedText";
 import dynamic from "next/dynamic";
 import LanguageSwitcher from "./LanguageSwitcher";
 import Transition from "./Transition";
@@ -49,22 +48,12 @@ const MemoizedGrid = memo(function Grid() {
   );
 });
 
-const MemoizedNavigation = memo(function Navigation({
-  navLinks,
-  isReduced,
-  onToggleResize,
-  navAnimation = false,
-}: {
-  navLinks: Array<{ href: string; labelKey: string }>;
-  isReduced: boolean;
-  onToggleResize: () => void;
-  navAnimation?: boolean;
-}) {
+const MemoizedNavigation = memo(function Navigation() {
   return (
     <>
-      <div className="flex items-center md:space-x-5 px-1 transition-all duration-100 z-70">
+      <div className="flex items-center transition-all duration-100 z-70 pl-2">
         {/* CustomBorderRadius Nav right Border */}
-        <div className="absolute md:top-3 md:-right-10  top-3 -right-[19.8px] z-70">
+        <div className="absolute top-3 -right-5 z-70">
           <svg
             width="20"
             height="20"
@@ -100,126 +89,11 @@ const MemoizedNavigation = memo(function Navigation({
               className="transition-transform duration-300 transform group-hover:-translate-y-5"
               style={{ transformStyle: "preserve-3d" }}
             >
-              <span className="block">Germain</span>
-              <span className="block">Alexis</span>
+              <span className="block text-sm tracking-widest font-medium">Germain</span>
+              <span className="block text-sm tracking-widest font-medium">Alexis</span>
             </div>
           </div>
         </TransitionLink>
-        {navLinks.map((link, i) => {
-          return (
-            <motion.div
-              key={link.href}
-              className="relative  items-center hidden md:flex"
-              initial={navAnimation ? { opacity: 0, x: 40 } : false}
-              animate={navAnimation ? { opacity: 1, x: 0 } : false}
-              transition={
-                navAnimation
-                  ? {
-                      delay: 0.2 + i * 0.15,
-                      duration: 0.5,
-                      type: "spring",
-                      stiffness: 60,
-                    }
-                  : {}
-              }
-            >
-              <TransitionLink
-                href={link.href}
-                className="block text-neutral-content text-sm transition-colors duration-100"
-              >
-                <div className="text-center relative overflow-hidden h-5 group">
-                  <div
-                    className="transition-transform duration-300 transform group-hover:-translate-y-5"
-                    style={{ transformStyle: "preserve-3d" }}
-                  >
-                    <div className="block">
-                      {link.labelKey ? (
-                        <AnimatedText
-                          translationKey={link.labelKey}
-                          className="inline-block"
-                          animated={false}
-                        />
-                      ) : (
-                        <AnimatedText
-                          text={link.labelKey || ""}
-                          className="inline-block"
-                          animated={false}
-                        />
-                      )}
-                    </div>
-                    <div className="block">
-                      {link.labelKey ? (
-                        <AnimatedText
-                          translationKey={link.labelKey}
-                          className="inline-block"
-                          animated={false}
-                        />
-                      ) : (
-                        <AnimatedText
-                          text={link.labelKey || ""}
-                          className="inline-block"
-                          animated={false}
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </TransitionLink>
-              <div className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-primary to-secondary rounded-full" />
-            </motion.div>
-          );
-        })}
-        <div className="md:pl-0 pl-3">
-          <LanguageSwitcher />
-        </div>
-        <div className="relative overflow-hidden h-5 group hidden md:flex">
-          <div
-            className="transition-transform duration-300 transform group-hover:-translate-y-5"
-            style={{ transformStyle: "preserve-3d" }}
-          >
-            <div className="block">
-              <ThemeSwitcher position="top" />
-            </div>
-            <div className="block">
-              <ThemeSwitcher position="bottom" />
-            </div>
-          </div>
-        </div>
-        <div className="relative overflow-hidden h-5 group hidden md:flex">
-          <div
-            key={isReduced ? "reduced" : "expanded"}
-            className="transition-transform duration-300 transform group-hover:-translate-y-5"
-            style={{ transformStyle: "preserve-3d" }}
-          >
-            <div className="block position-top">
-              <button
-                aria-label={isReduced ? "Maximiser" : "Réduire"}
-                onClick={onToggleResize}
-                className="focus:outline-none"
-              >
-                {isReduced ? (
-                  <Minimize size={17} className="text-base-content" />
-                ) : (
-                  <Maximize size={17} className="text-base-content" />
-                )}
-              </button>
-            </div>
-
-            <div className="block position-bottom">
-              <button
-                onClick={onToggleResize}
-                className="focus:outline-none"
-                aria-label={!isReduced ? "Maximiser" : "Réduire"}
-              >
-                {isReduced ? (
-                  <Maximize size={17} className="text-base-content" />
-                ) : (
-                  <Minimize size={17} className="text-base-content" />
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
     </>
   );
@@ -312,19 +186,19 @@ const DraggableBorders = memo(function DraggableBorders({
   return (
     <>
       <div
-        className="absolute w-full h-3 bottom-0 bg-neutral z-[999] pointer-events-none"
+        className="absolute w-full h-3 bottom-0 bg-neutral z-[999] link"
         onPointerDown={handlePointerDown}
       />
       <div
-        className="absolute h-full w-3 right-0 bg-neutral z-[999] pointer-events-none"
+        className="absolute h-full w-3 right-0 bg-neutral z-[999] link"
         onPointerDown={handlePointerDown}
       />
       <div
-        className="absolute h-full w-3 left-0 bg-neutral z-[999] pointer-events-none"
+        className="absolute h-full w-3 left-0 bg-neutral z-[999] link"
         onPointerDown={handlePointerDown}
       />
       <div
-        className="absolute w-full h-3 top-0 bg-neutral z-[999] pointer-events-none"
+        className="absolute w-full h-3 top-0 bg-neutral z-[999] link"
         onPointerDown={handlePointerDown}
       />
     </>
@@ -441,7 +315,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         <MemoizedGrid />
         <motion.div
           className={
-            "relative overflow-hidden z-10 backdrop-blur-sm  scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)] "
+            "relative overflow-hidden z-10 backdrop-blur-sm scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)] shadowz"
           }
           animate={{
             width: isReduced ? "90vw" : "100vw",
@@ -495,21 +369,19 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             <Transition>
               <>
                 <div
-                  className="absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between text-sm text-neutral-content bg-neutral px-4 rounded-br-[20px] z-70 cursor-grab"
+                  className="absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between text-sm text-neutral-content bg-neutral px-6 rounded-br-[20px] z-70 cursor-grab"
                   onPointerDown={(e) => {
                     e.stopPropagation();
                     handleDragStart();
                   }}
                 >
                   <MemoizedNavigation
-                    navLinks={navLinks}
                     isReduced={isReduced}
                     onToggleResize={() => setIsReduced((v) => !v)}
-                    navAnimation={showNavAnimation}
                   />
                 </div>
 
-                <div className="absolute top-0 right-0 w-auto h-[47px]  items-center justify-between text-sm text-neutral-content bg-neutral px-4 rounded-bl-[20px] z-70 cursor-grab flex md:hidden">
+                <div className="absolute top-0 right-0 w-auto h-[47px]  items-center justify-between text-sm text-neutral-content bg-neutral px-6 rounded-bl-[20px] z-70 cursor-grab flex">
                   {/* CustomBorderRadius MobileNav left Border */}
                   <div className="absolute top-3 -left-5 rotate-90 z-70">
                     <svg
@@ -524,7 +396,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                         fill="var(--color-neutral)"
                       ></path>
                     </svg>
-                  </div>{" "}
+                  </div>
                   {/* CustomBorderRadius MobileNav right Border */}
                   <div className="absolute -bottom-5 right-3 rotate-90 z-70">
                     <svg
@@ -540,51 +412,56 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                       ></path>
                     </svg>
                   </div>
-                  <div className="flex items-center space-x-5 px-1 transition-all duration-100 z-50">
-                    <div className="relative overflow-hidden h-5 group">
-                      <div
-                        className="transition-transform duration-300 transform group-hover:-translate-y-5"
-                        style={{ transformStyle: "preserve-3d" }}
-                      >
-                        <div className="block">
-                          <ThemeSwitcher />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="relative overflow-hidden h-5 group">
-                      <div
-                        key={isReduced ? "reduced" : "expanded"}
-                        className="transition-transform duration-300 transform group-hover:-translate-y-5"
-                        style={{ transformStyle: "preserve-3d" }}
-                      >
-                        <div className="block">
-                          <button
-                            aria-label={isReduced ? "Maximiser" : "Réduire"}
-                            onClick={onToggleResize}
-                            className="focus:outline-none"
-                          >
-                            {isReduced ? (
-                              <Minimize
-                                size={17}
-                                className="text-base-content"
-                              />
-                            ) : (
-                              <Maximize
-                                size={17}
-                                className="text-base-content"
-                              />
-                            )}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    <button
-                      className="focus:outline-none"
-                      aria-label="Toggle Mobile Nav"
-                      onClick={() => setShowMobileNav(true)}
+                  <div className="pr-2">
+                    <LanguageSwitcher />
+                  </div>
+                  <div className="relative overflow-hidden h-5 group px-2">
+                    <div
+                      className="transition-transform duration-300 transform group-hover:-translate-y-5"
+                      style={{ transformStyle: "preserve-3d" }}
                     >
-                      <Menu size={20} className="text-base-content mb-[2px]" />
-                    </button>
+                      <div className="block">
+                        <ThemeSwitcher position="top" />
+                      </div>
+                      <div className="block">
+                        <ThemeSwitcher position="bottom" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="relative overflow-hidden h-5 group">
+                    <div
+                      key={isReduced ? "reduced" : "expanded"}
+                      className="transition-transform duration-300 transform group-hover:-translate-y-5"
+                      style={{ transformStyle: "preserve-3d" }}
+                    >
+                      <div className="block position-top px-2 pl-2">
+                        <button
+                          aria-label={isReduced ? "Maximiser" : "Réduire"}
+                          onClick={onToggleResize}
+                          className="focus:outline-none"
+                        >
+                          {isReduced ? (
+                            <Minimize size={17} className="text-base-content" />
+                          ) : (
+                            <Maximize size={17} className="text-base-content" />
+                          )}
+                        </button>
+                      </div>
+
+                      <div className="block position-bottom px-1">
+                        <button
+                          onClick={onToggleResize}
+                          className="focus:outline-none"
+                          aria-label={!isReduced ? "Maximiser" : "Réduire"}
+                        >
+                          {isReduced ? (
+                            <Maximize size={17} className="text-base-content" />
+                          ) : (
+                            <Minimize size={17} className="text-base-content" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
 

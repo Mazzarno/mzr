@@ -103,3 +103,7 @@ body,
 [data-animate-text].visible {
   opacity: 1;
 }
+.shadowz {
+  -webkit-box-shadow: inset 0px 0px 50px 42px rgba(0,0,0,0.2); 
+  box-shadow: inset 0px 0px 50px 42px rgba(0,0,0,0.2);
+}
