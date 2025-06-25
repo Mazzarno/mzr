@@ -41,7 +41,7 @@ const ScrambleText = ({
     const chars = "!<>-_\/[]{}—=+*^?#________";
     let scrambled = "";
     let localFrame = 0;
-    clearInterval(intervalRef.current);
+    if (intervalRef.current !== null) clearInterval(intervalRef.current);
 
     intervalRef.current = setInterval(() => {
       scrambled = text
