@@ -372,10 +372,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                     handleDragStart();
                   }}
                 >
-                  <MemoizedNavigation
-                    isReduced={isReduced}
-                    onToggleResize={() => setIsReduced((v) => !v)}
-                  />
+                  <MemoizedNavigation />
                 </div>
 
                 <div className="absolute top-0 right-0 w-auto h-[47px]  items-center justify-between text-sm text-neutral-content bg-neutral px-6 rounded-bl-[20px] z-70 cursor-grab flex">
