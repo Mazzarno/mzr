@@ -366,7 +366,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             <Transition>
               <>
                 <div
-                  className="absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between text-sm text-neutral-content bg-neutral px-6 rounded-br-[20px] z-70 cursor-grab"
+                  className="absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between  text-neutral-content bg-neutral pr-4 pl-2 rounded-br-[20px] z-70 cursor-grab"
                   onPointerDown={(e) => {
                     e.stopPropagation();
                     handleDragStart();
@@ -375,7 +375,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                   <MemoizedNavigation />
                 </div>
 
-                <div className="absolute top-0 right-0 w-auto h-[47px]  items-center justify-between text-sm text-neutral-content bg-neutral px-6 rounded-bl-[20px] z-70 cursor-grab flex">
+                <div className="absolute top-0 right-0 w-auto h-[47px]  items-center justify-between text-sm text-neutral-content bg-neutral pr-2 pl-4 rounded-bl-[20px] z-70 cursor-grab flex">
                   {/* CustomBorderRadius MobileNav left Border */}
                   <div className="absolute top-3 -left-5 rotate-90 z-70">
                     <svg
@@ -406,7 +406,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                       ></path>
                     </svg>
                   </div>
-                  <div className="pr-2">
+                  <div className="pr-2 pb-1">
                     <LanguageSwitcher />
                   </div>
                   <div className="relative overflow-hidden h-5 group px-2">

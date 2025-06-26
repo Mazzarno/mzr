@@ -119,7 +119,6 @@ const HeroSection = () => {
       ref={heroRef}
       className="min-h-screen flex flex-col justify-center items-center px-4 relative overflow-hidden"
     >
-
       {/* Contenu principal */}
       <motion.div
         className="text-center z-10 relative"
@@ -145,7 +144,6 @@ const HeroSection = () => {
           variants={itemVariants}
         >
           <div className="relative inline-block font-mono">
-    
             <ScrambleText text={currentPhrase} speed={30} />
           </div>
         </motion.div>
