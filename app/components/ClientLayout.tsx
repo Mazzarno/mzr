@@ -146,7 +146,7 @@ const MemoizedFooter = memo(function Footer({
       <span className="text-sm text-neutral-content">—</span>
       <div className="flex items-center space-x-3 ml-2">
         <a
-          href="https://github.com/alxsgrmn"
+          href="https://github.com/Mazzarno"
           target="_blank"
           rel="noopener noreferrer"
           className="text-neutral-content hover:text-primary transition-colors"
@@ -154,7 +154,7 @@ const MemoizedFooter = memo(function Footer({
           <Github size={16} />
         </a>
         <a
-          href="https://linkedin.com/in/alxsgrmn"
+          href="https://www.linkedin.com/in/alexis-germain/"
           target="_blank"
           rel="noopener noreferrer"
           className="text-neutral-content hover:text-primary transition-colors"
@@ -162,7 +162,7 @@ const MemoizedFooter = memo(function Footer({
           <Linkedin size={16} />
         </a>
         <a
-          href="mailto:contact@alxsgrmn.com"
+          href="mailto:contact@alexis-germain.fr"
           target="_blank"
           rel="noopener noreferrer"
           className="text-neutral-content hover:text-primary transition-colors"
