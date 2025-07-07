@@ -19,12 +19,14 @@
     "contactMe": "Me contacter",
     "scrollDown": "Défiler vers le bas",
     "phrases": {
-      "1": "Je conçois des interfaces épurées et centrées utilisateur.",
-      "2": "Je développe des sites web ultra-rapides et responsives.",
-      "3": "Je répare, installe et optimise votre parc informatique.",
-      "4": "Je forme à des compétences numériques concrètes et utiles.",
-      "5": "J'automatise vos processus pour maximiser votre productivité."
-    },
+  "0": "Développeur Web - React / Vue",
+  "1": "Je conçois des interfaces élégantes centrées sur l’utilisateur.",
+  "2": "Codeur créatif - Motion / Gsap / Three.js",
+  "3": "Je développe des sites web ultra-rapides et responsives.",
+  "4": "Passionné d’esport & joueur d’équipe",
+  "5": "Je favorise des expériences d’apprentissage numérique concrètes.",
+  "6": "Je crée des expériences web immersives."
+},
     "quickAboutTitle": "À propos de moi",
   "quickAboutText": "Développeur web freelance basé en France, spécialisé dans la création de solutions digitales innovantes.",
   "featuredProjects": "Projets en vedette",
@@ -46,7 +48,54 @@
   "allProjects": "Tous les projets",
   "seeDetails": "Voir le projet",
   "ctaTitle": "Prêt à collaborer ?",
-  "ctaText": "Contactez-moi pour discuter de votre projet ou de vos idées."
+  "ctaText": "Contactez-moi pour discuter de votre projet ou de vos idées.",
+    "contactForm": {
+      "nameLabel": "Nom",
+      "namePlaceholder": "Votre nom",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Votre email",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Votre message",
+      "send": "Envoyer"
+    },
+    "about": {
+      "title": "À propos",
+      "text": "Je suis <strong>Alexis Germain</strong>, développeur web passionné spécialisé dans la création d’expériences web modernes et interactives. Avec une expertise en <strong>Vue/Nuxt</strong> et <strong>React/Next</strong>, je conçois des interfaces performantes en y intégrant des animations grâce à <strong>Framer Motion & GSAP</strong>, de la  3D avec <strong>Three.js</strong>, et une attention particulière au détail."
+    },
+    "skills": {
+      "title": "Compétences",
+      "languages": {
+        "title": "Languages & outils",
+        "items": [
+          "HTML5 / CSS3 / JavaScript / TypeScript",
+          "SQL, GraphQL, Node.js, Express",
+          "GSAP, Framer Motion, Three.js, Blender"
+        ]
+      },
+      "frameworks": {
+        "title": "Frameworks & CMS",
+        "items": [
+          "Vue.js / Nuxt3, React / Next.js, AngularJS",
+          "Strapi, WordPress, Drupal",
+          "Figma, Photoshop, Trello, Jira"
+        ]
+      }
+    },
+    "experience": {
+      "title": "Expérience",
+      "freelance": {
+        "title": "Développeur Web Freelance",
+        "description": "Création de sites vitrines, intégration personnalisée, support et maintenance client."
+      },
+      "asus": {
+        "title": "Webmaster – ASUS France",
+        "description": "Coordination Europe / Taiwan, support marketing, intégration web multilingue et localisation."
+      },
+      "mgs": {
+        "title": "Développeur Web Junior – MGS Informatique",
+        "description": "Développement et maintenance de sites, collaboration internationale, correctifs techniques via Jira."
+      }
+    }
 },  
   "work": {
     "title": "PROJETS",
@@ -149,14 +198,16 @@
   "contact": {
     "title": "CONTACT",
     "letsChat": "Échangeons",
-    "collaborate": "Travaillons ensemble",
+    "collaborate": "Collaboration",
     "contactMe": "Me contacter",
     "name": "Nom",
     "email": "Email",
     "message": "Message",
     "send": "Envoyer",
+    "sending": "Envoi en cours...",
     "success": "Message envoyé avec succès!",
     "error": "Une erreur est survenue. Veuillez réessayer.",
+    "socialHint": "Vous pouvez aussi me retrouver sur les réseaux sociaux.",
     "subject": "Sujet",
     "phone": "06.08.53.52.80",
     "address": "Bruyères-sur-Oise, 95820",
@@ -165,7 +216,9 @@
     "social": "Réseaux sociaux",
     "follow": "Suivez-moi",
     "required": "Champ obligatoire",
-    "project": "Vous avez un projet en tête ?",
+    "project": "Nouveau projet",
+    "question": "Question générale",
+    "other": "Autre",
     "open": "Je suis toujours ouvert à discuter de nouveaux projets, idées créatives ou opportunités de collaboration."
   },
   "loading": {

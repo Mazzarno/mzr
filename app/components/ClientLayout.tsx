@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, memo } from "react";
 import Loading from "./Loading";
 import { usePathname } from "next/navigation";
 import TransitionLink from "./TransitionLink";
-import { motion, useMotionValue, animate } from "framer-motion";
+import { motion, useMotionValue, useDragControls, animate, DragControls } from "framer-motion";
 import ThemeSwitcher from "./ThemeSwitch";
 import Logo from "./Logo";
 import { Github, Linkedin, Mail, Maximize, Minimize } from "lucide-react";
@@ -14,7 +14,6 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import Transition from "./Transition";
 import { getTitleInfo } from "./getTitleInfo";
 import SmoothScroll from "./SmoothScroll";
-import MobileMenu from "./MobileMenu";
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -31,23 +30,41 @@ const FaviconUpdater = dynamic(() => import("./FaviconUpdater"), {
 
 const MemoizedGrid = memo(function Grid() {
   return (
-    <div className="fixed inset-0 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-9 2xl:grid-cols-11 divide-x-2 divide-dashed divide-neutral-content pointer-events-none opacity-30">
+    <motion.div
+      className="
+        fixed inset-0
+        grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5
+             lg:grid-cols-7 xl:grid-cols-9 2xl:grid-cols-11
+        divide-x-2 divide-dashed
+        pointer-events-none
+        opacity-30
+      "
+      initial={{ opacity: 0 }}
+      animate={{
+        opacity: [0.5, 0.7, 1, 0.7, 0.5],
+      }}
+      transition={{
+        duration: 5,
+        ease: "easeInOut",
+        repeat: Infinity,
+        repeatType: "reverse",
+      }}
+    >
       {[...Array(11)].map((_, i) => (
         <div
           key={i}
           className={`
-          ${i >= 2 ? "hidden sm:block" : ""}
-          ${i >= 3 ? "hidden md:block" : ""}
-          ${i >= 5 ? "hidden lg:block" : ""}
-          ${i >= 7 ? "hidden xl:block" : ""}
-          ${i >= 9 ? "hidden 2xl:block" : ""}
-        `}
-        ></div>
+            ${i >= 2 ? "hidden sm:block" : ""}
+            ${i >= 3 ? "hidden md:block" : ""}
+            ${i >= 5 ? "hidden lg:block" : ""}
+            ${i >= 7 ? "hidden xl:block" : ""}
+            ${i >= 9 ? "hidden 2xl:block" : ""}
+          `}
+        />
       ))}
-    </div>
+    </motion.div>
   );
 });
-
 const MemoizedNavigation = memo(function Navigation() {
   return (
     <>
@@ -173,37 +190,33 @@ const MemoizedFooter = memo(function Footer({
     </div>
   );
 });
-const DraggableBorders = memo(function DraggableBorders({
-  onDragStart,
-}: {
-  onDragStart: () => void;
-}) {
+export function DraggableBorders({ dragControls }: { dragControls: DragControls }) {
   const handlePointerDown = (e: React.PointerEvent) => {
     e.stopPropagation();
-    onDragStart();
+    dragControls.start(e);
   };
 
   return (
     <>
       <div
-        className="absolute w-full h-3 bottom-0 bg-neutral z-[999] link"
+        className="absolute w-full h-3 bottom-0 bg-neutral z-[999] link touch-none"
         onPointerDown={handlePointerDown}
       />
       <div
-        className="absolute h-full w-3 right-0 bg-neutral z-[999] link"
+        className="absolute h-full w-3 right-0 bg-neutral z-[999] link touch-none"
         onPointerDown={handlePointerDown}
       />
       <div
-        className="absolute h-full w-3 left-0 bg-neutral z-[999] link"
+        className="absolute h-full w-3 left-0 bg-neutral z-[999] link touch-none"
         onPointerDown={handlePointerDown}
       />
       <div
-        className="absolute w-full h-3 top-0 bg-neutral z-[999] link"
+        className="absolute w-full h-3 top-0 bg-neutral z-[999] link touch-none"
         onPointerDown={handlePointerDown}
       />
     </>
   );
-});
+}
 
 export default function ClientLayout({ children }: ClientLayoutProps) {
   const [showLoader, setShowLoader] = useState(true);
@@ -213,10 +226,8 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const constraintsRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
   const [isReduced, setIsReduced] = useState(false);
   const onToggleResize = () => setIsReduced((v) => !v);
-  const [showMobileNav, setShowMobileNav] = useState(false);
 
   const contentRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -240,17 +251,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     };
   }, []);
 
-  const navLinks = [
-    { href: "/work", labelKey: "navigation.work" },
-    { href: "/about", labelKey: "navigation.about" },
-    { href: "/contact", labelKey: "navigation.contact" },
-  ];
-
-  const handleDragStart = () => {
-    if (!isMobile) {
-      setIsDragging(true);
-    }
-  };
+  const dragControls = useDragControls();
 
   if (showLoader) {
     return (
@@ -319,19 +320,20 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             height: isReduced ? "90dvh" : "100dvh",
             borderRadius: isReduced ? "1rem" : "0rem",
           }}
-          drag={!isReduced ? false : isDragging}
+          drag={!isReduced ? false : true}
+          dragListener={false}
+          dragControls={dragControls}
           dragElastic={0.7}
           whileDrag={{ scale: 1 }}
           style={{ x, y }}
           dragConstraints={constraintsRef}
           dragMomentum={false}
           onDragEnd={() => {
-            setIsDragging(false);
             animate(x, 0, { type: "spring", stiffness: 100, damping: 15 });
             animate(y, 0, { type: "spring", stiffness: 100, damping: 15 });
           }}
         >
-          <DraggableBorders onDragStart={handleDragStart} />
+          <DraggableBorders dragControls={dragControls} />
           {/* CustomBorderRadius Bottom left corner */}
           <div className="absolute bottom-3 left-3 -rotate-90 z-70">
             <svg
@@ -367,10 +369,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
               <>
                 <div
                   className="absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between  text-neutral-content bg-neutral pr-4 pl-2 rounded-br-[20px] z-70 cursor-grab"
-                  onPointerDown={(e) => {
-                    e.stopPropagation();
-                    handleDragStart();
-                  }}
                 >
                   <MemoizedNavigation />
                 </div>
@@ -472,12 +470,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                 </motion.div>
               </>
             </Transition>
-            <MobileMenu
-              isOpen={showMobileNav}
-              onClose={() => setShowMobileNav(false)}
-              navLinks={navLinks}
-            />
-
             <MemoizedFooter isMobile={isMobile} pathname={pathname} />
           </motion.div>
         </motion.div>

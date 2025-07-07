@@ -19,11 +19,13 @@
     "contactMe": "Contact me",
     "scrollDown": "Scroll down",
     "phrases": {
+      "0": "Web Developer - React / Vue",
       "1": "I craft sleek, user-focused interfaces.",
-      "2": "I engineer blazing-fast, responsive websites.",
-      "3": "I repair, install, and optimize your tech setup.",
-      "4": "I empower real-world digital learning experiences.",
-      "5": "I automate workflows to supercharge productivity."
+      "2": "Creative Coder - Motion / Gsap / Three.js",
+      "3": "I engineer blazing-fast, responsive websites.",
+      "4": "Esport Enthusiast & Team Player",
+      "5": "I empower real-world digital learning experiences.",
+      "6": "I build immersive web experiences."
     },
     "quickAboutTitle": "About me",
     "quickAboutText": "Freelance web developer based in France, specializing in innovative digital solutions.",
@@ -46,7 +48,54 @@
     "allProjects": "All projects",
     "seeDetails": "See project",
     "ctaTitle": "Ready to collaborate?",
-    "ctaText": "Contact me to discuss your project or ideas."
+    "ctaText": "Contact me to discuss your project or ideas.",
+    "contactForm": {
+      "nameLabel": "Name",
+      "namePlaceholder": "Your name",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Your email",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Your message",
+      "send": "Send"
+    },
+    "about": {
+      "title": "About",
+      "text": "I am <strong>Alexis Germain</strong>, a passionate web developer specializing in creating modern and interactive web experiences. With expertise in <strong>Vue/Nuxt</strong> and <strong>React/Next</strong>, I design high-performance interfaces, integrating animations with <strong>Framer Motion & GSAP</strong>, 3D with <strong>Three.js</strong>, and paying close attention to detail."
+    },
+    "skills": {
+      "title": "Skills",
+      "languages": {
+        "title": "Languages & tools",
+        "items": [
+          "HTML5 / CSS3 / JavaScript / TypeScript",
+          "SQL, GraphQL, Node.js, Express",
+          "GSAP, Framer Motion, Three.js, Blender"
+        ]
+      },
+      "frameworks": {
+        "title": "Frameworks & CMS",
+        "items": [
+          "Vue.js / Nuxt3, React / Next.js, AngularJS",
+          "Strapi, WordPress, Drupal",
+          "Figma, Photoshop, Trello, Jira"
+        ]
+      }
+    },
+    "experience": {
+      "title": "Experience",
+      "freelance": {
+        "title": "Freelance Web Developer",
+        "description": "Creation of showcase websites, custom integration, client support and maintenance."
+      },
+      "asus": {
+        "title": "Webmaster – ASUS France",
+        "description": "Europe / Taiwan coordination, marketing support, multilingual web integration and localization."
+      },
+      "mgs": {
+        "title": "Junior Web Developer – MGS Informatique",
+        "description": "Development and maintenance of websites, international collaboration, technical fixes via Jira."
+      }
+    }
   },
   "work": {
     "title": "WORK",
@@ -149,14 +198,16 @@
   "contact": {
     "title": "CONTACT",
     "letsChat": "Let's Chat",
-    "collaborate": "Let's work together",
+    "collaborate": "Collaboration",
     "contactMe": "Contact me",
     "name": "Name",
     "email": "Email",
     "message": "Message",
     "send": "Send",
+    "sending": "Sending...",
     "success": "Message sent successfully!",
     "error": "An error occurred. Please try again.",
+    "socialHint": "Feel free to connect on social media as well.",
     "subject": "Subject",
     "phone": "06.08.53.52.80",
     "address": "Bruyères-sur-Oise, 95820",
@@ -165,7 +216,9 @@
     "social": "Social",
     "follow": "Follow Me",
     "required": "Required field",
-    "project": "Do you have a project in mind?",
+    "project": "New project",
+    "question": "General question",
+    "other": "Other",
     "open": "I'm always open to discussing new projects, creative ideas, or opportunities to collaborate."
   },
   "loading": {

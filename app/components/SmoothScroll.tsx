@@ -13,8 +13,6 @@ export default function SmoothScroll() {
   const lastEmojiRef = useRef<string>("");
   const lastEdgeRef = useRef<number>(-1); 
   const pathname = usePathname();
-
-
   const wrapperRef = useRef<HTMLElement | null>(null);
   const contentRef = useRef<HTMLElement | null>(null);
   const lenisRef = useRef<Lenis | null>(null);
@@ -74,10 +72,8 @@ export default function SmoothScroll() {
   }, { enableOnFormTags: true });
 
   useEffect(() => {
-    // Détection mobile simple
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
     if (isMobile) {
-      // Sur mobile, scroll natif, pas de Lenis
       return;
     }
     const wrapper = document.getElementById("content");
@@ -92,7 +88,7 @@ export default function SmoothScroll() {
       content,
       smoothWheel: true,
       lerp: 0.1,
-      gestureOrientation: 'vertical', // S'assure que le scroll vertical fonctionne
+      gestureOrientation: 'vertical',
     });
     lenisRef.current = lenis;
     let animationId: number;
@@ -144,7 +140,6 @@ export default function SmoothScroll() {
       lenis.destroy();
 
     };
-
   }, [pathname]);
 
   function pickOne<T>(arr: T[]): T {
