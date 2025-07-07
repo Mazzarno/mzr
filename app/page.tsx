@@ -29,6 +29,25 @@ const fadeIn = {
   }),
 };
 
+const listContainerVariants = {
+  visible: {
+    transition: {
+      staggerChildren: 0.15,  
+      delayChildren: 0.1,
+    },
+  },
+  hidden: {},
+};
+
+const listItemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { ease: [0.22, 1, 0.36, 1], duration: 0.7 },
+  },
+};
+
 const ScrambleText = ({ text, speed = 40 }: { text: string; speed?: number }) => {
   const [displayed, setDisplayed] = useState("");
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -141,33 +160,39 @@ const QuickAbout = () => {
 
 const SkillsSection = () => {
   const t = useTranslations("home.skills");
-  const languages = t.raw("languages.items") as string[];
-  const frameworks = t.raw("frameworks.items") as string[];
+  const languagesObj = t.raw("languages.items") as Record<string, string>;
+  const languages = Object.values(languagesObj);
+  const frameworksObj = t.raw("frameworks.items") as Record<string, string>;
+  const frameworks = Object.values(frameworksObj);
 
   return (
     <section className="py-20">
       <div className="container mx-auto px-6">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
-          <motion.h2 className="text-3xl md:text-4xl font-bold mb-20" variants={fadeIn} custom={0}>
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={listContainerVariants}>
+          <motion.h2 className="text-3xl md:text-4xl font-bold mb-20" variants={listItemVariants}>
             {t("title")}
           </motion.h2>
-          <motion.div className="grid md:grid-cols-2 gap-8" variants={fadeIn} custom={1}>
-            <div>
+          <motion.div className="grid md:grid-cols-2 gap-8" variants={listContainerVariants}>
+            <motion.div variants={listItemVariants}>
               <h3 className="text-xl font-semibold mb-2">{t("languages.title")}</h3>
-              <ul className="list-disc list-inside">
+              <motion.ul className="list-disc list-inside space-y-2" variants={listContainerVariants}>
                 {languages.map((item, index) => (
-                  <li key={index}>{item}</li>
+                  <motion.li key={index} variants={listItemVariants}>
+                    {item}
+                  </motion.li>
                 ))}
-              </ul>
-            </div>
-            <div>
+              </motion.ul>
+            </motion.div>
+            <motion.div variants={listItemVariants}>
               <h3 className="text-xl font-semibold mb-2">{t("frameworks.title")}</h3>
-              <ul className="list-disc list-inside">
+              <motion.ul className="list-disc list-inside space-y-2" variants={listContainerVariants}>
                 {frameworks.map((item, index) => (
-                  <li key={index}>{item}</li>
+                  <motion.li key={index} variants={listItemVariants}>
+                    {item}
+                  </motion.li>
                 ))}
-              </ul>
-            </div>
+              </motion.ul>
+            </motion.div>
           </motion.div>
         </motion.div>
       </div>
@@ -180,24 +205,24 @@ const ExperienceSection = () => {
   return (
     <section className="py-20 bg-base-200/40">
       <div className="container mx-auto px-6">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
-          <motion.h2 className="text-3xl md:text-4xl font-bold mb-20" variants={fadeIn} custom={0}>
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={listContainerVariants}>
+          <motion.h2 className="text-3xl md:text-4xl font-bold mb-20" variants={listItemVariants}>
             {t("title")}
           </motion.h2>
-          <div className="space-y-20">
-            <motion.div variants={fadeIn} custom={1}>
+          <motion.div className="space-y-20" variants={listContainerVariants}>
+            <motion.div variants={listItemVariants}>
               <h3 className="text-xl font-semibold">{t("freelance.title")}</h3>
               <p className="text-base-content/70">{t("freelance.description")}</p>
             </motion.div>
-            <motion.div variants={fadeIn} custom={2}>
+            <motion.div variants={listItemVariants}>
               <h3 className="text-xl font-semibold">{t("asus.title")}</h3>
               <p className="text-base-content/70">{t("asus.description")}</p>
             </motion.div>
-            <motion.div variants={fadeIn} custom={3}>
+            <motion.div variants={listItemVariants}>
               <h3 className="text-xl font-semibold">{t("mgs.title")}</h3>
               <p className="text-base-content/70">{t("mgs.description")}</p>
             </motion.div>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>
@@ -260,7 +285,7 @@ const ContactForm = () => {
                 <label htmlFor="name" className="block text-sm font-medium">
                   <AnimatedText translationKey="contact.name" animated={false} />
                 </label>
-                <input
+                <motion.input
                   type="text"
                   id="name"
                   name="name"
@@ -269,13 +294,15 @@ const ContactForm = () => {
                   required
                   className="w-full px-4 py-3 rounded-lg border border-base-300 bg-base-200/50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
                   placeholder={t("contact.name") + '...'}
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.2 }}
                 />
               </div>
               <div className="space-y-2">
                 <label htmlFor="email" className="block text-sm font-medium">
                   <AnimatedText translationKey="contact.email" animated={false} />
                 </label>
-                <input
+                <motion.input
                   type="email"
                   id="email"
                   name="email"
@@ -284,6 +311,8 @@ const ContactForm = () => {
                   required
                   className="w-full px-4 py-3 rounded-lg border border-base-300 bg-base-200/50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
                   placeholder={t("contact.email") + '...'}
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.2 }}
                 />
               </div>
             </div>
@@ -291,26 +320,28 @@ const ContactForm = () => {
               <label htmlFor="subject" className="block text-sm font-medium">
                 <AnimatedText translationKey="contact.subject" animated={false} />
               </label>
-              <select
+              <motion.select
                 id="subject"
                 name="subject"
                 value={formState.subject}
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 rounded-lg border border-base-300 bg-base-200/50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
               >
                 <option value="" disabled>{t("contact.subject")}</option>
                 <option value="projet">{t("contact.project")}</option>
                 <option value="collaboration">{t("contact.collaborate")}</option>
                 <option value="question">{t("contact.question")}</option>
                 <option value="autre">{t("contact.other")}</option>
-              </select>
+              </motion.select>
             </div>
             <div className="space-y-2">
               <label htmlFor="message" className="block text-sm font-medium">
                 <AnimatedText translationKey="contact.message" animated={false} />
               </label>
-              <textarea
+              <motion.textarea
                 id="message"
                 name="message"
                 value={formState.message}
@@ -319,7 +350,9 @@ const ContactForm = () => {
                 rows={6}
                 className="w-full px-4 py-3 rounded-lg border border-base-300 bg-base-200/50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
                 placeholder={t("contact.message") + '...'}
-              ></textarea>
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+              ></motion.textarea>
             </div>
             <div className="pt-2 flex flex-col items-center">
               <motion.button
@@ -365,5 +398,5 @@ const ContactForm = () => {
       </div>
     </section>
   );
-}
+};
 

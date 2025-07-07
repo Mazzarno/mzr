@@ -66,19 +66,19 @@
       "title": "Compétences",
       "languages": {
         "title": "Languages & outils",
-        "items": [
-          "HTML5 / CSS3 / JavaScript / TypeScript",
-          "SQL, GraphQL, Node.js, Express",
-          "GSAP, Framer Motion, Three.js, Blender"
-        ]
+        "items": {
+          "0": "HTML5 / CSS3 / JavaScript / TypeScript",
+          "1": "SQL, GraphQL, Node.js, Express",
+          "2": "GSAP, Framer Motion, Three.js, Blender"
+        }
       },
       "frameworks": {
         "title": "Frameworks & CMS",
-        "items": [
-          "Vue.js / Nuxt3, React / Next.js, AngularJS",
-          "Strapi, WordPress, Drupal",
-          "Figma, Photoshop, Trello, Jira"
-        ]
+        "items": {
+          "0": "Vue.js / Nuxt3, React / Next.js, AngularJS",
+          "1": "Strapi, WordPress, Drupal",
+          "2": "Figma, Photoshop, Trello, Jira"
+        }
       }
     },
     "experience": {
