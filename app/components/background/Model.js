@@ -1,13 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useGLTF, Float } from "@react-three/drei";
-import { useTransform } from "framer-motion";
+
 import { motion } from "framer-motion-3d";
 
-// Main component to orchestrate the 3D model scene
 export default function Model({ motionValues, currentTheme }) {
   const [scaleFactor, setScaleFactor] = useState(1);
-
-  // Computes scale factor based on window size
   const computeScale = () => {
     const w = window.innerWidth;
     const h = window.innerHeight;
@@ -16,7 +13,6 @@ export default function Model({ motionValues, currentTheme }) {
     return Math.min(w, h) / 900;
   };
 
-  // Handles window resize to adjust model scale
   useEffect(() => {
     const handleResize = () => setScaleFactor(computeScale());
     handleResize();
@@ -31,7 +27,6 @@ export default function Model({ motionValues, currentTheme }) {
   const lightThemeColor = "#FFFFFF";
   const darkThemeColor = "#212529";
 
-  // Switches the active shape every 3 seconds
   useEffect(() => {
     if (intervalRef.current) clearTimeout(intervalRef.current);
     intervalRef.current = setTimeout(() => {
@@ -44,7 +39,6 @@ export default function Model({ motionValues, currentTheme }) {
     };
   }, [activeShape]);
 
-  // Pauses animation when tab is not visible
   useEffect(() => {
     const handleVisibilityChange = () => {
       isVisibleRef.current = document.visibilityState === "visible";
@@ -57,22 +51,17 @@ export default function Model({ motionValues, currentTheme }) {
 
   return (
     <motion.group
-      // Global rotation driven by device tilt
-      rotation-y={motionValues.tilt.x} // gamma
-      rotation-x={motionValues.tilt.y} // beta
-      // Initial animation
+      rotation-y={motionValues.tilt.x}
+      rotation-x={motionValues.tilt.y}
       initial={{ scale: 0, y: 100 }}
       animate={{ scale: 1, y: 0 }}
       transition={{ duration: 1.5, ease: [0.215, 0.61, 0.355, 1] }}
       scale={scaleFactor}
     >
-      {/* Map through all nodes from the GLB file and render a Mesh component */}
       {Object.values(nodes).filter(node => node.isMesh).map((node, index) => (
          <Mesh
             key={node.uuid}
             node={node}
-            multiplier={2} // This could be randomized or based on index
-            mouse={motionValues.touch} // Pass touch/mouse controls for parallax effect
             isActive={activeShape === index + 1}
             isDarkTheme={isDarkTheme}
             lightColor={lightThemeColor}
@@ -85,16 +74,8 @@ export default function Model({ motionValues, currentTheme }) {
 
 useGLTF.preload("/medias/shapes.glb");
 
-// Component for a single 3D mesh with its own animations
-function Mesh({ node, multiplier, mouse, isActive, isDarkTheme, lightColor, darkColor }) {
+function Mesh({ node, isActive, isDarkTheme, lightColor, darkColor }) {
   const { geometry, position, scale, rotation } = node;
-  const a = multiplier / 2;
-
-  // Parallax effect based on touch/mouse position
-  const rotationX = useTransform(mouse.y, [0, 1], [rotation.y - a / 4, rotation.y + a / 4]);
-  const rotationY = useTransform(mouse.x, [0, 1], [rotation.x - a / 4, rotation.x + a / 4]);
-  const positionX = useTransform(mouse.x, [0, 1], [position.x - multiplier, position.x + multiplier]);
-  const positionY = useTransform(mouse.y, [0, 1], [position.y + multiplier, position.y - multiplier]);
 
   const getRandomMultiplier = () => {
     return Math.floor(Math.random() * 1.5) * (Math.round(Math.random()) ? 1 : -1);
@@ -107,13 +88,8 @@ function Mesh({ node, multiplier, mouse, isActive, isDarkTheme, lightColor, dark
         receiveShadow={false}
         geometry={geometry}
         position={position}
+        rotation={rotation}
         scale={scale}
-        // Apply parallax rotations and positions
-        rotation-x={rotationX}
-        rotation-y={rotationY}
-        position-x={positionX}
-        position-y={positionY}
-        // Animate Z rotation when active
         animate={{
           rotateZ: isActive ? rotation.z + getRandomMultiplier() : rotation.z,
         }}
