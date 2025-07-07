@@ -19,7 +19,7 @@ const Loading: React.FC<LoadingProps> = ({
   const text = "ALEXIS GERMAIN";  
   
   useEffect(() => {
-    // Calculer la progression du chargement
+
     const interval = setInterval(() => {
       setProgress(prev => {
         const newProgress = prev + 100 / (duration * 10);
@@ -27,10 +27,8 @@ const Loading: React.FC<LoadingProps> = ({
         if (newProgress >= 100) {
           clearInterval(interval);
           
-          // Déclencher immédiatement l'animation de sortie
           setTimeout(() => {
             setIsComplete(true);
-            // Appeler onLoadComplete après un court délai pour permettre à l'animation de sortie de commencer
             if (onLoadComplete) setTimeout(onLoadComplete, 400);
           }, 300);
           
@@ -44,13 +42,11 @@ const Loading: React.FC<LoadingProps> = ({
     return () => clearInterval(interval);
   }, [duration, onLoadComplete]);
   
-  // Animation commune pour tous les éléments
   const commonTransition = {
     duration: 0.5,
     ease: [0.22, 1, 0.36, 1]
   };
   
-  // Animation de conteneur
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { 
@@ -66,7 +62,6 @@ const Loading: React.FC<LoadingProps> = ({
     }
   };
   
-  // Animation du texte et de tous les éléments
   const itemVariants = {
     hidden: { opacity: 0, y: 10 },
     visible: { 
@@ -81,7 +76,6 @@ const Loading: React.FC<LoadingProps> = ({
     }
   };
   
-  // Animation de la barre de progression
   const progressVariants = {
     hidden: { width: "0%" },
     visible: { 

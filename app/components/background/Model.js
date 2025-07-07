@@ -10,11 +10,13 @@ export default function Model({ mouse, currentTheme }) {
     const w = window.innerWidth;
     const h = window.innerHeight;
 
-    if (w < 600) {
-      return Math.min(w, h) / 400;
-    } else if (w < 900) {
-      return Math.min(w, h) / 600;
-    } else {
+    if (w < 768) {
+      return Math.min(w, h) / 850;
+    }
+    else if (w < 1280) {
+      return Math.min(w, h) / 1000;
+    }
+    else {
       return Math.min(w, h) / 900;
     }
   };
@@ -73,6 +75,7 @@ export default function Model({ mouse, currentTheme }) {
       transition={{
         duration: 1.5,
         ease: [0.215, 0.61, 0.355, 1],
+
       }}
       scale={[scaleFactor, scaleFactor, scaleFactor]}
     >

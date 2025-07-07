@@ -119,7 +119,7 @@ const HeroSection = () => {
   return (
     <section className="min-h-screen flex flex-col justify-center items-center px-4 relative overflow-hidden">
       <motion.div className="text-center z-10 relative" initial="hidden" animate="visible" variants={containerVariants}>
-        <motion.h1 variants={itemVariants} className="text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-6">
+        <motion.h1 variants={itemVariants} className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
           <span className="inline-block">
             <span className="relative inline-block">
               <AnimatedText translationKey="home.heroTitle" animated={true} />
@@ -140,14 +140,14 @@ const HeroSection = () => {
 const QuickAbout = () => {
   const t = useTranslations("home.about");
   return (
-    <section className="py-16 bg-base-200/40 ">
+    <section className="py-16 sm:py-20 bg-base-200/40">
       <div className="container mx-auto px-6">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeIn}>
           <motion.h2 className="text-3xl md:text-4xl font-bold mb-20" variants={fadeIn} custom={0}>
             {t("title")}
           </motion.h2>
           <motion.p
-            className="text-lg  max-w-2xl mx-auto"
+            className="text-base sm:text-lg max-w-2xl mx-auto"
             variants={fadeIn}
             custom={1}
             dangerouslySetInnerHTML={{ __html: t.raw("text") as string }}
@@ -166,7 +166,7 @@ const SkillsSection = () => {
   const frameworks = Object.values(frameworksObj);
 
   return (
-    <section className="py-20">
+    <section className="py-16 sm:py-20">
       <div className="container mx-auto px-6">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={listContainerVariants}>
           <motion.h2 className="text-3xl md:text-4xl font-bold mb-20" variants={listItemVariants}>
@@ -203,7 +203,7 @@ const SkillsSection = () => {
 const ExperienceSection = () => {
   const t = useTranslations("home.experience");
   return (
-    <section className="py-20 bg-base-200/40">
+    <section className="py-16 sm:py-20 bg-base-200/40">
       <div className="container mx-auto px-6">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={listContainerVariants}>
           <motion.h2 className="text-3xl md:text-4xl font-bold mb-20" variants={listItemVariants}>
@@ -256,7 +256,7 @@ const ContactForm = () => {
   };
 
   return (
-    <section className="py-24 border-t border-base-300/30">
+    <section className="py-16 sm:py-24 border-t border-base-300/30">
       <div className="container mx-auto px-6">
         <motion.div
           initial="hidden"
@@ -273,7 +273,7 @@ const ContactForm = () => {
             <AnimatedText translationKey="home.ctaTitle" animated={true} />
           </motion.h2>
           <motion.p
-            className="text-lg text-base-content/70 max-w-2xl mx-auto mb-8 text-center"
+            className="text-base sm:text-lg md:text-xl text-base-content/70 max-w-2xl mx-auto mt-4 mb-8 text-center"
             variants={fadeIn}
             custom={1}
           >

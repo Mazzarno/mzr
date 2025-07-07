@@ -1,10 +1,9 @@
 "use client";
 import React, {
   useEffect,
-  useCallback,
-  useRef,
   useMemo,
   Suspense,
+  useState,
 } from "react";
 import { Canvas } from "@react-three/fiber";
 import { EffectComposer, ChromaticAberration, Noise } from "@react-three/postprocessing";
@@ -19,7 +18,17 @@ import { useTheme } from "next-themes";
 export default function Background() {
   const { theme, resolvedTheme } = useTheme();
   const currentTheme = theme === "system" ? resolvedTheme : theme;
-  const lastMoveTime = useRef(Date.now());
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      setIsMobile(isMobileDevice);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const springConfig = useMemo(
     () => ({
@@ -41,53 +50,76 @@ export default function Background() {
     y: useSpring(mouse.y, springConfig),
   };
 
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      const now = Date.now();
-      if (now - lastMoveTime.current < 32) return;
-
-      lastMoveTime.current = now;
-
+  useEffect(() => {
+    // Handler for mouse movement on desktop
+    const handleMouseMove = (e: MouseEvent) => {
       const { innerWidth, innerHeight } = window;
       const x = e.clientX / innerWidth;
       const y = e.clientY / innerHeight;
+      mouse.x.set(x);
+      mouse.y.set(y);
+    };
+
+    // Handler for device orientation on mobile
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (e.beta === null || e.gamma === null) return;
+
+      // Clamp values for a more subtle effect
+      const clamp = (val: number, min: number, max: number) => Math.max(Math.min(val, max), min);
+      const beta = clamp(e.beta, -45, 45);  // front-to-back tilt
+      const gamma = clamp(e.gamma, -45, 45); // left-to-right tilt
+
+      // Normalize to 0-1 range
+      const x = (gamma + 45) / 90;
+      const y = (beta + 45) / 90;
 
       mouse.x.set(x);
       mouse.y.set(y);
-    },
-    [mouse.x, mouse.y]
-  );
-
-  // Handler pour le tactile
-  const handleTouchMove = useCallback(
-    (e: TouchEvent) => {
-      if (!e.touches || e.touches.length === 0) return;
-      const touch = e.touches[0];
-      const { innerWidth, innerHeight } = window;
-      const x = touch.clientX / innerWidth;
-      const y = touch.clientY / innerHeight;
-      mouse.x.set(x);
-      mouse.y.set(y);
-    },
-    [mouse.x, mouse.y]
-  );
-
-  useEffect(() => {
-    const throttledMouseMove = (e: MouseEvent) => {
-      requestAnimationFrame(() => handleMouseMove(e));
-    };
-    const throttledTouchMove = (e: TouchEvent) => {
-      requestAnimationFrame(() => handleTouchMove(e));
     };
 
-    window.addEventListener("mousemove", throttledMouseMove);
-    window.addEventListener("touchmove", throttledTouchMove, { passive: false });
+    const requestOrientationPermission = () => {
+      // iOS 13+ requires user permission for DeviceOrientation events
+      const doe = DeviceOrientationEvent as unknown as {
+        requestPermission?: () => Promise<'granted' | 'denied'>;
+      };
 
-    return () => {
-      window.removeEventListener("mousemove", throttledMouseMove);
-      window.removeEventListener("touchmove", throttledTouchMove);
+      if (typeof doe.requestPermission === 'function') {
+        doe.requestPermission()
+          .then((permissionState) => {
+            if (permissionState === 'granted') {
+              window.addEventListener('deviceorientation', handleOrientation);
+            }
+          })
+          .catch(console.error);
+      } else {
+        // Non-iOS 13+ devices
+        window.addEventListener('deviceorientation', handleOrientation);
+      }
     };
-  }, [handleMouseMove, handleTouchMove]);
+
+    if (isMobile) {
+      // For mobile, we need a user gesture to request permission.
+      // We'll listen for the first click/touch on the body.
+      document.body.addEventListener('click', requestOrientationPermission, { once: true });
+      document.body.addEventListener('touchend', requestOrientationPermission, { once: true });
+      
+      return () => {
+        window.removeEventListener('deviceorientation', handleOrientation);
+        document.body.removeEventListener('click', requestOrientationPermission);
+        document.body.removeEventListener('touchend', requestOrientationPermission);
+      };
+
+    } else {
+      // For desktop, use mouse move with throttling
+      const throttledMouseMove = (e: MouseEvent) => {
+        requestAnimationFrame(() => handleMouseMove(e));
+      };
+      window.addEventListener('mousemove', throttledMouseMove);
+      return () => {
+        window.removeEventListener('mousemove', throttledMouseMove);
+      };
+    }
+  }, [isMobile, mouse.x, mouse.y]);
 
   return (
     <Canvas

@@ -34,14 +34,12 @@ const Transition: React.FC<TransitionProps> = ({
   const prevPath = useRef(pathname);
   const isInitialRender = useRef(true);
 
-  // Responsive grid configuration
   const getGridConfig = useCallback(() => {
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
     const isTablet = typeof window !== 'undefined' && window.innerWidth >= 640 && window.innerWidth < 1024;
     
     let cols, rows;
     
-    // Adjust density based on preference
     const densityMultiplier = pixelDensity === 'low' ? 0.7 : pixelDensity === 'high' ? 1.5 : 1;
     
     if (isMobile) {
@@ -66,8 +64,7 @@ const Transition: React.FC<TransitionProps> = ({
     const totalPixels = cols * rows;
     
     const indices = Array.from({ length: totalPixels }, (_, i) => i);
-    
-    // Fisher-Yates shuffle algorithm for randomizing pixels
+
     for (let i = indices.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [indices[i], indices[j]] = [indices[j], indices[i]];
@@ -76,10 +73,8 @@ const Transition: React.FC<TransitionProps> = ({
     indices.forEach((index, i) => {
       const gridX = index % cols;
       const gridY = Math.floor(index / cols);
-      
-      // Calculate delay with slight variation for more organic feel
       const baseDelay = i * 0.003;
-      const randomVariation = Math.random() * 0.001; // Small random variation
+      const randomVariation = Math.random() * 0.001; 
       
       pixels.push({
         id: index,
@@ -116,13 +111,13 @@ const Transition: React.FC<TransitionProps> = ({
     setTransitionEnded(false);
   }, [isTransitioning, pathname]);
 
-  const animationDuration = 0.3; // Base animation duration in seconds
+  const animationDuration = 0.3;
 
   useEffect(() => {
     if (isTransitioning && nextPath && nextPath !== pathname) {
       const timer = setTimeout(() => {
         router.push(nextPath);
-      }, transitionDuration * 0.75); // Slightly shorter than full transition to ensure smooth experience
+      }, transitionDuration * 0.75); 
       return () => clearTimeout(timer);
     }
   }, [isTransitioning, nextPath, pathname, router, transitionDuration]);
@@ -141,8 +136,7 @@ const Transition: React.FC<TransitionProps> = ({
         setIsTransitioning(false);
         prevPath.current = pathname;
         setNextPath(null);
-        
-        // Mark transition as fully complete after all animations
+  
         setTimeout(() => {
           setTransitionEnded(true);
         }, 100);
@@ -242,10 +236,8 @@ const Transition: React.FC<TransitionProps> = ({
         )}
       </AnimatePresence>
       
-      {/* Navigation above transition */}
       {navChild}
-      
-      {/* Main content with enhanced transitions */}
+    
       <motion.div 
         initial={isInitialRender.current ? {} : { opacity: 0, y: 10 }}
         animate={{ opacity: isTransitioning ? 0.3 : 1, y: 0 }}
@@ -256,8 +248,7 @@ const Transition: React.FC<TransitionProps> = ({
       >
         {contentChild}
       </motion.div>
-      
-      {/* Footer above transition */}
+    
       {footerChild}
     </TransitionContext.Provider>
   );
