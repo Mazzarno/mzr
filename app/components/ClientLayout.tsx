@@ -256,7 +256,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   if (showLoader) {
     return (
       <Loading
-        duration={3}
+        duration={2}
         onLoadComplete={() => {
           setShowLoader(false);
         }}
