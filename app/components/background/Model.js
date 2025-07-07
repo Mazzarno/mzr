@@ -3,29 +3,23 @@ import { useGLTF, Float } from "@react-three/drei";
 import { useTransform } from "framer-motion";
 import { motion } from "framer-motion-3d";
 
-export default function Model({ mouse, currentTheme }) {
+// Main component to orchestrate the 3D model scene
+export default function Model({ motionValues, currentTheme }) {
   const [scaleFactor, setScaleFactor] = useState(1);
 
+  // Computes scale factor based on window size
   const computeScale = () => {
     const w = window.innerWidth;
     const h = window.innerHeight;
-
-    if (w < 768) {
-      return Math.min(w, h) / 850;
-    }
-    else if (w < 1280) {
-      return Math.min(w, h) / 1000;
-    }
-    else {
-      return Math.min(w, h) / 900;
-    }
+    if (w < 768) return Math.min(w, h) / 850;
+    if (w < 1280) return Math.min(w, h) / 1000;
+    return Math.min(w, h) / 900;
   };
 
+  // Handles window resize to adjust model scale
   useEffect(() => {
-    const handleResize = () => {
-      setScaleFactor(computeScale());
-    };
-    handleResize(); // set au mount
+    const handleResize = () => setScaleFactor(computeScale());
+    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -37,190 +31,73 @@ export default function Model({ mouse, currentTheme }) {
   const lightThemeColor = "#FFFFFF";
   const darkThemeColor = "#212529";
 
+  // Switches the active shape every 3 seconds
   useEffect(() => {
-    if (intervalRef.current) {
-      clearTimeout(intervalRef.current);
-    }
-
+    if (intervalRef.current) clearTimeout(intervalRef.current);
     intervalRef.current = setTimeout(() => {
       if (isVisibleRef.current) {
         setActiveShape((prev) => (prev === 11 ? 1 : prev + 1));
       }
     }, 3000);
-
     return () => {
-      if (intervalRef.current) {
-        clearTimeout(intervalRef.current);
-      }
+      if (intervalRef.current) clearTimeout(intervalRef.current);
     };
   }, [activeShape]);
 
+  // Pauses animation when tab is not visible
   useEffect(() => {
     const handleVisibilityChange = () => {
       isVisibleRef.current = document.visibilityState === "visible";
     };
-
     document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, []);
 
   const { nodes } = useGLTF("/medias/shapes.glb");
+
   return (
     <motion.group
-      initial={{ scaleX: 0, y: 500 }}
-      animate={{ scaleX: 1, y: 0 }}
-      transition={{
-        duration: 1.5,
-        ease: [0.215, 0.61, 0.355, 1],
-
-      }}
-      scale={[scaleFactor, scaleFactor, scaleFactor]}
+      // Global rotation driven by device tilt
+      rotation-y={motionValues.tilt.x} // gamma
+      rotation-x={motionValues.tilt.y} // beta
+      // Initial animation
+      initial={{ scale: 0, y: 100 }}
+      animate={{ scale: 1, y: 0 }}
+      transition={{ duration: 1.5, ease: [0.215, 0.61, 0.355, 1] }}
+      scale={scaleFactor}
     >
-      <Mesh
-        node={nodes.Sphere001}
-        multiplier={2.4}
-        mouse={mouse}
-        isActive={activeShape == 1}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Sphere002}
-        multiplier={2.4}
-        mouse={mouse}
-        isActive={activeShape == 2}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Cylinder002}
-        multiplier={1.2}
-        mouse={mouse}
-        isActive={activeShape == 3}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Sphere003}
-        multiplier={1}
-        mouse={mouse}
-        isActive={activeShape == 4}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Cylinder003}
-        multiplier={1.8}
-        mouse={mouse}
-        isActive={activeShape == 5}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Cylinder005}
-        multiplier={1.8}
-        mouse={mouse}
-        isActive={activeShape == 6}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Cube002}
-        multiplier={2}
-        mouse={mouse}
-        isActive={activeShape == 7}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Cylinder006}
-        multiplier={1.2}
-        mouse={mouse}
-        isActive={activeShape == 8}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Cylinder007}
-        multiplier={1.6}
-        mouse={mouse}
-        isActive={activeShape == 9}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Cylinder009}
-        multiplier={1.8}
-        mouse={mouse}
-        isActive={activeShape == 10}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Sphere}
-        multiplier={1.5}
-        mouse={mouse}
-        isActive={activeShape == 11}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
+      {/* Map through all nodes from the GLB file and render a Mesh component */}
+      {Object.values(nodes).filter(node => node.isMesh).map((node, index) => (
+         <Mesh
+            key={node.uuid}
+            node={node}
+            multiplier={2} // This could be randomized or based on index
+            mouse={motionValues.touch} // Pass touch/mouse controls for parallax effect
+            isActive={activeShape === index + 1}
+            isDarkTheme={isDarkTheme}
+            lightColor={lightThemeColor}
+            darkColor={darkThemeColor}
+        />
+      ))}
     </motion.group>
   );
 }
 
 useGLTF.preload("/medias/shapes.glb");
 
-function Mesh({
-  node,
-  multiplier,
-  mouse,
-  isActive,
-  isDarkTheme,
-  lightColor,
-  darkColor,
-}) {
+// Component for a single 3D mesh with its own animations
+function Mesh({ node, multiplier, mouse, isActive, isDarkTheme, lightColor, darkColor }) {
   const { geometry, position, scale, rotation } = node;
   const a = multiplier / 2;
 
-  const rotationX = useTransform(
-    mouse.x,
-    [0, 1],
-    [rotation.x - a / 2, rotation.x + a / 2]
-  );
-  const rotationY = useTransform(
-    mouse.y,
-    [0, 1],
-    [rotation.y - a / 2, rotation.y + a / 2]
-  );
-  const positionX = useTransform(
-    mouse.x,
-    [0, 1],
-    [position.x - multiplier, position.x + multiplier]
-  );
-  const positionY = useTransform(
-    mouse.y,
-    [0, 1],
-    [position.y + multiplier, position.y - multiplier]
-  );
+  // Parallax effect based on touch/mouse position
+  const rotationX = useTransform(mouse.y, [0, 1], [rotation.y - a / 4, rotation.y + a / 4]);
+  const rotationY = useTransform(mouse.x, [0, 1], [rotation.x - a / 4, rotation.x + a / 4]);
+  const positionX = useTransform(mouse.x, [0, 1], [position.x - multiplier, position.x + multiplier]);
+  const positionY = useTransform(mouse.y, [0, 1], [position.y + multiplier, position.y - multiplier]);
 
   const getRandomMultiplier = () => {
-    return (
-      Math.floor(Math.random() * 1.5) * (Math.round(Math.random()) ? 1 : -1)
-    );
+    return Math.floor(Math.random() * 1.5) * (Math.round(Math.random()) ? 1 : -1);
   };
 
   return (
@@ -230,14 +107,15 @@ function Mesh({
         receiveShadow={false}
         geometry={geometry}
         position={position}
-        rotation={rotation}
         scale={scale}
-        rotation-y={rotationX}
-        rotation-x={rotationY}
+        // Apply parallax rotations and positions
+        rotation-x={rotationX}
+        rotation-y={rotationY}
         position-x={positionX}
         position-y={positionY}
+        // Animate Z rotation when active
         animate={{
-          rotateZ: isActive ? rotation.z + getRandomMultiplier() : null,
+          rotateZ: isActive ? rotation.z + getRandomMultiplier() : rotation.z,
         }}
         transition={{ type: "spring", stiffness: 50, damping: 80, mass: 2 }}
       >

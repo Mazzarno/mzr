@@ -40,14 +40,20 @@ export default function Background() {
     []
   );
 
-  const mouse = {
-    x: useMotionValue(0.5),
-    y: useMotionValue(0.5),
+  const motionValues = {
+    tilt: {
+      x: useSpring(0, springConfig), // gamma
+      y: useSpring(0, springConfig), // beta
+    },
+    touch: {
+      x: useMotionValue(0.5),
+      y: useMotionValue(0.5),
+    },
   };
 
-  const smoothMouse = {
-    x: useSpring(mouse.x, springConfig),
-    y: useSpring(mouse.y, springConfig),
+  const smoothTouch = {
+    x: useSpring(motionValues.touch.x, springConfig),
+    y: useSpring(motionValues.touch.y, springConfig),
   };
 
   useEffect(() => {
@@ -56,25 +62,33 @@ export default function Background() {
       const { innerWidth, innerHeight } = window;
       const x = e.clientX / innerWidth;
       const y = e.clientY / innerHeight;
-      mouse.x.set(x);
-      mouse.y.set(y);
+      motionValues.touch.x.set(x);
+      motionValues.touch.y.set(y);
+    };
+
+    // Handler for touch movement on mobile
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!e.touches || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      const { innerWidth, innerHeight } = window;
+      const x = touch.clientX / innerWidth;
+      const y = touch.clientY / innerHeight;
+      motionValues.touch.x.set(x);
+      motionValues.touch.y.set(y);
     };
 
     // Handler for device orientation on mobile
     const handleOrientation = (e: DeviceOrientationEvent) => {
       if (e.beta === null || e.gamma === null) return;
 
-      // Clamp values for a more subtle effect
+      // Use a wider range for more pronounced movement and convert to radians
       const clamp = (val: number, min: number, max: number) => Math.max(Math.min(val, max), min);
-      const beta = clamp(e.beta, -45, 45);  // front-to-back tilt
-      const gamma = clamp(e.gamma, -45, 45); // left-to-right tilt
+      const beta = clamp(e.beta, -90, 90);  // front-to-back tilt
+      const gamma = clamp(e.gamma, -90, 90); // left-to-right tilt
 
-      // Normalize to 0-1 range
-      const x = (gamma + 45) / 90;
-      const y = (beta + 45) / 90;
-
-      mouse.x.set(x);
-      mouse.y.set(y);
+      // Convert degrees to radians for direct use in rotation
+      motionValues.tilt.y.set(beta * (Math.PI / 180));
+      motionValues.tilt.x.set(gamma * (Math.PI / 180));
     };
 
     const requestOrientationPermission = () => {
@@ -98,15 +112,16 @@ export default function Background() {
     };
 
     if (isMobile) {
-      // For mobile, we need a user gesture to request permission.
-      // We'll listen for the first click/touch on the body.
+      // For mobile, add listeners for both orientation and touch
       document.body.addEventListener('click', requestOrientationPermission, { once: true });
       document.body.addEventListener('touchend', requestOrientationPermission, { once: true });
-      
+      window.addEventListener("touchmove", handleTouchMove, { passive: false });
+
       return () => {
         window.removeEventListener('deviceorientation', handleOrientation);
         document.body.removeEventListener('click', requestOrientationPermission);
         document.body.removeEventListener('touchend', requestOrientationPermission);
+        window.removeEventListener("touchmove", handleTouchMove);
       };
 
     } else {
@@ -119,7 +134,7 @@ export default function Background() {
         window.removeEventListener('mousemove', throttledMouseMove);
       };
     }
-  }, [isMobile, mouse.x, mouse.y]);
+  }, [isMobile, motionValues.tilt, motionValues.touch]);
 
   return (
     <Canvas
@@ -140,7 +155,7 @@ export default function Background() {
           />
           <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} opacity={0.01} />
         </EffectComposer>
-        <Model mouse={smoothMouse} currentTheme={currentTheme} />
+        <Model motionValues={{...motionValues, touch: smoothTouch}} currentTheme={currentTheme} />
         <Environment preset="city" background={false} />
       </Suspense>
     </Canvas>
