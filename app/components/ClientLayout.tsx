@@ -4,7 +4,13 @@ import React, { useState, useEffect, useRef, memo } from "react";
 import Loading from "./Loading";
 import { usePathname } from "next/navigation";
 import TransitionLink from "./TransitionLink";
-import { motion, useMotionValue, useDragControls, animate, DragControls } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useDragControls,
+  animate,
+  DragControls,
+} from "framer-motion";
 import ThemeSwitcher from "./ThemeSwitch";
 import Logo from "./Logo";
 import { Github, Linkedin, Mail, Maximize, Minimize } from "lucide-react";
@@ -12,7 +18,6 @@ import Background from "./background";
 import dynamic from "next/dynamic";
 import LanguageSwitcher from "./LanguageSwitcher";
 import Transition from "./Transition";
-import { getTitleInfo } from "./getTitleInfo";
 import SmoothScroll from "./SmoothScroll";
 
 interface ClientLayoutProps {
@@ -106,8 +111,12 @@ const MemoizedNavigation = memo(function Navigation() {
               className="transition-transform duration-300 transform group-hover:-translate-y-5"
               style={{ transformStyle: "preserve-3d" }}
             >
-              <span className="block text-sm tracking-widest font-medium">Germain</span>
-              <span className="block text-sm tracking-widest font-medium">Alexis</span>
+              <span className="block text-sm tracking-widest font-medium">
+                Germain
+              </span>
+              <span className="block text-sm tracking-widest font-medium">
+                Alexis
+              </span>
             </div>
           </div>
         </TransitionLink>
@@ -118,10 +127,8 @@ const MemoizedNavigation = memo(function Navigation() {
 
 const MemoizedFooter = memo(function Footer({
   isMobile,
-  pathname,
 }: {
   isMobile: boolean;
-  pathname: string;
 }) {
   return (
     <div
@@ -157,40 +164,133 @@ const MemoizedFooter = memo(function Footer({
           ></path>
         </svg>
       </div>
-      <span className={`font-bold ${isMobile ? "text-xs" : "text-sm"}`}>
-        {getTitleInfo(pathname)}
-      </span>
-      <span className="text-sm text-neutral-content">—</span>
-      <div className="flex items-center space-x-3 ml-2">
-        <a
-          href="https://github.com/Mazzarno"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-neutral-content hover:text-primary transition-colors"
-        >
-          <Github size={16} />
-        </a>
-        <a
-          href="https://www.linkedin.com/in/alexis-germain/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-neutral-content hover:text-primary transition-colors"
-        >
-          <Linkedin size={16} />
-        </a>
-        <a
-          href="mailto:contact@alexis-germain.fr"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-neutral-content hover:text-primary transition-colors"
-        >
-          <Mail size={16} />
-        </a>
+      {/* Socials */}
+      <div className="flex items-center space-x-6">
+        {/* Github */}
+        <div className="relative overflow-hidden h-5 group">
+          <div
+            className="transition-transform duration-300 transform group-hover:-translate-y-6"
+            style={{ transformStyle: "preserve-3d" }}
+          >
+            <div className="block">
+              <a
+                href="https://github.com/Mazzarno"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-neutral-content hover:text-primary transition-colors"
+              >
+                <button
+                  className="text-sm text-neutral-content focus:outline-none"
+                  aria-label="GitHub"
+                >
+                  <Github size={18} />
+                </button>
+              </a>
+            </div>
+            <div className="block">
+              <a
+                href="https://github.com/Mazzarno"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-neutral-content hover:text-primary transition-colors"
+              >
+                <button
+                  className="text-sm text-neutral-content focus:outline-none"
+                  aria-label="GitHub"
+                >
+                  <Github size={18} className="text-indigo-500" />
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
+        {/* Linkedin */}
+        <div className="relative overflow-hidden h-5 group">
+          <div
+            className="transition-transform duration-300 transform group-hover:-translate-y-6"
+            style={{ transformStyle: "preserve-3d" }}
+          >
+            <div className="block">
+              <a
+                href="https://www.linkedin.com/in/alexis-germain/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-neutral-content hover:text-primary transition-colors"
+              >
+                <button
+                  className="text-sm text-neutral-content focus:outline-none"
+                  aria-label="Linkedin"
+                >
+                  <Linkedin size={18} />
+                </button>
+              </a>
+            </div>
+            <div className="block">
+              <a
+                href="https://www.linkedin.com/in/alexis-germain/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-neutral-content hover:text-primary transition-colors"
+              >
+                <button
+                  className="text-sm text-neutral-content focus:outline-none"
+                  aria-label="Linkedin"
+                >
+                  <Linkedin size={18} className="text-indigo-500" />
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Mail */}
+
+        <div className="relative overflow-hidden h-5 group">
+          <div
+            className="transition-transform duration-300 transform group-hover:-translate-y-6"
+            style={{ transformStyle: "preserve-3d" }}
+          >
+            <div className="block">
+              <a
+                href="mailto:contact@alexis-germain.fr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-neutral-content hover:text-primary transition-colors"
+              >
+                <button
+                  className="text-sm text-neutral-content focus:outline-none"
+                  aria-label="Mail"
+                >
+                  <Mail size={18} />
+                </button>
+              </a>
+            </div>
+            <div className="block">
+              <a
+                href="mailto:contact@alexis-germain.fr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-neutral-content hover:text-primary transition-colors"
+              >
+                <button
+                  className="text-sm text-neutral-content focus:outline-none"
+                  aria-label="Mail"
+                >
+                  <Mail size={18} className="text-indigo-500" />
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 });
-export function DraggableBorders({ dragControls }: { dragControls: DragControls }) {
+export function DraggableBorders({
+  dragControls,
+}: {
+  dragControls: DragControls;
+}) {
   const handlePointerDown = (e: React.PointerEvent) => {
     e.stopPropagation();
     dragControls.start(e);
@@ -245,7 +345,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
       checkIfMobile();
     };
     window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -367,9 +466,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
           <motion.div className="w-full h-full overflow-auto scrollbar-hide">
             <Transition>
               <>
-                <div
-                  className="absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between  text-neutral-content bg-neutral pr-4 pl-2 rounded-br-[20px] z-70 cursor-grab"
-                >
+                <div className="absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between  text-neutral-content bg-neutral pr-4 pl-2 rounded-br-[20px] z-70 cursor-grab">
                   <MemoizedNavigation />
                 </div>
 

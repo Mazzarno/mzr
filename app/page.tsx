@@ -32,7 +32,7 @@ const fadeIn = {
 const listContainerVariants = {
   visible: {
     transition: {
-      staggerChildren: 0.15,  
+      staggerChildren: 0.15,
       delayChildren: 0.1,
     },
   },
@@ -48,7 +48,13 @@ const listItemVariants = {
   },
 };
 
-const ScrambleText = ({ text, speed = 40 }: { text: string; speed?: number }) => {
+const ScrambleText = ({
+  text,
+  speed = 40,
+}: {
+  text: string;
+  speed?: number;
+}) => {
   const [displayed, setDisplayed] = useState("");
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -68,7 +74,8 @@ const ScrambleText = ({ text, speed = 40 }: { text: string; speed?: number }) =>
         .join("");
       setDisplayed(scrambled);
       localFrame++;
-      if (localFrame > text.length && intervalRef.current !== null) clearInterval(intervalRef.current);
+      if (localFrame > text.length && intervalRef.current !== null)
+        clearInterval(intervalRef.current);
     }, speed);
 
     return () => {
@@ -77,7 +84,10 @@ const ScrambleText = ({ text, speed = 40 }: { text: string; speed?: number }) =>
   }, [text, speed]);
 
   return (
-    <span className="text-base-content font-mono block h-[1.5em] sm:h-[1.8em] md:h-[2em] lg:h-[2.2em] xl:h-[2.4em] 2xl:h-[2.6em] text-pretty" dangerouslySetInnerHTML={{ __html: displayed }} />
+    <span
+      className="text-base-content font-mono block h-[1.5em] sm:h-[1.8em] md:h-[2em] lg:h-[2.2em] xl:h-[2.4em] 2xl:h-[2.6em] text-pretty"
+      dangerouslySetInnerHTML={{ __html: displayed }}
+    />
   );
 };
 
@@ -86,7 +96,15 @@ const HeroSection = () => {
   const [index, setIndex] = useState(0);
   const [currentPhrase, setCurrentPhrase] = useState("");
   const phrases = useMemo(
-    () => [t("phrases.0"), t("phrases.1"), t("phrases.2"), t("phrases.3"), t("phrases.4"), t("phrases.5"), t("phrases.6")],
+    () => [
+      t("phrases.0"),
+      t("phrases.1"),
+      t("phrases.2"),
+      t("phrases.3"),
+      t("phrases.4"),
+      t("phrases.5"),
+      t("phrases.6"),
+    ],
     [t]
   );
 
@@ -94,7 +112,7 @@ const HeroSection = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex(prev => (prev + 1) % phrases.length);
+      setIndex((prev) => (prev + 1) % phrases.length);
       setCurrentPhrase(phrases[(index + 1) % phrases.length]);
     }, 8000);
     return () => clearInterval(interval);
@@ -118,20 +136,30 @@ const HeroSection = () => {
 
   return (
     <section className="min-h-screen flex flex-col justify-center items-center px-4 relative overflow-hidden">
-      <motion.div className="text-center z-10 relative" initial="hidden" animate="visible" variants={containerVariants}>
-        <motion.h1 variants={itemVariants} className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
+      <motion.div
+        className="text-center z-10 relative"
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
+        <motion.h1
+          variants={itemVariants}
+          className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
+        >
           <span className="inline-block">
             <span className="relative inline-block">
               <AnimatedText translationKey="home.heroTitle" animated={true} />
             </span>
           </span>
         </motion.h1>
-        <motion.div className="text-xl font-medium mb-14 max-w-2xl mx-auto" variants={itemVariants}>
+        <motion.div
+          className="text-xl font-medium mb-14 max-w-2xl mx-auto"
+          variants={itemVariants}
+        >
           <div className="relative inline-block font-mono">
             <ScrambleText text={currentPhrase} speed={30} />
           </div>
         </motion.div>
-
       </motion.div>
     </section>
   );
@@ -142,12 +170,21 @@ const QuickAbout = () => {
   return (
     <section className="py-16 sm:py-20 bg-base-200/40">
       <div className="container mx-auto px-6">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeIn}>
-          <motion.h2 className="text-3xl md:text-4xl font-bold mb-20" variants={fadeIn} custom={0}>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeIn}
+        >
+          <motion.h2
+            className="text-3xl md:text-4xl font-bold mb-10"
+            variants={fadeIn}
+            custom={0}
+          >
             {t("title")}
           </motion.h2>
           <motion.p
-            className="text-base sm:text-lg max-w-2xl mx-auto"
+            className="text-base sm:text-lg max-w-2xl mx-auto leading-8 text-pretty"
             variants={fadeIn}
             custom={1}
             dangerouslySetInnerHTML={{ __html: t.raw("text") as string }}
@@ -168,14 +205,30 @@ const SkillsSection = () => {
   return (
     <section className="py-16 sm:py-20">
       <div className="container mx-auto px-6">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={listContainerVariants}>
-          <motion.h2 className="text-3xl md:text-4xl font-bold mb-20" variants={listItemVariants}>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={listContainerVariants}
+        >
+          <motion.h2
+            className="text-3xl md:text-4xl font-bold mb-10"
+            variants={listItemVariants}
+          >
             {t("title")}
           </motion.h2>
-          <motion.div className="grid md:grid-cols-2 gap-8" variants={listContainerVariants}>
+          <motion.div
+            className="grid md:grid-cols-2 gap-8"
+            variants={listContainerVariants}
+          >
             <motion.div variants={listItemVariants}>
-              <h3 className="text-xl font-semibold mb-2">{t("languages.title")}</h3>
-              <motion.ul className="list-disc list-inside space-y-2" variants={listContainerVariants}>
+              <h3 className="text-xl font-semibold mb-4">
+                {t("languages.title")}
+              </h3>
+              <motion.ul
+                className="list-disc list-inside leading-8 text-pretty"
+                variants={listContainerVariants}
+              >
                 {languages.map((item, index) => (
                   <motion.li key={index} variants={listItemVariants}>
                     {item}
@@ -184,8 +237,13 @@ const SkillsSection = () => {
               </motion.ul>
             </motion.div>
             <motion.div variants={listItemVariants}>
-              <h3 className="text-xl font-semibold mb-2">{t("frameworks.title")}</h3>
-              <motion.ul className="list-disc list-inside space-y-2" variants={listContainerVariants}>
+              <h3 className="text-xl font-semibold mb-4">
+                {t("frameworks.title")}
+              </h3>
+              <motion.ul
+                className="list-disc list-inside leading-8 text-pretty"
+                variants={listContainerVariants}
+              >
                 {frameworks.map((item, index) => (
                   <motion.li key={index} variants={listItemVariants}>
                     {item}
@@ -205,14 +263,24 @@ const ExperienceSection = () => {
   return (
     <section className="py-16 sm:py-20 bg-base-200/40">
       <div className="container mx-auto px-6">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={listContainerVariants}>
-          <motion.h2 className="text-3xl md:text-4xl font-bold mb-20" variants={listItemVariants}>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={listContainerVariants}
+        >
+          <motion.h2
+            className="text-3xl md:text-4xl font-bold mb-20"
+            variants={listItemVariants}
+          >
             {t("title")}
           </motion.h2>
           <motion.div className="space-y-20" variants={listContainerVariants}>
             <motion.div variants={listItemVariants}>
               <h3 className="text-xl font-semibold">{t("freelance.title")}</h3>
-              <p className="text-base-content/70">{t("freelance.description")}</p>
+              <p className="text-base-content/70">
+                {t("freelance.description")}
+              </p>
             </motion.div>
             <motion.div variants={listItemVariants}>
               <h3 className="text-xl font-semibold">{t("asus.title")}</h3>
@@ -232,15 +300,19 @@ const ExperienceSection = () => {
 const ContactForm = () => {
   const t = useTranslations();
   const [formState, setFormState] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState<null | boolean>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
 
@@ -251,7 +323,7 @@ const ContactForm = () => {
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitSuccess(true);
-      setFormState({ name: '', email: '', subject: '', message: '' });
+      setFormState({ name: "", email: "", subject: "", message: "" });
     }, 1200);
   };
 
@@ -283,7 +355,10 @@ const ContactForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label htmlFor="name" className="block text-sm font-medium">
-                  <AnimatedText translationKey="contact.name" animated={false} />
+                  <AnimatedText
+                    translationKey="contact.name"
+                    animated={false}
+                  />
                 </label>
                 <motion.input
                   type="text"
@@ -293,14 +368,17 @@ const ContactForm = () => {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 rounded-lg border border-base-300 bg-base-200/50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-                  placeholder={t("contact.name") + '...'}
+                  placeholder={t("contact.name") + "..."}
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.2 }}
                 />
               </div>
               <div className="space-y-2">
                 <label htmlFor="email" className="block text-sm font-medium">
-                  <AnimatedText translationKey="contact.email" animated={false} />
+                  <AnimatedText
+                    translationKey="contact.email"
+                    animated={false}
+                  />
                 </label>
                 <motion.input
                   type="email"
@@ -310,7 +388,7 @@ const ContactForm = () => {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 rounded-lg border border-base-300 bg-base-200/50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-                  placeholder={t("contact.email") + '...'}
+                  placeholder={t("contact.email") + "..."}
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.2 }}
                 />
@@ -318,7 +396,10 @@ const ContactForm = () => {
             </div>
             <div className="space-y-2">
               <label htmlFor="subject" className="block text-sm font-medium">
-                <AnimatedText translationKey="contact.subject" animated={false} />
+                <AnimatedText
+                  translationKey="contact.subject"
+                  animated={false}
+                />
               </label>
               <motion.select
                 id="subject"
@@ -330,16 +411,23 @@ const ContactForm = () => {
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.2 }}
               >
-                <option value="" disabled>{t("contact.subject")}</option>
+                <option value="" disabled>
+                  {t("contact.subject")}
+                </option>
                 <option value="projet">{t("contact.project")}</option>
-                <option value="collaboration">{t("contact.collaborate")}</option>
+                <option value="collaboration">
+                  {t("contact.collaborate")}
+                </option>
                 <option value="question">{t("contact.question")}</option>
                 <option value="autre">{t("contact.other")}</option>
               </motion.select>
             </div>
             <div className="space-y-2">
               <label htmlFor="message" className="block text-sm font-medium">
-                <AnimatedText translationKey="contact.message" animated={false} />
+                <AnimatedText
+                  translationKey="contact.message"
+                  animated={false}
+                />
               </label>
               <motion.textarea
                 id="message"
@@ -349,7 +437,7 @@ const ContactForm = () => {
                 required
                 rows={6}
                 className="w-full px-4 py-3 rounded-lg border border-base-300 bg-base-200/50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-                placeholder={t("contact.message") + '...'}
+                placeholder={t("contact.message") + "..."}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.2 }}
               ></motion.textarea>
@@ -368,7 +456,10 @@ const ContactForm = () => {
                     {t("contact.sending")}
                   </>
                 ) : (
-                  <AnimatedText translationKey="contact.send" animated={false} />
+                  <AnimatedText
+                    translationKey="contact.send"
+                    animated={false}
+                  />
                 )}
               </motion.button>
               {submitSuccess === true && (
@@ -377,7 +468,10 @@ const ContactForm = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-4 p-4 bg-success/20 text-success rounded-lg"
                 >
-                  <AnimatedText translationKey="contact.success" animated={false} />
+                  <AnimatedText
+                    translationKey="contact.success"
+                    animated={false}
+                  />
                 </motion.div>
               )}
               {submitSuccess === false && (
@@ -386,7 +480,10 @@ const ContactForm = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-4 p-4 bg-error/20 text-error rounded-lg"
                 >
-                  <AnimatedText translationKey="contact.error" animated={false} />
+                  <AnimatedText
+                    translationKey="contact.error"
+                    animated={false}
+                  />
                 </motion.div>
               )}
             </div>
@@ -399,4 +496,3 @@ const ContactForm = () => {
     </section>
   );
 };
-
