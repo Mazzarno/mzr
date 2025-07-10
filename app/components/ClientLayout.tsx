@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef, memo } from "react";
 import Loading from "./Loading";
-import { usePathname } from "next/navigation";
 import TransitionLink from "./TransitionLink";
 import {
   motion,
@@ -322,7 +321,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const [showLoader, setShowLoader] = useState(true);
   const isInitialRender = useRef(true);
   const [isMobile, setIsMobile] = useState(false);
-  const pathname = usePathname();
+
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const constraintsRef = useRef<HTMLDivElement>(null);
@@ -561,13 +560,13 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                   tabIndex={0}
                 >
                   <div className="lenis-content">
-                    <div key={pathname}>{children}</div>
+                    <div>{children}</div>
                   </div>
                   <SmoothScroll />
                 </motion.div>
               </>
             </Transition>
-            <MemoizedFooter isMobile={isMobile} pathname={pathname} />
+            <MemoizedFooter isMobile={isMobile} />
           </motion.div>
         </motion.div>
       </div>
