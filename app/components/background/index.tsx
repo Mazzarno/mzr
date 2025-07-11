@@ -9,7 +9,8 @@ import { Canvas } from "@react-three/fiber";
 import { EffectComposer, ChromaticAberration, Noise } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
 import { Vector2 } from "three";
-import Model from "./Model";
+import ModelShapes from "./ModelShapes";
+import ModelNuage from "./ModelNuage";
 import { Environment } from "@react-three/drei";
 import { useMotionValue, useSpring } from "framer-motion";
 import { useTheme } from "next-themes";
@@ -140,7 +141,8 @@ export default function Background() {
           />
           <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} opacity={0.01} />
         </EffectComposer>
-        <Model mouse={smoothMouse} currentTheme={currentTheme} />
+        <ModelShapes mouse={smoothMouse} currentTheme={currentTheme} />
+       {/* <ModelNuage mouse={smoothMouse} currentTheme={currentTheme} /> */}
         <Environment preset="city" background={false} />
       </Suspense>
     </Canvas>
