@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+/*import React, { useEffect, useState, useRef } from "react";
 import { useGLTF, Float } from "@react-three/drei";
 import { useTransform } from "framer-motion";
 import { motion } from "framer-motion-3d";
@@ -266,3 +266,4 @@ function Mesh({
     </Float>
   );
 }
+*/
