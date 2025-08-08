@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useEffect, useState, useMemo, useCallback, useContext } from "react";
+import React, {
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+  useContext,
+} from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -25,39 +31,37 @@ interface MobileMenuProps {
   navLinks: NavLink[];
 }
 
-// Static cache pour les pixels
 const staticPixelsCache: Record<string, Pixel[]> = {};
 
-// Configuration de la grille
 const GRID_COLS = 6;
 const GRID_ROWS = 12;
 const ANIMATION_DURATION = 600;
 
-const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, navLinks }) => {
+const MobileMenu: React.FC<MobileMenuProps> = ({
+  isOpen,
+  onClose,
+  navLinks,
+}) => {
   const t = useTranslations();
   const { startTransition, isTransitioning } = useContext(TransitionContext);
   const [isClosing, setIsClosing] = useState(false);
   const [selectedLink, setSelectedLink] = useState<string | null>(null);
 
-  // Génération des pixels pour l'animation
   const generatePixels = useCallback(() => {
     const cacheKey = `${GRID_COLS}-${GRID_ROWS}`;
-    
+
     if (staticPixelsCache[cacheKey]) {
       return staticPixelsCache[cacheKey];
     }
-    
+
     const pixels: Pixel[] = [];
     const totalPixels = GRID_COLS * GRID_ROWS;
 
-    // Création d'une séquence d'indices mélangée
     const indices = Array.from({ length: totalPixels }, (_, i) => i);
     for (let i = indices.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [indices[i], indices[j]] = [indices[j], indices[i]];
     }
-
-    // Génération des pixels avec délais randomisés
     indices.forEach((index, i) => {
       pixels.push({
         id: index,
@@ -73,40 +77,38 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, navLinks }) =>
 
   const pixels = useMemo(generatePixels, [generatePixels]);
 
-  // Gestion de la fermeture du menu
   const handleClose = useCallback(() => {
     if (isClosing) return;
-    
+
     setIsClosing(true);
     onClose();
-    
+
     setTimeout(() => {
       setIsClosing(false);
       setSelectedLink(null);
     }, ANIMATION_DURATION);
   }, [isClosing, onClose]);
 
-  // Gestion des clics sur les liens
-  const handleLinkClick = useCallback((href: string) => {
-    if (isClosing || isTransitioning) return;
-    
-    setSelectedLink(href);
-    handleClose();
-    
-    // On utilise le système de transition après que le menu soit fermé
-    setTimeout(() => {
-      startTransition(href);
-    }, 100);
-  }, [isClosing, isTransitioning, handleClose, startTransition]);
+  const handleLinkClick = useCallback(
+    (href: string) => {
+      if (isClosing || isTransitioning) return;
 
-  // Effet pour gérer la navigation après fermeture
+      setSelectedLink(href);
+      handleClose();
+
+      setTimeout(() => {
+        startTransition(href);
+      }, 100);
+    },
+    [isClosing, isTransitioning, handleClose, startTransition]
+  );
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
-    
+
     return () => {
       document.body.style.overflow = "";
     };
@@ -206,12 +208,15 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, navLinks }) =>
                     <button
                       onClick={() => handleLinkClick(link.href)}
                       className={`w-full flex items-center justify-center p-3 rounded-lg text-xl font-medium 
-                        ${selectedLink === link.href
-                          ? "bg-primary text-primary-content"
-                          : "bg-base-200 text-base-content hover:bg-base-300"
+                        ${
+                          selectedLink === link.href
+                            ? "bg-primary text-primary-content"
+                            : "bg-base-200 text-base-content hover:bg-base-300"
                         } transition-colors`}
                       disabled={isClosing}
-                      style={isClosing ? { pointerEvents: 'none', opacity: 0.7 } : {}}
+                      style={
+                        isClosing ? { pointerEvents: "none", opacity: 0.7 } : {}
+                      }
                     >
                       {link.icon && <span className="mr-3">{link.icon}</span>}
                       {t(link.labelKey)}

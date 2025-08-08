@@ -4,7 +4,7 @@ import { useTransform } from "framer-motion";
 import { motion } from "framer-motion-3d";
 
 export default function ModelNuage({ mouse, currentTheme }) {
-  const { nodes } = useGLTF('/medias/nuage.glb');
+  const { nodes } = useGLTF('/3d/nuage.glb');
 
   const [scaleFactor, setScaleFactor] = useState(1);
 
@@ -174,7 +174,7 @@ export default function ModelNuage({ mouse, currentTheme }) {
   )
 }
 
-useGLTF.preload('/medias/nuage.glb');
+useGLTF.preload('/3d/nuage.glb');
 
 function Mesh({ 
   node,

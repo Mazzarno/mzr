@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, memo } from "react";
 import Loading from "./Loading";
-import TransitionLink from "./TransitionLink";
+import TransitionLink from "../TransitionLink";
 import {
   motion,
   useMotionValue,
@@ -10,14 +10,15 @@ import {
   animate,
   DragControls,
 } from "framer-motion";
-import ThemeSwitcher from "./ThemeSwitch";
-import Logo from "./Logo";
+import ThemeSwitcher from "../ThemeSwitch";
+import Logo from "../Logo";
 import { Github, Linkedin, Mail, Maximize, Minimize } from "lucide-react";
-import Background from "./background";
+import Background from "../background";
 import dynamic from "next/dynamic";
 import LanguageSwitcher from "./LanguageSwitcher";
 import Transition from "./Transition";
 import SmoothScroll from "./SmoothScroll";
+import Noise from "../shared/Noise";
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -34,39 +35,41 @@ const FaviconUpdater = dynamic(() => import("./FaviconUpdater"), {
 
 const MemoizedGrid = memo(function Grid() {
   return (
-    <motion.div
-      className="
+    <>
+      <motion.div
+        className="
         fixed inset-0
         grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5
-             lg:grid-cols-7 xl:grid-cols-9 2xl:grid-cols-11
+        lg:grid-cols-7 xl:grid-cols-9 2xl:grid-cols-11
         divide-x-2 divide-dashed
         pointer-events-none
         opacity-30
       "
-      initial={{ opacity: 0 }}
-      animate={{
-        opacity: [0.5, 0.7, 1, 0.7, 0.5],
-      }}
-      transition={{
-        duration: 5,
-        ease: "easeInOut",
-        repeat: Infinity,
-        repeatType: "reverse",
-      }}
-    >
-      {[...Array(11)].map((_, i) => (
-        <div
-          key={i}
-          className={`
+        initial={{ opacity: 0 }}
+        animate={{
+          opacity: [0.5, 0.7, 1, 0.7, 0.5],
+        }}
+        transition={{
+          duration: 5,
+          ease: "easeInOut",
+          repeat: Infinity,
+          repeatType: "reverse",
+        }}
+      >
+        {[...Array(11)].map((_, i) => (
+          <div
+            key={i}
+            className={`
             ${i >= 2 ? "hidden sm:block" : ""}
             ${i >= 3 ? "hidden md:block" : ""}
             ${i >= 5 ? "hidden lg:block" : ""}
             ${i >= 7 ? "hidden xl:block" : ""}
             ${i >= 9 ? "hidden 2xl:block" : ""}
           `}
-        />
-      ))}
-    </motion.div>
+          />
+        ))}
+      </motion.div>
+    </>
   );
 });
 const MemoizedNavigation = memo(function Navigation() {
@@ -110,10 +113,10 @@ const MemoizedNavigation = memo(function Navigation() {
               className="transition-transform duration-300 transform group-hover:-translate-y-5"
               style={{ transformStyle: "preserve-3d" }}
             >
-              <span className="block text-sm tracking-widest font-medium">
+              <span className="block text-sm tracking-widest font-dm-sans font-medium">
                 Germain
               </span>
-              <span className="block text-sm tracking-widest font-medium">
+              <span className="block text-sm tracking-widest font-dm-sans font-medium">
                 Alexis
               </span>
             </div>
@@ -354,7 +357,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   if (showLoader) {
     return (
       <Loading
-        duration={2}
+        duration={3}
         onLoadComplete={() => {
           setShowLoader(false);
         }}
@@ -409,9 +412,9 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
           <Background />
         </motion.div>
         <MemoizedGrid />
-        <motion.div
+        <motion.main
           className={
-            "relative overflow-hidden z-10 backdrop-blur-sm scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)] shadowz"
+            "relative overflow-hidden z-10 bg-neutral/10 backdrop-blur-xs scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)] shadowz"
           }
           animate={{
             width: isReduced ? "90vw" : "100vw",
@@ -560,6 +563,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                   tabIndex={0}
                 >
                   <div className="lenis-content">
+                    <Noise />
                     <div>{children}</div>
                   </div>
                   <SmoothScroll />
@@ -568,7 +572,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             </Transition>
             <MemoizedFooter isMobile={isMobile} />
           </motion.div>
-        </motion.div>
+        </motion.main>
       </div>
     </>
   );

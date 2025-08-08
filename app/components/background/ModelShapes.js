@@ -12,11 +12,9 @@ export default function Model({ mouse, currentTheme }) {
 
     if (w < 768) {
       return Math.min(w, h) / 850;
-    }
-    else if (w < 1280) {
+    } else if (w < 1280) {
       return Math.min(w, h) / 1000;
-    }
-    else {
+    } else {
       return Math.min(w, h) / 900;
     }
   };
@@ -25,9 +23,9 @@ export default function Model({ mouse, currentTheme }) {
     const handleResize = () => {
       setScaleFactor(computeScale());
     };
-    handleResize(); // set au mount
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const [activeShape, setActiveShape] = useState(1);
@@ -67,122 +65,43 @@ export default function Model({ mouse, currentTheme }) {
     };
   }, []);
 
-  const { nodes } = useGLTF("/medias/shapes.glb");
-  return (
-    <motion.group
-      initial={{ scaleX: 0, y: 500 }}
-      animate={{ scaleX: 1, y: 0 }}
-      transition={{
-        duration: 1.5,
-        ease: [0.215, 0.61, 0.355, 1],
+  const { nodes } = useGLTF("/3d/shapes.glb");
 
-      }}
-      scale={[scaleFactor, scaleFactor, scaleFactor]}
-    >
-      <Mesh
-        node={nodes.Sphere001}
-        multiplier={2.4}
-        mouse={mouse}
-        isActive={activeShape == 1}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Sphere002}
-        multiplier={2.4}
-        mouse={mouse}
-        isActive={activeShape == 2}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Cylinder002}
-        multiplier={1.2}
-        mouse={mouse}
-        isActive={activeShape == 3}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Sphere003}
-        multiplier={1}
-        mouse={mouse}
-        isActive={activeShape == 4}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Cylinder003}
-        multiplier={1.8}
-        mouse={mouse}
-        isActive={activeShape == 5}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Cylinder005}
-        multiplier={1.8}
-        mouse={mouse}
-        isActive={activeShape == 6}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Cube002}
-        multiplier={2}
-        mouse={mouse}
-        isActive={activeShape == 7}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Cylinder006}
-        multiplier={1.2}
-        mouse={mouse}
-        isActive={activeShape == 8}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Cylinder007}
-        multiplier={1.6}
-        mouse={mouse}
-        isActive={activeShape == 9}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Cylinder009}
-        multiplier={1.8}
-        mouse={mouse}
-        isActive={activeShape == 10}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
-      <Mesh
-        node={nodes.Sphere}
-        multiplier={1.5}
-        mouse={mouse}
-        isActive={activeShape == 11}
-        isDarkTheme={isDarkTheme}
-        lightColor={lightThemeColor}
-        darkColor={darkThemeColor}
-      />
+  const meshes = [
+    { node: nodes.Sphere001, multiplier: 2.4, initialPosition: { x: 0, y: 15, z: 0 }, delay: 0.1 },
+    { node: nodes.Sphere002, multiplier: 2.4, initialPosition: { x: 5, y: -10, z: 2 }, delay: 0.2 },
+    { node: nodes.Cylinder002, multiplier: 1.2, initialPosition: { x: -5, y: -8, z: -2 }, delay: 0.3 },
+    { node: nodes.Sphere003, multiplier: 1, initialPosition: { x: 10, y: 5, z: -5 }, delay: 0.4 },
+    { node: nodes.Cylinder003, multiplier: 1.8, initialPosition: { x: -10, y: 8, z: 5 }, delay: 0.5 },
+    { node: nodes.Cylinder005, multiplier: 1.8, initialPosition: { x: 8, y: -12, z: 3 }, delay: 0.6 },
+    { node: nodes.Cube002, multiplier: 2, initialPosition: { x: -8, y: 12, z: -3 }, delay: 0.7 },
+    { node: nodes.Cylinder006, multiplier: 1.2, initialPosition: { x: 4, y: 10, z: 4 }, delay: 0.8 },
+    { node: nodes.Cylinder007, multiplier: 1.6, initialPosition: { x: -4, y: -10, z: -4 }, delay: 0.9 },
+    { node: nodes.Cylinder009, multiplier: 1.8, initialPosition: { x: 12, y: 0, z: 0 }, delay: 1.0 },
+    { node: nodes.Sphere, multiplier: 1.5, initialPosition: { x: -12, y: 0, z: 0 }, delay: 1.1 },
+  ];
+
+  return (
+    <motion.group scale={[scaleFactor, scaleFactor, scaleFactor]}>
+       {meshes.map((meshData, index) => (
+        <Mesh
+          key={index}
+          node={meshData.node}
+          multiplier={meshData.multiplier}
+          mouse={mouse}
+          isActive={activeShape === index + 1}
+          isDarkTheme={isDarkTheme}
+          lightColor={lightThemeColor}
+          darkColor={darkThemeColor}
+          initialPosition={meshData.initialPosition}
+          delay={meshData.delay}
+        />
+      ))}
     </motion.group>
   );
 }
 
-useGLTF.preload("/medias/shapes.glb");
+useGLTF.preload("/3d/shapes.glb");
 
 function Mesh({
   node,
@@ -192,6 +111,8 @@ function Mesh({
   isDarkTheme,
   lightColor,
   darkColor,
+  initialPosition,
+  delay,
 }) {
   const { geometry, position, scale, rotation } = node;
   const a = multiplier / 2;
@@ -224,30 +145,36 @@ function Mesh({
   };
 
   return (
-    <Float speed={0.5} rotationIntensity={0.5} floatIntensity={0.5}>
-      <motion.mesh
-        castShadow={false}
-        receiveShadow={false}
-        geometry={geometry}
-        position={position}
-        rotation={rotation}
-        scale={scale}
-        rotation-y={rotationX}
-        rotation-x={rotationY}
-        position-x={positionX}
-        position-y={positionY}
-        animate={{
-          rotateZ: isActive ? rotation.z + getRandomMultiplier() : null,
-        }}
-        transition={{ type: "spring", stiffness: 50, damping: 80, mass: 2 }}
-      >
-        <meshStandardMaterial
-          color={isDarkTheme ? darkColor : lightColor}
-          roughness={0.6}
-          metalness={0.1}
-          flatShading={true}
-        />
-      </motion.mesh>
-    </Float>
+    <motion.group
+      initial={{ ...initialPosition, scale: 0 }}
+      animate={{ x: 0, y: 0, z: 0, scale: 1 }}
+      transition={{ duration: 1.5, delay, ease: "easeInOut" }}
+    >
+      <Float speed={0.5} rotationIntensity={0.5} floatIntensity={0.5}>
+        <motion.mesh
+          castShadow={false}
+          receiveShadow={false}
+          geometry={geometry}
+          position={position}
+          rotation={rotation}
+          scale={scale}
+          rotation-y={rotationX}
+          rotation-x={rotationY}
+          position-x={positionX}
+          position-y={positionY}
+          animate={{
+            rotateZ: isActive ? rotation.z + getRandomMultiplier() : null,
+          }}
+          transition={{ type: "spring", stiffness: 50, damping: 80, mass: 2 }}
+        >
+          <meshStandardMaterial
+            color={isDarkTheme ? darkColor : lightColor}
+            roughness={0.6}
+            metalness={0.1}
+            flatShading={true}
+          />
+        </motion.mesh>
+      </Float>
+    </motion.group>
   );
 }

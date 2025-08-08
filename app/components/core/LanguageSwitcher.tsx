@@ -9,7 +9,7 @@ const LanguageSwitcher = memo(function LanguageSwitcher() {
   const toggleLanguage = useCallback(() => {
     const newLocale = locale === "fr" ? "en" : "fr";
     setLocale(newLocale);
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       window.localStorage.setItem("locale", newLocale);
     }
   }, [locale, setLocale]);
@@ -21,18 +21,18 @@ const LanguageSwitcher = memo(function LanguageSwitcher() {
         style={{ transformStyle: "preserve-3d" }}
       >
         <div className="block">
-          <button 
-            onClick={toggleLanguage} 
-            className="text-sm text-neutral-content focus:outline-none"
+          <button
+            onClick={toggleLanguage}
+            className="text-sm text-neutral-content focus:outline-none font-dm-sans font-medium"
             aria-label={`Switch to ${locale === "fr" ? "English" : "French"}`}
           >
             {locale === "fr" ? "FR" : "EN"}
           </button>
         </div>
         <div className="block">
-          <button 
-            onClick={toggleLanguage} 
-            className="text-sm text-neutral-content focus:outline-none"
+          <button
+            onClick={toggleLanguage}
+            className="text-sm text-neutral-content focus:outline-none font-dm-sans font-medium"
             aria-label={`Switch to ${locale === "fr" ? "English" : "French"}`}
           >
             {locale === "fr" ? "EN" : "FR"}

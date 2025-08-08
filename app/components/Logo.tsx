@@ -1,10 +1,10 @@
 "use client";
 import { motion } from "framer-motion";
-export default function Logo() {
+export default function Logo({ className }: { className?: string }) {
   return (
     <motion.svg
       viewBox="0 0 65 120"
-      className="relative h-5.5 w-auto logo"
+      className={`relative h-5.5 w-auto logo ${className || ""}`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       whileTap={{ scale: 0.9 }}
