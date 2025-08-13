@@ -414,19 +414,33 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         <MemoizedGrid />
         <motion.main
           className={
-            "relative overflow-hidden z-10 bg-neutral/10 backdrop-blur-xs scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)] shadowz"
+            "relative overflow-hidden z-10 bg-neutral/10 backdrop-blur-xs scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)] shadowz will-change-transform will-change-opacity"
           }
+          initial={{ opacity: 0, scale: 0.94, y: 16, filter: "blur(8px)" }}
           animate={{
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            filter: "blur(0px)",
             width: isReduced ? "90vw" : "100vw",
             height: isReduced ? "90dvh" : "100dvh",
             borderRadius: isReduced ? "1rem" : "0rem",
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 160,
+            damping: 22,
+            mass: 0.9,
+            opacity: { duration: 0.5, ease: "easeOut" },
+            filter: { duration: 0.5, ease: "easeOut" },
+            borderRadius: { delay: 0.15, duration: 1, ease: "easeOut" },
           }}
           drag={!isReduced ? false : true}
           dragListener={false}
           dragControls={dragControls}
           dragElastic={0.7}
           whileDrag={{ scale: 1 }}
-          style={{ x, y }}
+          style={{ x, y, transformOrigin: "50% 40%" }}
           dragConstraints={constraintsRef}
           dragMomentum={false}
           onDragEnd={() => {
@@ -434,6 +448,18 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             animate(y, 0, { type: "spring", stiffness: 100, damping: 15 });
           }}
         >
+          {/* Subtle vignette sweep on open */}
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 0.18, 0.08] }}
+            transition={{ duration: 1.2, times: [0, 0.6, 1], ease: "easeOut" }}
+            style={{
+              background:
+                "radial-gradient(120% 120% at 50% 50%, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0) 60%)",
+            }}
+            aria-hidden
+          />
           <DraggableBorders dragControls={dragControls} />
           {/* CustomBorderRadius Bottom left corner */}
           <div className="absolute bottom-3 left-3 -rotate-90 z-70">

@@ -1,8 +1,9 @@
 "use client";
-import React, { useEffect, useRef, useMemo, useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import AnimatedText from "./components/AnimatedText";
 import { useTranslations } from "next-intl";
+import TextType from "./components/shared/TextType";
 
 export default function HomePage() {
   return (
@@ -48,76 +49,7 @@ const listItemVariants = {
   },
 };
 
-const ScrambleText = ({
-  text,
-  speed = 40,
-}: {
-  text: string;
-  speed?: number;
-}) => {
-  const [displayed, setDisplayed] = useState("");
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    const chars = "!<>-_\\/[]{}—=+*^?#";
-    let scrambled = "";
-    let localFrame = 0;
-    if (intervalRef.current !== null) clearInterval(intervalRef.current);
-
-    intervalRef.current = setInterval(() => {
-      scrambled = text
-        .split("")
-        .map((char, i) => {
-          if (i < localFrame) return text[i];
-          return chars[Math.floor(Math.random() * chars.length)];
-        })
-        .join("");
-      setDisplayed(scrambled);
-      localFrame++;
-      if (localFrame > text.length && intervalRef.current !== null)
-        clearInterval(intervalRef.current);
-    }, speed);
-
-    return () => {
-      if (intervalRef.current !== null) clearInterval(intervalRef.current);
-    };
-  }, [text, speed]);
-
-  return (
-    <span
-      className="text-base-content font-mono block h-[1.5em] sm:h-[1.8em] md:h-[2em] lg:h-[2.2em] xl:h-[2.4em] 2xl:h-[2.6em] text-pretty"
-      dangerouslySetInnerHTML={{ __html: displayed }}
-    />
-  );
-};
-
 const HeroSection = () => {
-  const t = useTranslations("home");
-  const [index, setIndex] = useState(0);
-  const [currentPhrase, setCurrentPhrase] = useState("");
-  const phrases = useMemo(
-    () => [
-      t("phrases.0"),
-      t("phrases.1"),
-      t("phrases.2"),
-      t("phrases.3"),
-      t("phrases.4"),
-      t("phrases.5"),
-      t("phrases.6"),
-    ],
-    [t]
-  );
-
-  useEffect(() => setCurrentPhrase(phrases[index]), [phrases, index]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % phrases.length);
-      setCurrentPhrase(phrases[(index + 1) % phrases.length]);
-    }, 8000);
-    return () => clearInterval(interval);
-  }, [index, phrases]);
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -152,14 +84,21 @@ const HeroSection = () => {
             </span>
           </span>
         </motion.h1>
-        <motion.div
-          className="text-xl font-medium mb-14 max-w-2xl mx-auto"
-          variants={itemVariants}
-        >
-          <div className="relative inline-block font-mono">
-            <ScrambleText text={currentPhrase} speed={30} />
-          </div>
-        </motion.div>
+        <TextType
+          translationKeys={[
+            "home.phrases.0",
+            "home.phrases.1",
+            "home.phrases.2",
+            "home.phrases.3",
+            "home.phrases.4",
+            "home.phrases.5",
+            "home.phrases.6",
+          ]}
+          typingSpeed={75}
+          pauseDuration={3000}
+          showCursor={true}
+          cursorCharacter="|"
+        />
       </motion.div>
     </section>
   );

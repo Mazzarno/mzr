@@ -9,7 +9,7 @@ import BlurText from "../shared/BlurText";
 import Logo from "../Logo";
 
 interface LoadingProps {
-  duration?: number; //
+  duration?: number;
   onLoadComplete?: () => void;
 }
 const Loading: React.FC<LoadingProps> = ({
@@ -28,7 +28,6 @@ const Loading: React.FC<LoadingProps> = ({
     setIsTitleAnimationComplete(true);
   };
 
-  // Phase 1 — chargement simulé jusqu'à 50%
   useEffect(() => {
     if (phase !== "fake" || !isTitleAnimationComplete) return;
 
@@ -46,7 +45,6 @@ const Loading: React.FC<LoadingProps> = ({
     return () => clearInterval(interval);
   }, [phase, isTitleAnimationComplete]);
 
-  // Détection de chargement complet du DOM
   useEffect(() => {
     const handleLoad = () => setDomLoaded(true);
     if (document.readyState === "complete") {
@@ -57,7 +55,6 @@ const Loading: React.FC<LoadingProps> = ({
     }
   }, []);
 
-  // Phase 2 — animation 50 → 100% quand tout est chargé
   useEffect(() => {
     if (phase !== "wait") return;
     if (!domLoaded || r3fProgress < 100) return;
