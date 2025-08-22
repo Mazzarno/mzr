@@ -356,22 +356,23 @@ const ProjectsSection = () => {
               delay={5000}
               pauseOnHover={true}
             >
-              <Card headerTitle="Asus - PBA" headerLogoSrc="/logodark.svg" />
-              <Card headerTitle="Maxime Caro" headerLogoSrc="/logodark.svg" />
+              <Card headerTitle="Asus - PBA" headerLogoSrc="/favpba.png" imageSrc="/pba.png" />
+              <Card headerTitle="Maxime Caro" headerLogoSrc="/favmax.png" imageSrc="/maximecaro.png"/>
               <Card
                 headerTitle="Asus - Zenphone 10"
-                headerLogoSrc="/logolight.svg"
-                imageSrc="/zenphone.gif"
+                headerLogoSrc="/favasus.png"
+                imageSrc="/asuszen.png"
               />
               <Card
                 headerTitle="Barbin CPS"
-                headerLogoSrc="/logodark.svg"
-                imageSrc="/barbin.gif"
+                headerLogoSrc="/favcps.png"
+                imageSrc="/barbncps.png"
               />
 
               <Card
                 headerTitle="Les Gamins Marais"
-                headerLogoSrc="/logodark.svg"
+                headerLogoSrc="/favgamins.png"
+
               />
             </CardSwap>
           </div>

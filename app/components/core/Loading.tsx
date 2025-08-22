@@ -139,7 +139,7 @@ const Loading: React.FC<LoadingProps> = ({
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="flex flex-col items-center justify-center min-h-screen min-w-full bg-gradient-to-bl from-base-200/50 to-base-100 px-2 sm:px-0 z-[9999]"
+          className="flex flex-col items-center justify-center min-h-screen min-w-screen max-h-screen max-w-screen bg-gradient-to-bl from-base-200/50 to-base-100 px-2 sm:px-0 z-[9999]"
         >
           <motion.div
             className="flex flex-col items-center space-y-10"
