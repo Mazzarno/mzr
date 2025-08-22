@@ -4,6 +4,33 @@ import { motion } from "framer-motion";
 import AnimatedText from "./components/AnimatedText";
 import { useTranslations } from "next-intl";
 import TextType from "./components/shared/TextType";
+import BlurText from "./components/shared/BlurText";
+import CardSwap, { Card } from "./components/shared/CardSwap";
+import LogoLoop from "./components/shared/LogoLoop";
+import {
+  SiHtml5,
+  SiCss3,
+  SiJavascript,
+  SiTypescript,
+  SiReact,
+  SiVuedotjs,
+  SiNextdotjs,
+  SiNuxtdotjs,
+  SiTailwindcss,
+  SiFramer,
+  SiThreedotjs,
+  SiDaisyui,
+  SiGreensock,
+  SiGit,
+  SiGithub,
+  SiFigma,
+  SiAdobephotoshop,
+  SiBlender,
+  SiMysql,
+  SiGraphql,
+  SiAngular,
+  SiStrapi,
+} from "react-icons/si";
 
 export default function HomePage() {
   return (
@@ -12,6 +39,7 @@ export default function HomePage() {
       <QuickAbout />
       <SkillsSection />
       <ExperienceSection />
+      <ProjectsSection />
       <ContactForm />
     </main>
   );
@@ -50,6 +78,7 @@ const listItemVariants = {
 };
 
 const HeroSection = () => {
+  const t = useTranslations("home");
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -80,7 +109,13 @@ const HeroSection = () => {
         >
           <span className="inline-block">
             <span className="relative inline-block">
-              <AnimatedText translationKey="home.heroTitle" animated={true} />
+              <BlurText
+                text={t("heroTitle")}
+                delay={180}
+                animateBy="words"
+                direction="top"
+                className="content-title"
+              />
             </span>
           </span>
         </motion.h1>
@@ -107,7 +142,7 @@ const HeroSection = () => {
 const QuickAbout = () => {
   const t = useTranslations("home.about");
   return (
-    <section className="py-16 sm:py-20 bg-base-200/40">
+    <section className="py-16 sm:py-20 bg-base-200/40 overflow-hidden flex justify-center items-center">
       <div className="container mx-auto px-6">
         <motion.div
           initial="hidden"
@@ -116,14 +151,15 @@ const QuickAbout = () => {
           variants={fadeIn}
         >
           <motion.h2
-            className="text-3xl md:text-4xl font-bold mb-10"
+            className="content-title mb-10"
             variants={fadeIn}
             custom={0}
           >
             {t("title")}
           </motion.h2>
+
           <motion.p
-            className="text-base sm:text-lg max-w-2xl mx-auto leading-8 text-pretty"
+            className="content-text"
             variants={fadeIn}
             custom={1}
             dangerouslySetInnerHTML={{ __html: t.raw("text") as string }}
@@ -135,6 +171,55 @@ const QuickAbout = () => {
 };
 
 const SkillsSection = () => {
+  const techLogos = [
+    { node: <SiHtml5 />, title: "HTML5", href: "https://html.com" },
+    { node: <SiCss3 />, title: "CSS3", href: "https://css.com" },
+    {
+      node: <SiJavascript />,
+      title: "JavaScript",
+      href: "https://javascript.com",
+    },
+    {
+      node: <SiTypescript />,
+      title: "TypeScript",
+      href: "https://www.typescriptlang.org",
+    },
+    {
+      node: <SiGraphql />,
+      title: "GraphQL",
+      href: "https://graphql.org",
+    },
+    {
+      node: <SiMysql />,
+      title: "MySQL",
+      href: "https://www.mysql.com",
+    },
+    {
+      node: <SiTailwindcss />,
+      title: "Tailwind CSS",
+      href: "https://tailwindcss.com",
+    },
+    { node: <SiVuedotjs />, title: "Vue.js", href: "https://vuejs.org" },
+    { node: <SiReact />, title: "React", href: "https://react.dev" },
+    { node: <SiNuxtdotjs />, title: "Nuxt.js", href: "https://nuxtjs.org" },
+    { node: <SiNextdotjs />, title: "Next.js", href: "https://nextjs.org" },
+    { node: <SiAngular />, title: "Angular", href: "https://angular.io" },
+    { node: <SiStrapi />, title: "Strapi", href: "https://strapi.io" },
+    { node: <SiThreedotjs />, title: "Three.js", href: "https://threejs.org" },
+    { node: <SiDaisyui />, title: "DaisyUI", href: "https://daisyui.com" },
+    { node: <SiGreensock />, title: "GSAP", href: "https://greensock.com" },
+    { node: <SiFramer />, title: "Framer Motion", href: "https://framer.com" },
+    { node: <SiGit />, title: "Git", href: "https://git-scm.com" },
+    { node: <SiGithub />, title: "GitHub", href: "https://github.com" },
+    { node: <SiFigma />, title: "Figma", href: "https://figma.com" },
+    { node: <SiBlender />, title: "Blender", href: "https://www.blender.org" },
+
+    {
+      node: <SiAdobephotoshop />,
+      title: "Adobe Photoshop",
+      href: "https://www.adobe.com/products/photoshop.html",
+    },
+  ];
   const t = useTranslations("home.skills");
   const languagesObj = t.raw("languages.items") as Record<string, string>;
   const languages = Object.values(languagesObj);
@@ -151,7 +236,7 @@ const SkillsSection = () => {
           variants={listContainerVariants}
         >
           <motion.h2
-            className="text-3xl md:text-4xl font-bold mb-10"
+            className="content-title mb-10"
             variants={listItemVariants}
           >
             {t("title")}
@@ -161,11 +246,11 @@ const SkillsSection = () => {
             variants={listContainerVariants}
           >
             <motion.div variants={listItemVariants}>
-              <h3 className="text-xl font-semibold mb-4">
+              <h3 className="content-text font-semibold mb-4">
                 {t("languages.title")}
               </h3>
               <motion.ul
-                className="list-disc list-inside leading-8 text-pretty"
+                className="list-disc list-inside leading-8 text-pretty "
                 variants={listContainerVariants}
               >
                 {languages.map((item, index) => (
@@ -176,11 +261,11 @@ const SkillsSection = () => {
               </motion.ul>
             </motion.div>
             <motion.div variants={listItemVariants}>
-              <h3 className="text-xl font-semibold mb-4">
+              <h3 className="content-text font-semibold mb-4">
                 {t("frameworks.title")}
               </h3>
               <motion.ul
-                className="list-disc list-inside leading-8 text-pretty"
+                className="list-disc list-inside leading-8 text-pretty "
                 variants={listContainerVariants}
               >
                 {frameworks.map((item, index) => (
@@ -192,6 +277,19 @@ const SkillsSection = () => {
             </motion.div>
           </motion.div>
         </motion.div>
+      </div>
+      <div className="mt-16 sm:mt-20">
+        <LogoLoop
+          className="gradient-text"
+          logos={techLogos}
+          speed={50}
+          direction="right"
+          logoHeight={60}
+          gap={60}
+          pauseOnHover
+          scaleOnHover
+          ariaLabel="Skills Logo Loop"
+        />
       </div>
     </section>
   );
@@ -209,12 +307,12 @@ const ExperienceSection = () => {
           variants={listContainerVariants}
         >
           <motion.h2
-            className="text-3xl md:text-4xl font-bold mb-20"
+            className="content-title mb-12"
             variants={listItemVariants}
           >
             {t("title")}
           </motion.h2>
-          <motion.div className="space-y-20" variants={listContainerVariants}>
+          <motion.div className="space-y-12" variants={listContainerVariants}>
             <motion.div variants={listItemVariants}>
               <h3 className="text-xl font-semibold">{t("freelance.title")}</h3>
               <p className="text-base-content/70">
@@ -231,6 +329,53 @@ const ExperienceSection = () => {
             </motion.div>
           </motion.div>
         </motion.div>
+      </div>
+    </section>
+  );
+};
+
+const ProjectsSection = () => {
+  const t = useTranslations("work");
+  return (
+    <section className="pt-16 md:pt-20 pb-0 md:pb-0">
+      <div className="container px-5 mx-auto">
+        <motion.h2 className="content-title mb-12" variants={listItemVariants}>
+          {t("selectedWorks")}
+        </motion.h2>
+        <div className="flex flex-wrap -mx-4 text-center">
+          <div className="sm:w-1/2 px-4 text-center">
+            <motion.p className="content-text" variants={listItemVariants}>
+              {t("discover")}
+            </motion.p>
+          </div>
+          <div className="sm:w-1/2 px-4 relative h-[500px] sm:h-[600px] md:h-[700px] lg:h-[800px]">
+            <CardSwap
+              placement="center"
+              cardDistance={100}
+              verticalDistance={80}
+              delay={5000}
+              pauseOnHover={true}
+            >
+              <Card headerTitle="Asus - PBA" headerLogoSrc="/logodark.svg" />
+              <Card headerTitle="Maxime Caro" headerLogoSrc="/logodark.svg" />
+              <Card
+                headerTitle="Asus - Zenphone 10"
+                headerLogoSrc="/logolight.svg"
+                imageSrc="/zenphone.gif"
+              />
+              <Card
+                headerTitle="Barbin CPS"
+                headerLogoSrc="/logodark.svg"
+                imageSrc="/barbin.gif"
+              />
+
+              <Card
+                headerTitle="Les Gamins Marais"
+                headerLogoSrc="/logodark.svg"
+              />
+            </CardSwap>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -267,7 +412,7 @@ const ContactForm = () => {
   };
 
   return (
-    <section className="py-16 sm:py-24 border-t border-base-300/30">
+    <section className="py-16 sm:py-20 border-t border-base-300/30">
       <div className="container mx-auto px-6">
         <motion.div
           initial="hidden"
@@ -385,7 +530,7 @@ const ContactForm = () => {
               <motion.button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn btn-primary btn-lg px-8 rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
+                className="btn btn-lg px-8 rounded-full shadow-lg shadow-base-content/20 hover:shadow-base-content/30 transition-all text-shadow-base-content/20 bg-gradient-to-t from-base-content/60 via-base-content/80 to-base-content/100 text-base-100"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -401,6 +546,7 @@ const ContactForm = () => {
                   />
                 )}
               </motion.button>
+
               {submitSuccess === true && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}

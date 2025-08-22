@@ -6,7 +6,26 @@
   --font-inter: "Inter", var(--font-inter);
   --font-figtree: "FigTree", var(--font-figtree);
 }
+@layer components {
+  .content-title {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold 
+           tracking-tight sm:tracking-normal md:tracking-wide
+           bg-gradient-to-t from-base-content/60 via-base-content/80 to-base-content
+           text-transparent bg-clip-text 
+           drop-shadow-lg;
+  }
 
+  .content-text {
+    @apply text-base sm:text-lg md:text-xl lg:text-2xl font-medium leading-relaxed 
+           max-w-3xl mx-auto
+           bg-gradient-to-r from-base-content/70 via-base-content/90 to-base-content
+           text-transparent bg-clip-text
+           drop-shadow text-pretty;
+  }
+  .content-gradient {
+    @apply bg-gradient-to-t from-base-content/80 via-base-content/90 to-base-content/100 inline-block text-transparent bg-clip-text;
+  }
+}
 @plugin "daisyui" {
   exclude: link;
 }

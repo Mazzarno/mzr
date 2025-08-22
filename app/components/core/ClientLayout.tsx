@@ -74,56 +74,54 @@ const MemoizedGrid = memo(function Grid() {
 });
 const MemoizedNavigation = memo(function Navigation() {
   return (
-    <>
-      <div className="flex items-center transition-all duration-100 z-70 pl-2">
-        {/* CustomBorderRadius Nav right Border */}
-        <div className="absolute top-3 -right-5 z-70">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
-              fill="var(--color-neutral)"
-            ></path>
-          </svg>
-        </div>
-        {/* CustomBorderRadius Nav left Border */}
-        <div className="absolute -bottom-5 left-3 z-70">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
-              fill="var(--color-neutral)"
-            ></path>
-          </svg>
-        </div>
-        <TransitionLink href="/" className="flex items-center space-x-3">
-          <Logo />
-          <div className="relative inline-block overflow-hidden h-5 group">
-            <div
-              className="transition-transform duration-300 transform group-hover:-translate-y-5"
-              style={{ transformStyle: "preserve-3d" }}
-            >
-              <span className="block text-sm tracking-widest font-dm-sans font-medium">
-                Germain
-              </span>
-              <span className="block text-sm tracking-widest font-dm-sans font-medium">
-                Alexis
-              </span>
-            </div>
-          </div>
-        </TransitionLink>
+    <div className="flex items-center transition-all duration-100 z-70 pl-2">
+      {/* CustomBorderRadius Nav right Border */}
+      <div className="absolute top-3 -right-5 z-70">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
+            fill="var(--color-neutral)"
+          ></path>
+        </svg>
       </div>
-    </>
+      {/* CustomBorderRadius Nav left Border */}
+      <div className="absolute -bottom-5 left-3 z-70">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
+            fill="var(--color-neutral)"
+          ></path>
+        </svg>
+      </div>
+      <TransitionLink href="/" className="flex items-center space-x-3">
+        <Logo />
+        <div className="relative inline-block overflow-hidden h-5 group">
+          <div
+            className="transition-transform duration-300 transform group-hover:-translate-y-5"
+            style={{ transformStyle: "preserve-3d" }}
+          >
+            <span className="block text-sm tracking-widest font-dm-sans font-medium content-gradient">
+              Germain
+            </span>
+            <span className="block text-sm tracking-widest font-dm-sans font-medium content-gradient">
+              Alexis
+            </span>
+          </div>
+        </div>
+      </TransitionLink>
+    </div>
   );
 });
 
@@ -425,6 +423,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             width: isReduced ? "90vw" : "100vw",
             height: isReduced ? "90dvh" : "100dvh",
             borderRadius: isReduced ? "1rem" : "0rem",
+            boxShadow: isReduced ? "0px 0px 10px 6px rgba(0, 0, 0, 0.1)" : "",
           }}
           transition={{
             type: "spring",
@@ -588,11 +587,11 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                   ref={contentRef}
                   tabIndex={0}
                 >
+                  <SmoothScroll />
                   <div className="lenis-content">
                     <Noise />
                     <div>{children}</div>
                   </div>
-                  <SmoothScroll />
                 </motion.div>
               </>
             </Transition>

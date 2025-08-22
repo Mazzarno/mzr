@@ -58,9 +58,14 @@ const TextType = ({
   const cursorRef = useRef<HTMLSpanElement>(null);
   const containerRef = useRef<HTMLElement>(null);
   // Build the array of texts, resolving translations if translationKeys are provided
-  const textArrayRaw = translationKeys && translationKeys.length > 0
-    ? translationKeys.map((key) => t(key))
-    : Array.isArray(text) ? text : (typeof text === "string" ? [text] : []);
+  const textArrayRaw =
+    translationKeys && translationKeys.length > 0
+      ? translationKeys.map((key) => t(key))
+      : Array.isArray(text)
+        ? text
+        : typeof text === "string"
+          ? [text]
+          : [];
   // Ensure at least one safe item to prevent undefined access
   const textArray = textArrayRaw.length > 0 ? textArrayRaw : [""];
 
@@ -68,11 +73,6 @@ const TextType = ({
     if (!variableSpeed) return typingSpeed;
     const { min, max } = variableSpeed;
     return Math.random() * (max - min) + min;
-  };
-
-  const getCurrentTextColor = () => {
-    if (textColors.length === 0) return "#ffffff";
-    return textColors[currentTextIndex % textColors.length];
   };
 
   useEffect(() => {
@@ -179,13 +179,17 @@ const TextType = ({
     onSentenceComplete,
   ]);
 
-  // Reset typing state when the set of texts (or locale via t) changes
+  // On locale/keys change, keep the same phrase index, but reset the typing of that phrase.
   useEffect(() => {
     setDisplayedText("");
     setCurrentCharIndex(0);
     setIsDeleting(false);
-    setCurrentTextIndex(0);
-  }, [translationKeys, t]);
+    // Keep the same phrase index, but clamp to new array length if needed
+    setCurrentTextIndex((prev) => {
+      const maxIndex = Math.max(0, textArray.length - 1);
+      return Math.min(prev, maxIndex);
+    });
+  }, [translationKeys, t, textArray.length]);
 
   const currentFullText = textArray[currentTextIndex] ?? "";
   const shouldHideCursor =
@@ -202,12 +206,12 @@ const TextType = ({
     <AnimatedText
       text={displayedText}
       animated={false}
-      className="inline text-lg sm:text-xl md:text-2xl lg:text-3xl text-pretty text-base-content"
+      className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-pretty font-bold bg-gradient-to-t from-base-content/60 via-base-content/80 to-base-content/100 inline-block text-transparent bg-clip-text"
     />,
     showCursor && (
       <span
         ref={cursorRef}
-        className={`ml-1 inline-block opacity-100 text-lg sm:text-xl md:text-2xl lg:text-3xl text-pretty text-base-content ${shouldHideCursor ? "hidden" : ""} ${cursorClassName}`}
+        className={`ml-1 opacity-100 text-lg sm:text-xl md:text-2xl lg:text-3xl text-pretty font-bold bg-gradient-to-t from-base-content/60 via-base-content/80 to-base-content/100 inline-block text-transparent bg-clip-text ${shouldHideCursor ? "hidden" : ""} ${cursorClassName}`}
       >
         {cursorCharacter}
       </span>

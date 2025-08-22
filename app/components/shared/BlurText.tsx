@@ -49,6 +49,7 @@ const BlurText: React.FC<BlurTextProps> = ({
 }) => {
   const elements = animateBy === "words" ? text.split(" ") : text.split("");
   const [inView, setInView] = useState(false);
+  const [animSeed, setAnimSeed] = useState(0);
   const ref = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
@@ -65,6 +66,16 @@ const BlurText: React.FC<BlurTextProps> = ({
     observer.observe(ref.current);
     return () => observer.disconnect();
   }, [threshold, rootMargin]);
+
+  // Restart animation on text change (e.g., language switch)
+  useEffect(() => {
+    // bump seed so keys change and spans remount
+    setAnimSeed((s) => s + 1);
+    // toggle inView to force framer to replay initial -> animate
+    setInView(false);
+    const id = requestAnimationFrame(() => setInView(true));
+    return () => cancelAnimationFrame(id);
+  }, [text]);
 
   const defaultFrom = useMemo(
     () =>
@@ -109,8 +120,8 @@ const BlurText: React.FC<BlurTextProps> = ({
 
         return (
           <motion.span
-            className="bg-gradient-to-t from-base-content/50 via-base-content/75 to-base-content/100 inline-block text-transparent bg-clip-text"
-            key={index}
+            className="bg-gradient-to-t from-base-content/60 via-base-content/80 to-base-content/100 inline-block text-transparent bg-clip-text"
+            key={`${animSeed}-${index}-${segment}`}
             initial={fromSnapshot}
             animate={inView ? animateKeyframes : fromSnapshot}
             transition={spanTransition}

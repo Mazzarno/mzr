@@ -151,7 +151,7 @@ const Loading: React.FC<LoadingProps> = ({
               animateBy="letters"
               direction="top"
               onAnimationComplete={handleAnimationComplete}
-              className="text-4xl text-center sm:text-5xl font-black font-dm-sans tracking-wider"
+              className="content-title tracking-wider"
             />
             <motion.div
               className="w-full flex flex-col items-center space-y-3"
@@ -178,7 +178,7 @@ const Loading: React.FC<LoadingProps> = ({
               text="LOADING~PLEASE~WAIT~"
               onHover="speedUp"
               spinDuration={10}
-              className="font-black text-sm font-figtree "
+              className="content-text"
             >
               <CountUp to={Math.floor(progress)} />
             </CircularText>

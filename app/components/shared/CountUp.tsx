@@ -120,13 +120,5 @@ export default function CountUp({
     return () => unsubscribe();
   }, [springValue, separator, maxDecimals]);
 
-  return (
-    <span
-      className={
-        className +
-        "font-black text-4xl  bg-gradient-to-t from-base-content/50 via-base-content/75 to-base-content/100 inline-block text-transparent bg-clip-text"
-      }
-      ref={ref}
-    />
-  );
+  return <span className={className + "content-text"} ref={ref} />;
 }

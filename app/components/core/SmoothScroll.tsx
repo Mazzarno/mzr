@@ -3,6 +3,10 @@ import { useEffect, useState, useRef } from "react";
 import Lenis from "lenis";
 import { usePathname } from "next/navigation";
 import { useHotkeys } from 'react-hotkeys-hook';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 
 export default function SmoothScroll() {
@@ -93,6 +97,32 @@ export default function SmoothScroll() {
     lenisRef.current = lenis;
     let animationId: number;
 
+    // Sync GSAP ScrollTrigger with Lenis wrapper
+    ScrollTrigger.scrollerProxy(wrapper, {
+      scrollTop(value) {
+        if (arguments.length) {
+          lenis.scrollTo(value as number, { immediate: true });
+        }
+        return lenis.scroll;
+      },
+      getBoundingClientRect() {
+        return {
+          top: 0,
+          left: 0,
+          width: window.innerWidth,
+          height: window.innerHeight,
+        };
+      },
+      pinType: (wrapper as HTMLElement).style.transform ? "transform" : "fixed",
+    });
+
+    const onLenisScroll = () => ScrollTrigger.update();
+    (lenis as unknown as { on: (event: string, cb: () => void) => void }).on('scroll', onLenisScroll);
+    // Ensure ScrollTrigger uses this scroller by default (optional)
+    ScrollTrigger.defaults({ scroller: wrapper });
+    // Refresh after setup
+    ScrollTrigger.refresh();
+
     function updateFromLenis() {
       const scrollTop = lenis.scroll;
       const scrollHeight = lenis.limit;
@@ -137,8 +167,14 @@ export default function SmoothScroll() {
 
     return () => {
       cancelAnimationFrame(animationId);
+      if (typeof (lenis as unknown as { off?: (event: string, cb: () => void) => void }).off === 'function') {
+        (lenis as unknown as { off: (event: string, cb: () => void) => void }).off('scroll', onLenisScroll);
+      }
+      // Kill only triggers tied to this scroller
+      ScrollTrigger.getAll().forEach((t) => {
+        if (t.scroller === wrapper) t.kill();
+      });
       lenis.destroy();
-
     };
   }, [pathname]);
 

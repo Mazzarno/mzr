@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+
 export default function Logo({ className }: { className?: string }) {
   return (
     <motion.svg
@@ -9,7 +10,7 @@ export default function Logo({ className }: { className?: string }) {
       xmlns="http://www.w3.org/2000/svg"
       whileTap={{ scale: 0.9 }}
       whileHover={{ scale: 1.1 }}
-      transition={{ type: "spring", stiffness: 100 }} 
+      transition={{ type: "spring", stiffness: 100 }}
     >
       <path
         id="motionPath"
