@@ -1,6 +1,6 @@
 "use client";
 
-import { ElementType, useEffect, useRef, useState, createElement } from "react";
+import { ElementType, useEffect, useRef, useState, createElement, useCallback } from "react";
 import { gsap } from "gsap";
 import { useTranslations } from "next-intl";
 import AnimatedText from "../AnimatedText";
@@ -42,7 +42,6 @@ const TextType = ({
   cursorCharacter = "|",
   cursorClassName = "",
   cursorBlinkDuration = 0.5,
-  textColors = [],
   variableSpeed,
   onSentenceComplete,
   startOnVisible = false,
@@ -69,11 +68,11 @@ const TextType = ({
   // Ensure at least one safe item to prevent undefined access
   const textArray = textArrayRaw.length > 0 ? textArrayRaw : [""];
 
-  const getRandomSpeed = () => {
+  const getRandomSpeed = useCallback(() => {
     if (!variableSpeed) return typingSpeed;
     const { min, max } = variableSpeed;
     return Math.random() * (max - min) + min;
-  };
+  }, [variableSpeed, typingSpeed]);
 
   useEffect(() => {
     if (!startOnVisible || !containerRef.current) return;
@@ -177,6 +176,7 @@ const TextType = ({
     reverseMode,
     variableSpeed,
     onSentenceComplete,
+    getRandomSpeed,
   ]);
 
   // On locale/keys change, keep the same phrase index, but reset the typing of that phrase.
