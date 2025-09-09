@@ -5,7 +5,6 @@ import AnimatedText from "./components/AnimatedText";
 import { useTranslations } from "next-intl";
 import TextType from "./components/shared/TextType";
 import BlurText from "./components/shared/BlurText";
-// CardSwap removed (unused here)
 import LogoLoop from "./components/shared/LogoLoop";
 import {
   SiHtml5,
