@@ -30,7 +30,7 @@ import {
   SiAngular,
   SiStrapi,
 } from "react-icons/si";
-
+import CardSwap, { Card } from "./components/shared/CardSwap";
 export default function HomePage() {
   return (
     <main className="text-base-content relative">
@@ -38,7 +38,7 @@ export default function HomePage() {
       <QuickAbout />
       <SkillsSection />
       <ExperienceSection />
-      {/* <ProjectsSection /> */}
+      <ProjectsSection />
       <ContactForm />
     </main>
   );
@@ -141,7 +141,7 @@ const HeroSection = () => {
 const QuickAbout = () => {
   const t = useTranslations("home.about");
   return (
-    <section className="py-16 sm:py-20 bg-base-200/40 overflow-hidden flex justify-center items-center">
+    <section className="py-16 sm:py-20 glass overflow-hidden flex justify-center items-center">
       <div className="container mx-auto px-6">
         <motion.div
           initial="hidden"
@@ -238,7 +238,7 @@ const SkillsSection = () => {
             {t("title")}
           </motion.h2>
           <motion.div
-            className="grid md:grid-cols-2 gap-8"
+            className="grid md:grid-cols-2 gap-10 md:gap-12 lg:gap-16 max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto text-left pretty-text"
             variants={listContainerVariants}
           >
             <motion.div variants={listItemVariants}>
@@ -246,7 +246,7 @@ const SkillsSection = () => {
                 {t("languages.title")}
               </h3>
               <motion.ul
-                className="list-disc list-inside leading-8 text-pretty "
+                className="list-disc list-inside space-y-2 text-pretty text-base sm:text-lg md:text-lg lg:text-xl leading-6 text-base-content/90"
                 variants={listContainerVariants}
               >
                 {languages.map((item, index) => (
@@ -261,7 +261,7 @@ const SkillsSection = () => {
                 {t("frameworks.title")}
               </h3>
               <motion.ul
-                className="list-disc list-inside leading-8 text-pretty "
+                className="list-disc list-inside space-y-2 text-pretty text-base sm:text-lg md:text-lg lg:text-xl leading-6 text-base-content/90"
                 variants={listContainerVariants}
               >
                 {frameworks.map((item, index) => (
@@ -306,7 +306,7 @@ const SkillsSection = () => {
 const ExperienceSection = () => {
   const t = useTranslations("home.experience");
   return (
-    <section className="py-16 sm:py-20 bg-base-200/40">
+    <section className="py-16 sm:py-20 glass overflow-hidden flex justify-center items-center">
       <div className="container mx-auto px-6">
         <motion.div
           initial="hidden"
@@ -315,25 +315,28 @@ const ExperienceSection = () => {
           variants={listContainerVariants}
         >
           <motion.h2
-            className="content-title mb-12"
+            className="content-title mb-10"
             variants={listItemVariants}
           >
             {t("title")}
           </motion.h2>
-          <motion.div className="space-y-12" variants={listContainerVariants}>
+          <motion.div
+            className="space-y-8 max-w-3xl mx-auto text-left pretty-text"
+            variants={listContainerVariants}
+          >
             <motion.div variants={listItemVariants}>
-              <h3 className="text-xl font-semibold">{t("freelance.title")}</h3>
-              <p className="text-base-content/70">
+              <h3 className="content-text font-semibold mb-2">{t("freelance.title")}</h3>
+              <p className="content-text text-base-content/70">
                 {t("freelance.description")}
               </p>
             </motion.div>
             <motion.div variants={listItemVariants}>
-              <h3 className="text-xl font-semibold">{t("asus.title")}</h3>
-              <p className="text-base-content/70">{t("asus.description")}</p>
+              <h3 className="content-text font-semibold mb-2">{t("asus.title")}</h3>
+              <p className="content-text text-base-content/70">{t("asus.description")}</p>
             </motion.div>
             <motion.div variants={listItemVariants}>
-              <h3 className="text-xl font-semibold">{t("mgs.title")}</h3>
-              <p className="text-base-content/70">{t("mgs.description")}</p>
+              <h3 className="content-text font-semibold mb-2">{t("mgs.title")}</h3>
+              <p className="content-text text-base-content/70">{t("mgs.description")}</p>
             </motion.div>
           </motion.div>
         </motion.div>
@@ -341,8 +344,7 @@ const ExperienceSection = () => {
     </section>
   );
 };
-{
-  /* 
+
 const ProjectsSection = () => {
   const t = useTranslations("work");
   return (
@@ -398,8 +400,7 @@ const ProjectsSection = () => {
     </section>
   );
 };
-*/
-}
+
 const ContactForm = () => {
   const t = useTranslations();
   const [formState, setFormState] = useState({
@@ -457,11 +458,13 @@ const ContactForm = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label htmlFor="name" className="block text-sm font-medium">
-                  <AnimatedText
-                    translationKey="contact.name"
-                    animated={false}
-                  />
+                <label htmlFor="name" className="label">
+                  <span className="label-text">
+                    <AnimatedText
+                      translationKey="contact.name"
+                      animated={false}
+                    />
+                  </span>
                 </label>
                 <motion.input
                   type="text"
@@ -470,18 +473,20 @@ const ContactForm = () => {
                   value={formState.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 rounded-lg border border-base-300 bg-base-200/50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                  className="input input-bordered w-full"
                   placeholder={t("contact.name") + "..."}
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.2 }}
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="email" className="block text-sm font-medium">
-                  <AnimatedText
-                    translationKey="contact.email"
-                    animated={false}
-                  />
+                <label htmlFor="email" className="label">
+                  <span className="label-text">
+                    <AnimatedText
+                      translationKey="contact.email"
+                      animated={false}
+                    />
+                  </span>
                 </label>
                 <motion.input
                   type="email"
@@ -490,7 +495,7 @@ const ContactForm = () => {
                   value={formState.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 rounded-lg border border-base-300 bg-base-200/50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                  className="input input-bordered w-full"
                   placeholder={t("contact.email") + "..."}
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.2 }}
@@ -498,11 +503,13 @@ const ContactForm = () => {
               </div>
             </div>
             <div className="space-y-2">
-              <label htmlFor="subject" className="block text-sm font-medium">
-                <AnimatedText
-                  translationKey="contact.subject"
-                  animated={false}
-                />
+              <label htmlFor="subject" className="label">
+                <span className="label-text">
+                  <AnimatedText
+                    translationKey="contact.subject"
+                    animated={false}
+                  />
+                </span>
               </label>
               <motion.select
                 id="subject"
@@ -510,7 +517,7 @@ const ContactForm = () => {
                 value={formState.subject}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg border border-base-300 bg-base-200/50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                className="select select-bordered w-full"
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.2 }}
               >
@@ -526,11 +533,13 @@ const ContactForm = () => {
               </motion.select>
             </div>
             <div className="space-y-2">
-              <label htmlFor="message" className="block text-sm font-medium">
-                <AnimatedText
-                  translationKey="contact.message"
-                  animated={false}
-                />
+              <label htmlFor="message" className="label">
+                <span className="label-text">
+                  <AnimatedText
+                    translationKey="contact.message"
+                    animated={false}
+                  />
+                </span>
               </label>
               <motion.textarea
                 id="message"
@@ -539,7 +548,7 @@ const ContactForm = () => {
                 onChange={handleChange}
                 required
                 rows={6}
-                className="w-full px-4 py-3 rounded-lg border border-base-300 bg-base-200/50 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                className="textarea textarea-bordered w-full"
                 placeholder={t("contact.message") + "..."}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.2 }}
@@ -549,7 +558,7 @@ const ContactForm = () => {
               <motion.button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn btn-lg px-8 rounded-full shadow-lg shadow-base-content/20 hover:shadow-base-content/30 transition-all text-shadow-base-content/20 bg-gradient-to-t from-base-content/60 via-base-content/80 to-base-content/100 text-base-100"
+                className="btn btn-primary btn-lg px-8 rounded-full shadow-lg"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -570,24 +579,28 @@ const ContactForm = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 p-4 bg-success/20 text-success rounded-lg"
+                  className="mt-4 alert alert-success max-w-lg"
                 >
-                  <AnimatedText
-                    translationKey="contact.success"
-                    animated={false}
-                  />
+                  <span>
+                    <AnimatedText
+                      translationKey="contact.success"
+                      animated={false}
+                    />
+                  </span>
                 </motion.div>
               )}
               {submitSuccess === false && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 p-4 bg-error/20 text-error rounded-lg"
+                  className="mt-4 alert alert-error max-w-lg"
                 >
-                  <AnimatedText
-                    translationKey="contact.error"
-                    animated={false}
-                  />
+                  <span>
+                    <AnimatedText
+                      translationKey="contact.error"
+                      animated={false}
+                    />
+                  </span>
                 </motion.div>
               )}
             </div>
