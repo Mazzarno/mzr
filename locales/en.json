@@ -1,67 +1,21 @@
 {
-  "websites": "Websites",
-  "hello": "Hello, I am Alexis",
-  "ido": "I develop Websites",
-  "navigation": {
-    "home": "Home",
-    "work": "Work",
-    "about": "About",
-    "contact": "Contact",
-    "previous": "Previous",
-    "next": "Next"
-  },
   "home": {
-    "greeting": "Welcome to my portfolio",
     "heroTitle": "Hello, I'm Alexis.",
-    "heroSubtitle": "Passionate web developer crafting modern, high-performing, and tailor-made websites.",
-    "viewWork": "View my work",
-    "seeProjects": "See my projects",
-    "contactMe": "Contact me",
-    "scrollDown": "Scroll down",
-    "phrases": {
-      "0": "Web Developer - React / Vue",
-      "1": "I craft sleek, user-focused interfaces.",
-      "2": "Creative Coder - Motion / Gsap / Three.js",
-      "3": "I engineer blazing-fast, responsive websites.",
-      "4": "Esport Enthusiast & Team Player",
-      "5": "I empower real-world digital learning experiences.",
-      "6": "I build immersive web experiences."
-    },
-    "quickAboutTitle": "About me",
-    "quickAboutText": "Freelance web developer based in France, specializing in innovative digital solutions.",
-    "featuredProjects": "Featured Projects",
-    "project1": {
-      "title": "Minimalist Portfolio",
-      "desc": "Design and development of a clean portfolio for a photographer",
-      "stack": "Next.js, TailwindCSS"
-    },
-    "project2": {
-      "title": "E-commerce Application",
-      "desc": "Modern and high-performance online store for SMBs",
-      "stack": "Shopify, React"
-    },
-    "project3": {
-      "title": "Analytics Dashboard",
-      "desc": "Interactive dashboard with data visualizations",
-      "stack": "React, D3.js"
-    },
-    "allProjects": "All projects",
-    "seeDetails": "See project",
-    "ctaTitle": "Ready to collaborate?",
-    "ctaText": "Contact me to discuss your project or ideas.",
-    "contactForm": {
-      "nameLabel": "Name",
-      "namePlaceholder": "Your name",
-      "emailLabel": "Email",
-      "emailPlaceholder": "Your email",
-      "messageLabel": "Message",
-      "messagePlaceholder": "Your message",
-      "send": "Send"
-    },
-    "about": {
-      "title": "About",
-      "text": "I am <strong>Alexis Germain</strong>, a passionate web developer specializing in creating modern and interactive web experiences. With expertise in <strong>Vue/Nuxt</strong> and <strong>React/Next</strong>, I design high-performance interfaces, integrating animations with <strong>Framer Motion & GSAP</strong>, 3D with <strong>Three.js</strong>, and paying close attention to detail."
-    },
+ "phrases": {
+  "0": "I build websites that make the difference.",
+  "1": "Interfaces that captivate your users.",
+  "2": "Modern animations that bring your brand to life.",
+  "3": "Fast, fluid, and Google-optimized websites.",
+  "4": "A freelance partner who listens and delivers.",
+  "5": "Turning your ideas into impactful digital experiences.",
+  "6": "Boost your online presence with a site that stands out.",
+  "7": "Websites designed to convert."
+},
+"about": {
+  "title": "About",
+  "text": "I’m <strong>Alexis Germain</strong>, a freelance web developer specialized in building modern and immersive websites. With expertise in <strong>Vue/Nuxt</strong> and <strong>React/Next</strong>, I design fast and high-performance interfaces. I bring projects to life with smooth animations using <strong>Framer Motion & GSAP</strong>, interactive 3D with <strong>Three.js</strong>, and a strong attention to detail — delivering unique experiences that make brands stand out."
+}
+,
     "skills": {
       "title": "Skills",
       "languages": {
@@ -82,21 +36,21 @@
         }
       }
     },
-    "experience": {
-      "title": "Experience",
-      "freelance": {
-        "title": "Freelance Web Developer",
-        "description": "Creation of showcase websites, custom integration, client support and maintenance."
-      },
-      "asus": {
-        "title": "Webmaster – ASUS France",
-        "description": "Europe / Taiwan coordination, marketing support, multilingual web integration and localization."
-      },
-      "mgs": {
-        "title": "Junior Web Developer – MGS Informatique",
-        "description": "Development and maintenance of websites, international collaboration, technical fixes via Jira."
-      }
-    }
+"experience": {
+  "title": "Experience",
+  "freelance": {
+    "title": "Freelance Web Developer",
+    "description": "Design and development of modern showcase websites, custom integrations with React / Vue, performance optimization, SEO improvements, client training, and ongoing support & maintenance."
+  },
+  "asus": {
+    "title": "Webmaster – ASUS France",
+    "description": "Coordination between European and Taiwanese teams, marketing campaign support, multilingual web integration and localization, website content updates, and UX consistency across regions."
+  },
+  "mgs": {
+    "title": "Junior Web Developer – MGS Informatique",
+    "description": "Development and maintenance of corporate websites, bug fixing and technical support , implementation of new features."
+  }
+}
   },
   "work": {
     "title": "WORK",
@@ -113,88 +67,6 @@
     "viewLive": "View Live",
     "viewCode": "View Code",
     "discover": "Discover some of my recent work"
-  },
-  "about": {
-    "title": "ABOUT",
-    "about": "About me",
-    "journey": "Journey",
-    "skills": "Skills",
-    "intro": "Freelance Web Developer based in Bruyères-sur-Oise, I design and develop showcase websites, ensure maintenance and optimization of existing sites, and integrate customized solutions to meet specific needs.",
-    "experience": "Experience",
-    "education": "Education",
-    "interests": "Interests",
-    "downloadCV": "Download CV",
-    "frontend": "Frontend",
-    "backend": "Backend",
-    "design": "Design",
-    "other": "Other",
-    "years": "Years of Experience",
-    "clients": "Happy Clients",
-    "projects": "Completed Projects",
-    "designer": "Developer passionate about user experience",
-    "learnMore": "Learn more",
-    "experience_details": {
-      "1":   {
-        "title": "Self-Employed",
-        "role": "Freelance Web Developer",
-        "period": "2019 - 2022 | 2022 - Present",
-        "description": {
-          "1":"Design and development of showcase websites.",
-          "2":"Maintenance and optimization of existing sites.",
-          "3":"Integration of customized solutions to meet specific needs.",
-          "4":"Technical support and training to ensure client autonomy."
-        }
-      },
-      "2":  {
-        "title": "ASUS France",
-        "role": "Webmaster",
-        "period": "May 2022 - August 2022",
-        "description": {
-          "1":"Design, development, management and maintenance of French websites.",
-          "2":"International collaboration: coordination with ASUS Europe and implementation of technical fixes via Jira, in connection with Taiwan.",
-          "3":"Support and translation: adaptation of marketing content in French and technical assistance for European campaigns.",
-          "4":"Participation in marketing meetings: contribution to digital strategies and integration of marketing initiatives on web platforms."
-        }
-      },
-      "3": {
-        "title": "MGS Informatique",
-        "role": "Junior Web Developer",
-        "period": "September 2018 - February 2019",
-        "description": {
-          "1":"Design, development, management and maintenance of websites.",
-          "2":"Team training on HTML, CSS and WordPress.",
-          "3":"Consultation and analysis of client company needs."
-        }
-      }
-    },
-    "education_details": 
-      {
-        "title": "IFOCOP",
-        "degree": "Web Developer Training",
-        "period": "September 2018 - February 2019",
-        "description": {
-          "1":"HTML 5 / CSS 3 / JavaScript ES6",
-          "2":"CMS Wordpress / Drupal",
-          "3":"MySQL Database Integration and Management"
-        }
-      },
-    "skill_details": {
-      "soft": {
-        "1":"Empathetic", "2":"Autonomous", "3":"Cooperative", "4":"Creative"
-      },
-      "hard": {
-        "1":"Ideation", "2":"Brainstorming", "3":"Design", "4":"Wireframing", "5":"Prototyping", "6":"Conception", "7":"Development", "8":"Optimization", "9":"Technical Support"
-      },
-      "framework": "Vue/Nuxt3, React/Next, AngularJs",
-      "data": "SQL, GraphQL",
-      "backend": "Node.Js, Express",
-      "design": "Figma, PhotoShop",
-      "management": "JIRA, Trello",
-      "animation": "GSAP, Motion",
-      "webgl": "Three, Tresjs, Fiber",
-      "cms": "Strapi",
-      "3d": "Blender"
-    }
   },
   "contact": {
     "title": "CONTACT",
@@ -222,12 +94,7 @@
     "other": "Other",
     "open": "I'm always open to discussing new projects, creative ideas, or opportunities to collaborate."
   },
-  "loading": {
-    "loading": "Loading",
-    "please_wait": "Please wait",
-    "almost_ready": "Almost ready",
-    "preparing": "Preparing content"
-  },
+
   "notFound": {
     "title": "404",
     "page": "Page",
@@ -235,20 +102,6 @@
     "found": "Found",
     "goHome": "Go Home",
     "sorry": "Sorry, the page you are looking for does not exist."
-  },
-  "projects": {
-    "portfolio": {
-      "title": "Minimalist Portfolio",
-      "description": "Design and development of a clean portfolio for a photographer"
-    },
-    "ecommerce": {
-      "title": "E-commerce Web App",
-      "description": "Modern user interface for an online store"
-    },
-    "dashboard": {
-      "title": "Analytics Dashboard",
-      "description": "Interactive dashboard with data visualizations"
-    }
   },
   "footer": {
     "rights": "All Rights Reserved",

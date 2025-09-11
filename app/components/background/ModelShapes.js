@@ -69,16 +69,16 @@ export default function Model({ mouse, currentTheme }) {
 
   const meshes = [
     { node: nodes.Sphere001, multiplier: 2.4, initialPosition: { x: 0, y: 15, z: 0 }, delay: 0.50 },
-    { node: nodes.Sphere002, multiplier: 2.4, initialPosition: { x: 5, y: -10, z: 2 }, delay: 0.55 },
-    { node: nodes.Cylinder002, multiplier: 1.2, initialPosition: { x: -5, y: -8, z: -2 }, delay: 0.60 },
-    { node: nodes.Sphere003, multiplier: 1, initialPosition: { x: 10, y: 5, z: -5 }, delay: 0.65 },
-    { node: nodes.Cylinder003, multiplier: 1.8, initialPosition: { x: -10, y: 8, z: 5 }, delay: 0.70 },
-    { node: nodes.Cylinder005, multiplier: 1.8, initialPosition: { x: 8, y: -12, z: 3 }, delay: 0.75 },
-    { node: nodes.Cube002, multiplier: 2, initialPosition: { x: -8, y: 12, z: -3 }, delay: 0.80 },
-    { node: nodes.Cylinder006, multiplier: 1.2, initialPosition: { x: 4, y: 10, z: 4 }, delay: 0.85 },
-    { node: nodes.Cylinder007, multiplier: 1.6, initialPosition: { x: -4, y: -10, z: -4 }, delay: 0.90 },
-    { node: nodes.Cylinder009, multiplier: 1.8, initialPosition: { x: 12, y: 0, z: 0 }, delay: 0.95 },
-    { node: nodes.Sphere, multiplier: 1.5, initialPosition: { x: -12, y: 0, z: 0 }, delay: 1.00 },
+    { node: nodes.Sphere002, multiplier: 2.4, initialPosition: { x: 5, y: -10, z: 2 }, delay: 0.70 },
+    { node: nodes.Cylinder002, multiplier: 1.2, initialPosition: { x: -5, y: -8, z: -2 }, delay: 0.90 },
+    { node: nodes.Sphere003, multiplier: 1, initialPosition: { x: 10, y: 5, z: -5 }, delay: 1.10 },
+    { node: nodes.Cylinder003, multiplier: 1.8, initialPosition: { x: -10, y: 8, z: 5 }, delay: 1.30 },
+    { node: nodes.Cylinder005, multiplier: 1.8, initialPosition: { x: 8, y: -12, z: 3 }, delay: 1.50 },
+    { node: nodes.Cube002, multiplier: 2, initialPosition: { x: -8, y: 12, z: -3 }, delay: 1.70 },
+    { node: nodes.Cylinder006, multiplier: 1.2, initialPosition: { x: 4, y: 10, z: 4 }, delay: 2.10 },
+    { node: nodes.Cylinder007, multiplier: 1.6, initialPosition: { x: -4, y: -10, z: -4 }, delay: 2.30 },
+    { node: nodes.Cylinder009, multiplier: 1.8, initialPosition: { x: 12, y: 0, z: 0 }, delay: 2.50 },
+    { node: nodes.Sphere, multiplier: 1.5, initialPosition: { x: -12, y: 0, z: 0 }, delay: 2.70 },
   ];
 
   return (

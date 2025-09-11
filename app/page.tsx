@@ -38,7 +38,7 @@ export default function HomePage() {
       <QuickAbout />
       <SkillsSection />
       <ExperienceSection />
-      <ProjectsSection />
+      {/* ProjectsSection */}
       <ContactForm />
     </main>
   );
@@ -96,11 +96,9 @@ const HeroSection = () => {
 
   return (
     <section className="min-h-screen flex flex-col justify-center items-center px-4 relative overflow-hidden">
-      <motion.div
+      <div
         className="text-center z-10 relative"
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
+      
       >
         <motion.h1
           variants={itemVariants}
@@ -110,7 +108,7 @@ const HeroSection = () => {
             <span className="relative inline-block">
               <BlurText
                 text={t("heroTitle")}
-                delay={180}
+                delay={500}
                 animateBy="words"
                 direction="top"
                 className="content-title"
@@ -118,6 +116,7 @@ const HeroSection = () => {
             </span>
           </span>
         </motion.h1>
+
         <TextType
           translationKeys={[
             "home.phrases.0",
@@ -128,12 +127,12 @@ const HeroSection = () => {
             "home.phrases.5",
             "home.phrases.6",
           ]}
-          typingSpeed={75}
-          pauseDuration={3000}
+          typingSpeed={50}
+          pauseDuration={1000}
           showCursor={true}
           cursorCharacter="|"
         />
-      </motion.div>
+      </div>
     </section>
   );
 };
@@ -432,7 +431,7 @@ const ContactForm = () => {
   };
 
   return (
-    <section className="py-16 sm:py-20 border-t border-base-300/30">
+    <section className="py-16 sm:py-20 border-t glass">
       <div className="container mx-auto px-6">
         <motion.div
           initial="hidden"

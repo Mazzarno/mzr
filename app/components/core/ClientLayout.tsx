@@ -45,12 +45,13 @@ const MemoizedGrid = memo(function Grid() {
         pointer-events-none
         opacity-30
       "
-        initial={{ opacity: 0 }}
+        initial={{ opacity: 0, filter: "blur(0.25px) brightness(0.5)" }}
         animate={{
           opacity: [0.5, 0.7, 1, 0.7, 0.5],
+          filter: "blur(0px) brightness(1)",
         }}
         transition={{
-          duration: 5,
+          duration: 2.5,
           ease: "easeInOut",
           repeat: Infinity,
           repeatType: "reverse",
@@ -332,7 +333,15 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (isInitialRender.current) {
-      setShowLoader(true);
+      // Check if the user has already visited the site; if so, skip the loader
+      try {
+        const hasVisited = typeof window !== "undefined" &&
+          window.localStorage.getItem("hasVisited") === "true";
+        setShowLoader(!hasVisited);
+      } catch (_) {
+        // Fallback: show loader if localStorage is not accessible
+        setShowLoader(true);
+      }
       isInitialRender.current = false;
     }
 
@@ -355,8 +364,13 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   if (showLoader) {
     return (
       <Loading
-        duration={3}
+        duration={2}
         onLoadComplete={() => {
+          try {
+            if (typeof window !== "undefined") {
+              window.localStorage.setItem("hasVisited", "true");
+            }
+          } catch (_) {}
           setShowLoader(false);
         }}
       />
@@ -401,25 +415,18 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         className="flex items-center justify-center min-h-[100dvh] bg-gradient-to-bl from-content-200 to-content-100"
         ref={constraintsRef}
       >
-        <motion.div
-          className="absolute h-full w-full pointer-events-none z-10"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
+        <div className="absolute h-full w-full pointer-events-none z-10">
           <Background />
-        </motion.div>
+        </div>
         <MemoizedGrid />
         <motion.main
           className={
             "relative overflow-hidden z-10 bg-neutral/10 backdrop-blur-xs scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)] shadowz will-change-transform will-change-opacity"
           }
-          initial={{ opacity: 0, scale: 0.94, y: 16, filter: "blur(8px)" }}
+          initial={{ opacity: 0.5, width: "0vw", height: "0vh" }}
           animate={{
+            transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
             opacity: 1,
-            scale: 1,
-            y: 0,
-            filter: "blur(0px)",
             width: isReduced ? "90vw" : "100vw",
             height: isReduced ? "90dvh" : "100dvh",
             borderRadius: isReduced ? "1rem" : "0rem",
@@ -431,8 +438,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             damping: 22,
             mass: 0.9,
             opacity: { duration: 0.5, ease: "easeOut" },
-            filter: { duration: 0.5, ease: "easeOut" },
-            borderRadius: { delay: 0.15, duration: 1, ease: "easeOut" },
+            borderRadius: { duration: 0.5, ease: "easeOut" },
           }}
           drag={!isReduced ? false : true}
           dragListener={false}
