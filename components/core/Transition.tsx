@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { getTitleInfo } from "./getTitleInfo";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { TransitionContext } from "../TransitionLink";
+import { TransitionContext } from "./TransitionLink";
 
 interface TransitionProps {
   children: React.ReactNode;

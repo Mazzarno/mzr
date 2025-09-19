@@ -4,7 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import AnimatedText from "./components/AnimatedText";
+import AnimatedText from "../components/core/AnimatedText";
 
 // Animation variants
 const fadeIn = {

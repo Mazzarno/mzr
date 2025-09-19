@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef, memo } from "react";
-import Loading from "./Loading";
-import TransitionLink from "../TransitionLink";
+import Loading from "../components/core/Loading";
+import TransitionLink from "../components/core/TransitionLink";
 import {
   motion,
   useMotionValue,
@@ -10,15 +10,15 @@ import {
   animate,
   DragControls,
 } from "framer-motion";
-import ThemeSwitcher from "../ThemeSwitch";
-import Logo from "../Logo";
+import ThemeSwitcher from "../components/core/ThemeSwitch";
+import Logo from "../components/core/Logo";
 import { Github, Linkedin, Mail, Maximize, Minimize } from "lucide-react";
-import Background from "../background";
+import Background from "../components/background";
 import dynamic from "next/dynamic";
-import LanguageSwitcher from "./LanguageSwitcher";
-import Transition from "./Transition";
-import SmoothScroll from "./SmoothScroll";
-import Noise from "../shared/Noise";
+import LanguageSwitcher from "../components/core/LanguageSwitcher";
+import Transition from "../components/core/Transition";
+import SmoothScroll from "../components/core/SmoothScroll";
+import Noise from "../components/shared/Noise";
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -29,7 +29,7 @@ const AnimatedCursor = dynamic(() => import("react-animated-cursor"), {
   loading: () => <div className="cursor" />,
 });
 
-const FaviconUpdater = dynamic(() => import("./FaviconUpdater"), {
+const FaviconUpdater = dynamic(() => import("../components/core/FaviconUpdater"), {
   ssr: false,
 });
 

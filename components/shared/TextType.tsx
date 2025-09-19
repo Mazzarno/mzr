@@ -3,7 +3,7 @@
 import { ElementType, useEffect, useRef, useState, createElement, useCallback } from "react";
 import { gsap } from "gsap";
 import { useTranslations } from "next-intl";
-import AnimatedText from "../AnimatedText";
+import AnimatedText from "../core/AnimatedText";
 
 interface TextTypeProps {
   className?: string;

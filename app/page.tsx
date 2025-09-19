@@ -1,11 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import AnimatedText from "./components/AnimatedText";
+import AnimatedText from "../components/core/AnimatedText";
 import { useTranslations } from "next-intl";
-import TextType from "./components/shared/TextType";
-import BlurText from "./components/shared/BlurText";
-import LogoLoop from "./components/shared/LogoLoop";
+import TextType from "../components/shared/TextType";
+import BlurText from "../components/shared/BlurText";
+import LogoLoop from "../components/shared/LogoLoop";
 import {
   SiHtml5,
   SiCss3,
@@ -30,7 +30,7 @@ import {
   SiAngular,
   SiStrapi,
 } from "react-icons/si";
-import CardSwap, { Card } from "./components/shared/CardSwap";
+import CardSwap, { Card } from "../components/shared/CardSwap";
 export default function HomePage() {
   return (
     <main className="text-base-content relative">
@@ -431,7 +431,7 @@ const ContactForm = () => {
   };
 
   return (
-    <section className="py-16 sm:py-20 border-t glass">
+    <section className="py-16 sm:py-20">
       <div className="container mx-auto px-6">
         <motion.div
           initial="hidden"

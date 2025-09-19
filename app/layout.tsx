@@ -2,9 +2,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { ThemeProvider } from "./components/core/ThemeProvider";
-import { LanguageProvider } from "./components/core/LanguageProvider";
-import ClientLayout from "./components/core/ClientLayout";
+import { ThemeProvider } from "../components/core/ThemeProvider";
+import { LanguageProvider } from "../components/core/LanguageProvider";
+import ClientLayout from "./ClientLayout";
 
 const dmSans = localFont({
   src: [

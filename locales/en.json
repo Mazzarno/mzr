@@ -1,21 +1,22 @@
 {
   "home": {
+    "ctaText": "Contact me to discuss your project or ideas.",
+    "ctaTitle": "Ready to collaborate?",
     "heroTitle": "Hello, I'm Alexis.",
- "phrases": {
-  "0": "I build websites that make the difference.",
-  "1": "Interfaces that captivate your users.",
-  "2": "Modern animations that bring your brand to life.",
-  "3": "Fast, fluid, and Google-optimized websites.",
-  "4": "A freelance partner who listens and delivers.",
-  "5": "Turning your ideas into impactful digital experiences.",
-  "6": "Boost your online presence with a site that stands out.",
-  "7": "Websites designed to convert."
-},
-"about": {
-  "title": "About",
-  "text": "I’m <strong>Alexis Germain</strong>, a freelance web developer specialized in building modern and immersive websites. With expertise in <strong>Vue/Nuxt</strong> and <strong>React/Next</strong>, I design fast and high-performance interfaces. I bring projects to life with smooth animations using <strong>Framer Motion & GSAP</strong>, interactive 3D with <strong>Three.js</strong>, and a strong attention to detail — delivering unique experiences that make brands stand out."
-}
-,
+    "phrases": {
+      "0": "I build websites that make the difference.",
+      "1": "Interfaces that captivate your users.",
+      "2": "Modern animations that bring your brand to life.",
+      "3": "Fast, fluid, and Google-optimized websites.",
+      "4": "A freelance partner who listens and delivers.",
+      "5": "Turning your ideas into impactful digital experiences.",
+      "6": "Boost your online presence with a site that stands out.",
+      "7": "Websites designed to convert."
+    },
+    "about": {
+      "title": "About",
+      "text": "I’m <strong>Alexis Germain</strong>, a freelance web developer specialized in building modern and immersive websites. With expertise in <strong>Vue/Nuxt</strong> and <strong>React/Next</strong>, I design fast and high-performance interfaces. I bring projects to life with smooth animations using <strong>Framer Motion & GSAP</strong>, interactive 3D with <strong>Three.js</strong>, and a strong attention to detail — delivering unique experiences that make brands stand out."
+    },
     "skills": {
       "title": "Skills",
       "languages": {
@@ -32,25 +33,24 @@
           "0": "Vue.js, Nuxt3, React, Next.js, AngularJS",
           "1": "Strapi, WordPress, Drupal",
           "2": "GSAP, Framer Motion, Three.js, Blender"
-  
         }
       }
     },
-"experience": {
-  "title": "Experience",
-  "freelance": {
-    "title": "Freelance Web Developer",
-    "description": "Design and development of modern showcase websites, custom integrations with React / Vue, performance optimization, SEO improvements, client training, and ongoing support & maintenance."
-  },
-  "asus": {
-    "title": "Webmaster – ASUS France",
-    "description": "Coordination between European and Taiwanese teams, marketing campaign support, multilingual web integration and localization, website content updates, and UX consistency across regions."
-  },
-  "mgs": {
-    "title": "Junior Web Developer – MGS Informatique",
-    "description": "Development and maintenance of corporate websites, bug fixing and technical support , implementation of new features."
-  }
-}
+    "experience": {
+      "title": "Experience",
+      "freelance": {
+        "title": "Freelance Web Developer",
+        "description": "Design and development of modern showcase websites, custom integrations with React / Vue, performance optimization, SEO improvements, client training, and ongoing support & maintenance."
+      },
+      "asus": {
+        "title": "Webmaster – ASUS France",
+        "description": "Coordination between European and Taiwanese teams, marketing campaign support, multilingual web integration and localization, website content updates, and UX consistency across regions."
+      },
+      "mgs": {
+        "title": "Junior Web Developer – MGS Informatique",
+        "description": "Development and maintenance of corporate websites, bug fixing and technical support , implementation of new features."
+      }
+    }
   },
   "work": {
     "title": "WORK",
@@ -82,10 +82,6 @@
     "error": "An error occurred. Please try again.",
     "socialHint": "Feel free to connect on social media as well.",
     "subject": "Subject",
-    "phone": "06.08.53.52.80",
-    "address": "Bruyères-sur-Oise, 95820",
-    "email_address": "contact@alexis-germain.fr",
-    "website": "alexis-germain.fr",
     "social": "Social",
     "follow": "Follow Me",
     "required": "Required field",
@@ -94,7 +90,6 @@
     "other": "Other",
     "open": "I'm always open to discussing new projects, creative ideas, or opportunities to collaborate."
   },
-
   "notFound": {
     "title": "404",
     "page": "Page",
@@ -103,21 +98,19 @@
     "goHome": "Go Home",
     "sorry": "Sorry, the page you are looking for does not exist."
   },
-  "footer": {
-    "rights": "All Rights Reserved",
-    "designed": "Designed & Developed by",
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Service",
-    "cookies": "Cookies"
-  },
-  "theme": {
-    "light": "Light",
-    "dark": "Dark",
-    "system": "System"
-  },
-  "language": {
-    "en": "English",
-    "fr": "French",
-    "select": "Select language"
+  "experience": {
+    "title": "Experience",
+    "freelance": {
+      "title": "Freelance Web Developer",
+      "description": "Design and development of modern showcase websites, custom integrations with React / Vue, performance optimization, SEO improvements, client training, and ongoing support & maintenance."
+    },
+    "asus": {
+      "title": "Webmaster – ASUS France",
+      "description": "Coordination between European and Taiwanese teams, marketing campaign support, multilingual web integration and localization, website content updates, and UX consistency across regions."
+    },
+    "mgs": {
+      "title": "Junior Web Developer – MGS Informatique",
+      "description": "Development and maintenance of corporate websites, bug fixing and technical support and implementation of new features."
+    }
   }
 }

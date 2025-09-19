@@ -1,51 +1,4 @@
 {
-  "home": {
-    "heroTitle": "Bonjour, je suis Alexis.",
-"phrases": {
-  "0": "Je crée des sites web modernes qui font la différence.",
-  "1": "Des interfaces qui séduisent vos utilisateurs.",
-  "2": "Animations modernes qui donnent vie à votre marque.",
-  "3": "Des sites rapides, fluides et optimisés Google.",
-  "4": "Un freelance à l’écoute, force de proposition.",
-  "5": "Transformez vos idées en expériences digitales impactantes.",
-  "6": "Boostez votre présence en ligne avec un site qui marque.",
-  "7": "Votre site, pensé pour convertir."
-},
-
-    "contactForm": {
-      "nameLabel": "Nom",
-      "namePlaceholder": "Votre nom",
-      "emailLabel": "Email",
-      "emailPlaceholder": "Votre email",
-      "messageLabel": "Message",
-      "messagePlaceholder": "Votre message",
-      "send": "Envoyer"
-    },
-"about": {
-  "title": "À propos",
-  "text": "Je suis <strong>Alexis Germain</strong>, développeur web freelance spécialisé dans la création de sites modernes et immersifs. Mon expertise en <strong>Vue/Nuxt</strong> et <strong>React/Next</strong> me permet de concevoir des interfaces rapides et performantes. J’intègre des animations fluides avec <strong>Framer Motion & GSAP</strong>, de la 3D interactive avec <strong>Three.js</strong>, et je porte une attention particulière aux détails pour offrir des expériences uniques qui valorisent chaque projet."
-}
-,
-    "skills": {
-      "title": "Compétences",
-      "languages": {
-        "title": "Languages & outils",
-        "items": {
-          "0": "HTML5, CSS3, JavaScript, TypeScript",
-          "1": "SQL, GraphQL, Node.js, Express",
-          "2": "Figma, Photoshop, Trello, Jira"
-        }
-      },
-      "frameworks": {
-        "title": "Frameworks & CMS",
-        "items": {
-          "0": "Vue.js, Nuxt3, React, Next.js, AngularJS",
-          "1": "Strapi, WordPress, Drupal",
-          "2": "GSAP, Framer Motion, Three.js, Blender"
- 
-        }
-      }
-    },
   "contact": {
     "title": "CONTACT",
     "letsChat": "Échangeons",
@@ -72,13 +25,100 @@
     "other": "Autre",
     "open": "Je suis toujours ouvert à discuter de nouveaux projets, idées créatives ou opportunités de collaboration."
   },
-
-  "notFound": {
-    "title": "404",
-    "page": "Page",
-    "not": "Non",
-    "found": "Trouvée",
-    "goHome": "Retour à l'accueil",
-    "sorry": "Désolé, la page que vous recherchez n'existe pas."
+  "home": {
+    "ctaText": "Contactez-moi pour discuter de votre projet ou de vos idées.",
+    "ctaTitle": "Prêt à collaborer ?",
+    "heroTitle": "Bonjour, je suis Alexis.",
+    "phrases": {
+      "0": "Je crée des sites web modernes qui font la différence.",
+      "1": "Des interfaces qui séduisent vos utilisateurs.",
+      "2": "Animations modernes qui donnent vie à votre marque.",
+      "3": "Des sites rapides, fluides et optimisés Google.",
+      "4": "Un freelance à l’écoute, force de proposition.",
+      "5": "Transformez vos idées en expériences digitales impactantes.",
+      "6": "Boostez votre présence en ligne avec un site qui marque.",
+      "7": "Votre site, pensé pour convertir."
+    },
+    "about": {
+      "title": "À propos",
+      "text": "Je suis <strong>Alexis Germain</strong>, développeur web freelance spécialisé dans la création de sites modernes et immersifs. Mon expertise en <strong>Vue/Nuxt</strong> et <strong>React/Next</strong> me permet de concevoir des interfaces rapides et performantes. J’intègre des animations fluides avec <strong>Framer Motion & GSAP</strong>, de la 3D interactive avec <strong>Three.js</strong>, et je porte une attention particulière aux détails pour offrir des expériences uniques qui valorisent chaque projet."
+    },
+    "skills": {
+      "title": "Compétences",
+      "languages": {
+        "title": "Languages & outils",
+        "items": {
+          "0": "HTML5, CSS3, JavaScript, TypeScript",
+          "1": "SQL, GraphQL, Node.js, Express",
+          "2": "Figma, Photoshop, Trello, Jira"
+        }
+      },
+      "frameworks": {
+        "title": "Frameworks & CMS",
+        "items": {
+          "0": "Vue.js, Nuxt3, React, Next.js, AngularJS",
+          "1": "Strapi, WordPress, Drupal",
+          "2": "GSAP, Framer Motion, Three.js, Blender"
+        }
+      }
+    },
+    "contactForm": {
+      "nameLabel": "Nom",
+      "namePlaceholder": "Votre nom",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Votre email",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Votre message",
+      "send": "Envoyer"
+    },
+    "notFound": {
+      "title": "404",
+      "page": "Page",
+      "not": "Non",
+      "found": "Trouvée",
+      "goHome": "Retour à l'accueil",
+      "sorry": "Désolé, la page que vous recherchez n'existe pas."
+    },
+    "experience": {
+      "title": "Expérience",
+      "freelance": {
+        "title": "Développeur Web Freelance",
+        "description": "Conception et développement de sites vitrines modernes, intégrations personnalisées avec React / Vue, optimisation des performances, amélioration SEO, formation des clients et support & maintenance continue."
+      },
+      "asus": {
+        "title": "Webmaster – ASUS France",
+        "description": "Coordination entre les équipes européennes et taïwanaises, support aux campagnes marketing, intégration web multilingue et localisation, mise à jour des contenus, et garantie d’une cohérence UX entre les régions."
+      },
+      "mgs": {
+        "title": "Développeur Web Junior – MGS Informatique",
+        "description": "Développement et maintenance de sites institutionnels, correction de bugs et support technique et ajout de nouvelles fonctionnalités."
+      }
+    },
+    "contact": {
+      "title": "CONTACT",
+      "letsChat": "Échangeons",
+      "collaborate": "Collaboration",
+      "contactMe": "Me contacter",
+      "name": "Nom",
+      "email": "Email",
+      "message": "Message",
+      "send": "Envoyer",
+      "sending": "Envoi en cours...",
+      "success": "Message envoyé avec succès!",
+      "error": "Une erreur est survenue. Veuillez réessayer.",
+      "socialHint": "Vous pouvez aussi me retrouver sur les réseaux sociaux.",
+      "subject": "Sujet",
+      "phone": "06.08.53.52.80",
+      "address": "Bruyères-sur-Oise, 95820",
+      "email_address": "contact@alexis-germain.fr",
+      "website": "alexis-germain.fr",
+      "social": "Réseaux sociaux",
+      "follow": "Suivez-moi",
+      "required": "Champ obligatoire",
+      "project": "Nouveau projet",
+      "question": "Question générale",
+      "other": "Autre",
+      "open": "Je suis toujours ouvert à discuter de nouveaux projets, idées créatives ou opportunités de collaboration."
+    }
   }
-}}
+}
