@@ -1,35 +1,24 @@
 {
   "home": {
     "heroTitle": "Bonjour, je suis Alexis.",
-"phrases": {
-  "0": "Je crée des sites web modernes qui font la différence.",
-  "1": "Des interfaces qui séduisent vos utilisateurs.",
-  "2": "Animations modernes qui donnent vie à votre marque.",
-  "3": "Des sites rapides, fluides et optimisés Google.",
-  "4": "Un freelance à l’écoute, force de proposition.",
-  "5": "Transformez vos idées en expériences digitales impactantes.",
-  "6": "Boostez votre présence en ligne avec un site qui marque.",
-  "7": "Votre site, pensé pour convertir."
-},
-
-    "contactForm": {
-      "nameLabel": "Nom",
-      "namePlaceholder": "Votre nom",
-      "emailLabel": "Email",
-      "emailPlaceholder": "Votre email",
-      "messageLabel": "Message",
-      "messagePlaceholder": "Votre message",
-      "send": "Envoyer"
+    "phrases": {
+      "0": "Je crée des sites web modernes qui font la différence.",
+      "1": "Des interfaces qui séduisent vos utilisateurs.",
+      "2": "Des animations modernes qui donnent vie à votre marque.",
+      "3": "Des sites rapides, fluides et optimisés pour Google.",
+      "4": "Un freelance à l’écoute, force de proposition.",
+      "5": "Transformez vos idées en expériences digitales impactantes.",
+      "6": "Boostez votre présence en ligne avec un site qui marque.",
+      "7": "Votre site, pensé pour convertir."
     },
-"about": {
-  "title": "À propos",
-  "text": "Je suis <strong>Alexis Germain</strong>, développeur web freelance spécialisé dans la création de sites modernes et immersifs. Mon expertise en <strong>Vue/Nuxt</strong> et <strong>React/Next</strong> me permet de concevoir des interfaces rapides et performantes. J’intègre des animations fluides avec <strong>Framer Motion & GSAP</strong>, de la 3D interactive avec <strong>Three.js</strong>, et je porte une attention particulière aux détails pour offrir des expériences uniques qui valorisent chaque projet."
-}
-,
+    "about": {
+      "title": "À propos",
+      "text": "Je suis <strong>Alexis Germain</strong>, développeur web freelance spécialisé dans la création de sites modernes et immersifs. Mon expertise en <strong>Vue/Nuxt</strong> et <strong>React/Next</strong> me permet de concevoir des interfaces rapides et performantes. J’intègre des animations fluides avec <strong>Framer Motion & GSAP</strong>, de la 3D interactive avec <strong>Three.js</strong>, et je porte une attention particulière aux détails pour offrir des expériences uniques qui valorisent chaque projet."
+    },
     "skills": {
       "title": "Compétences",
       "languages": {
-        "title": "Languages & outils",
+        "title": "Langages & outils",
         "items": {
           "0": "HTML5, CSS3, JavaScript, TypeScript",
           "1": "SQL, GraphQL, Node.js, Express",
@@ -42,10 +31,43 @@
           "0": "Vue.js, Nuxt3, React, Next.js, AngularJS",
           "1": "Strapi, WordPress, Drupal",
           "2": "GSAP, Framer Motion, Three.js, Blender"
- 
         }
       }
     },
+    "experience": {
+      "title": "Expérience",
+      "freelance": {
+        "title": "Développeur web freelance",
+        "description": "Conception et développement de sites vitrines modernes, intégrations sur mesure avec React / Vue, optimisation des performances, amélioration du SEO, formation des clients et accompagnement continu."
+      },
+      "asus": {
+        "title": "Webmaster – ASUS France",
+        "description": "Coordination entre les équipes européennes et taïwanaises, accompagnement marketing, intégration et localisation multilingue, mises à jour de contenu et cohérence UX entre les régions."
+      },
+      "mgs": {
+        "title": "Développeur web junior – MGS Informatique",
+        "description": "Développement et maintenance de sites corporate, correction de bugs et support technique, implémentation de nouvelles fonctionnalités."
+      }
+    },
+    "ctaTitle": "Prêt à lancer votre prochain projet ?",
+    "ctaText": "Discutons de vos idées et créons un site sur mesure, performant et mémorable pour votre marque."
+  },
+  "work": {
+    "title": "PROJETS",
+    "projects": "Projets",
+    "realizations": "Réalisations",
+    "experiences": "Expériences",
+    "selectedWorks": "Sélection de projets",
+    "viewProject": "Voir mes projets",
+    "allProjects": "Tous les projets",
+    "technologies": "Technologies",
+    "client": "Client",
+    "duration": "Durée",
+    "role": "Rôle",
+    "viewLive": "Voir en ligne",
+    "viewCode": "Voir le code",
+    "discover": "Découvrez quelques-unes de mes réalisations récentes"
+  },
   "contact": {
     "title": "CONTACT",
     "letsChat": "Échangeons",
@@ -56,7 +78,7 @@
     "message": "Message",
     "send": "Envoyer",
     "sending": "Envoi en cours...",
-    "success": "Message envoyé avec succès!",
+    "success": "Message envoyé avec succès !",
     "error": "Une erreur est survenue. Veuillez réessayer.",
     "socialHint": "Vous pouvez aussi me retrouver sur les réseaux sociaux.",
     "subject": "Sujet",
@@ -70,9 +92,8 @@
     "project": "Nouveau projet",
     "question": "Question générale",
     "other": "Autre",
-    "open": "Je suis toujours ouvert à discuter de nouveaux projets, idées créatives ou opportunités de collaboration."
+    "open": "Je suis toujours ouvert à discuter de nouveaux projets, d'idées créatives ou d'opportunités de collaboration."
   },
-
   "notFound": {
     "title": "404",
     "page": "Page",
@@ -80,5 +101,22 @@
     "found": "Trouvée",
     "goHome": "Retour à l'accueil",
     "sorry": "Désolé, la page que vous recherchez n'existe pas."
+  },
+  "footer": {
+    "rights": "Tous droits réservés",
+    "designed": "Design & développement :",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "cookies": "Cookies"
+  },
+  "theme": {
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
+  },
+  "language": {
+    "en": "Anglais",
+    "fr": "Français",
+    "select": "Choisir la langue"
   }
-}}
+}
