@@ -338,7 +338,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         const hasVisited = typeof window !== "undefined" &&
           window.localStorage.getItem("hasVisited") === "true";
         setShowLoader(!hasVisited);
-      } catch (_) {
+      } catch {
 
         setShowLoader(true);
       }
@@ -370,7 +370,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             if (typeof window !== "undefined") {
               window.localStorage.setItem("hasVisited", "true");
             }
-          } catch (_) {}
+          } catch {}
           setShowLoader(false);
         }}
       />
