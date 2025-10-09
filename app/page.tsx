@@ -30,7 +30,7 @@ import {
   SiAngular,
   SiStrapi,
 } from "react-icons/si";
-import CardSwap, { Card } from "../components/shared/CardSwap";
+//import CardSwap, { Card } from "../components/shared/CardSwap";
 export default function HomePage() {
   return (
     <main className="text-base-content relative">
@@ -78,13 +78,6 @@ const listItemVariants = {
 
 const HeroSection = () => {
   const t = useTranslations("home");
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15, delayChildren: 0.2 },
-    },
-  };
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
@@ -96,10 +89,7 @@ const HeroSection = () => {
 
   return (
     <section className="min-h-screen flex flex-col justify-center items-center px-4 relative overflow-hidden">
-      <div
-        className="text-center z-10 relative"
-      
-      >
+      <div className="text-center z-10 relative">
         <motion.h1
           variants={itemVariants}
           className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
@@ -324,18 +314,28 @@ const ExperienceSection = () => {
             variants={listContainerVariants}
           >
             <motion.div variants={listItemVariants}>
-              <h3 className="content-text font-semibold mb-2">{t("freelance.title")}</h3>
+              <h3 className="content-text font-semibold mb-2">
+                {t("freelance.title")}
+              </h3>
               <p className="content-text text-base-content/70">
                 {t("freelance.description")}
               </p>
             </motion.div>
             <motion.div variants={listItemVariants}>
-              <h3 className="content-text font-semibold mb-2">{t("asus.title")}</h3>
-              <p className="content-text text-base-content/70">{t("asus.description")}</p>
+              <h3 className="content-text font-semibold mb-2">
+                {t("asus.title")}
+              </h3>
+              <p className="content-text text-base-content/70">
+                {t("asus.description")}
+              </p>
             </motion.div>
             <motion.div variants={listItemVariants}>
-              <h3 className="content-text font-semibold mb-2">{t("mgs.title")}</h3>
-              <p className="content-text text-base-content/70">{t("mgs.description")}</p>
+              <h3 className="content-text font-semibold mb-2">
+                {t("mgs.title")}
+              </h3>
+              <p className="content-text text-base-content/70">
+                {t("mgs.description")}
+              </p>
             </motion.div>
           </motion.div>
         </motion.div>
@@ -343,7 +343,7 @@ const ExperienceSection = () => {
     </section>
   );
 };
-
+/*
 const ProjectsSection = () => {
   const t = useTranslations("work");
   return (
@@ -399,7 +399,7 @@ const ProjectsSection = () => {
     </section>
   );
 };
-
+*/
 const ContactForm = () => {
   const t = useTranslations();
   const [formState, setFormState] = useState({

@@ -1,9 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-despairs: "Despairs", var(--font-despairs);
   --font-dm-sans: "DMSans", var(--font-dm-sans);
-  --font-inter: "Inter", var(--font-inter);
   --font-figtree: "FigTree", var(--font-figtree);
 }
 @layer components {

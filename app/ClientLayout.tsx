@@ -333,13 +333,13 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (isInitialRender.current) {
-      // Check if the user has already visited the site; if so, skip the loader
+
       try {
         const hasVisited = typeof window !== "undefined" &&
           window.localStorage.getItem("hasVisited") === "true";
         setShowLoader(!hasVisited);
       } catch (_) {
-        // Fallback: show loader if localStorage is not accessible
+
         setShowLoader(true);
       }
       isInitialRender.current = false;

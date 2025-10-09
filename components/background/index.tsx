@@ -51,7 +51,6 @@ export default function Background() {
   };
 
   useEffect(() => {
-    // Handler for mouse movement on desktop
     const handleMouseMove = (e: MouseEvent) => {
       const { innerWidth, innerHeight } = window;
       const x = e.clientX / innerWidth;
@@ -60,17 +59,12 @@ export default function Background() {
       mouse.y.set(y);
     };
 
-    // Handler for device orientation on mobile
     const handleOrientation = (e: DeviceOrientationEvent) => {
       if (e.beta === null || e.gamma === null) return;
-
-      // Clamp values for a more subtle effect
       const clamp = (val: number, min: number, max: number) =>
         Math.max(Math.min(val, max), min);
-      const beta = clamp(e.beta, -45, 45); // front-to-back tilt
-      const gamma = clamp(e.gamma, -45, 45); // left-to-right tilt
-
-      // Normalize to 0-1 range
+      const beta = clamp(e.beta, -45, 45);
+      const gamma = clamp(e.gamma, -45, 45);
       const x = (gamma + 45) / 90;
       const y = (beta + 45) / 90;
 
@@ -79,7 +73,6 @@ export default function Background() {
     };
 
     const requestOrientationPermission = () => {
-      // iOS 13+ requires user permission for DeviceOrientation events
       const doe = DeviceOrientationEvent as unknown as {
         requestPermission?: () => Promise<"granted" | "denied">;
       };
@@ -100,8 +93,6 @@ export default function Background() {
     };
 
     if (isMobile) {
-      // For mobile, we need a user gesture to request permission.
-      // We'll listen for the first click/touch on the body.
       document.body.addEventListener("click", requestOrientationPermission, {
         once: true,
       });
@@ -121,7 +112,6 @@ export default function Background() {
         );
       };
     } else {
-      // For desktop, use mouse move with throttling
       const throttledMouseMove = (e: MouseEvent) => {
         requestAnimationFrame(() => handleMouseMove(e));
       };
