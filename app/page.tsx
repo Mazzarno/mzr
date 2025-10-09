@@ -343,7 +343,7 @@ const ExperienceSection = () => {
     </section>
   );
 };
-
+/*
 const ProjectsSection = () => {
   const t = useTranslations("work");
   return (
@@ -399,6 +399,7 @@ const ProjectsSection = () => {
     </section>
   );
 };
+*/
 
 const ContactForm = () => {
   const t = useTranslations();
