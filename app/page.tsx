@@ -507,29 +507,30 @@ const ContactForm = () => {
     <section className="py-16 sm:py-20 relative overflow-hidden">
       <div className="container mx-auto px-6">
         <div className="max-w-2xl mx-auto">
-          <AnimatePresence mode="wait">
-            {!submitted && (
-              <motion.div
-                key="contact-form"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ duration: 0.5 }}
-              >
+          <motion.div
+            key="contact-form"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
                 <motion.h2
                   className="text-3xl md:text-4xl font-bold mb-6 text-center"
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-100px" }}
+                  variants={fadeIn}
+                  custom={0}
                 >
                   <AnimatedText translationKey="home.ctaTitle" animated />
                 </motion.h2>
 
                 <motion.p
                   className="text-base sm:text-lg md:text-xl text-base-content/70 mb-10 text-center"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2 }}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-100px" }}
+                  variants={fadeIn}
+                  custom={1}
                 >
                   <AnimatedText
                     translationKey="home.ctaText"
@@ -537,11 +538,19 @@ const ContactForm = () => {
                   />
                 </motion.p>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <motion.form
+                  onSubmit={handleSubmit}
+                  className="space-y-6"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.2 }}
+                  variants={listContainerVariants}
+                >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <motion.div
                       whileHover={{ scale: 1.02 }}
                       transition={{ duration: 0.2 }}
+                      variants={listItemVariants}
                     >
                       <label htmlFor="name" className="label">
                         <span className="label-text">{t("contact.name")}</span>
@@ -553,18 +562,14 @@ const ContactForm = () => {
                         onChange={handleChange}
                         required
                         type="text"
-                        className="input input-bordered w-full"
+                        className={`input input-bordered w-full ${submitted ? "opacity-60" : ""}`}
                         placeholder={t("contact.name") + "..."}
                         aria-invalid={!!errors.name}
-                        aria-describedby={
-                          errors.name ? "name-error" : undefined
-                        }
+                        aria-describedby={errors.name ? "name-error" : undefined}
+                        disabled={submitted}
                       />
                       {errors.name && (
-                        <span
-                          id="name-error"
-                          className="label-text-alt text-error mt-1 inline-block"
-                        >
+                        <span id="name-error" className="label-text-alt text-error mt-1 inline-block">
                           {errors.name}
                         </span>
                       )}
@@ -573,6 +578,7 @@ const ContactForm = () => {
                     <motion.div
                       whileHover={{ scale: 1.02 }}
                       transition={{ duration: 0.2 }}
+                      variants={listItemVariants}
                     >
                       <label htmlFor="email" className="label">
                         <span className="label-text">{t("contact.email")}</span>
@@ -584,28 +590,21 @@ const ContactForm = () => {
                         onChange={handleChange}
                         required
                         type="email"
-                        className="input input-bordered w-full"
+                        className={`input input-bordered w-full ${submitted ? "opacity-60" : ""}`}
                         placeholder={t("contact.email") + "..."}
                         aria-invalid={!!errors.email}
-                        aria-describedby={
-                          errors.email ? "email-error" : undefined
-                        }
+                        aria-describedby={errors.email ? "email-error" : undefined}
+                        disabled={submitted}
                       />
                       {errors.email && (
-                        <span
-                          id="email-error"
-                          className="label-text-alt text-error mt-1 inline-block"
-                        >
+                        <span id="email-error" className="label-text-alt text-error mt-1 inline-block">
                           {errors.email}
                         </span>
                       )}
                     </motion.div>
                   </div>
 
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ duration: 0.2 }}
-                  >
+                  <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
                     <label htmlFor="subject" className="label">
                       <span className="label-text">{t("contact.subject")}</span>
                     </label>
@@ -616,27 +615,20 @@ const ContactForm = () => {
                       onChange={handleChange}
                       required
                       type="text"
-                      className="input input-bordered w-full"
+                      className={`input input-bordered w-full ${submitted ? "opacity-60" : ""}`}
                       placeholder={t("contact.subject") + "..."}
                       aria-invalid={!!errors.subject}
-                      aria-describedby={
-                        errors.subject ? "subject-error" : undefined
-                      }
+                      aria-describedby={errors.subject ? "subject-error" : undefined}
+                      disabled={submitted}
                     />
                     {errors.subject && (
-                      <span
-                        id="subject-error"
-                        className="label-text-alt text-error mt-1 inline-block"
-                      >
+                      <span id="subject-error" className="label-text-alt text-error mt-1 inline-block">
                         {errors.subject}
                       </span>
                     )}
                   </motion.div>
 
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ duration: 0.2 }}
-                  >
+                  <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
                     <label htmlFor="message" className="label">
                       <span className="label-text">{t("contact.message")}</span>
                     </label>
@@ -647,78 +639,51 @@ const ContactForm = () => {
                       onChange={handleChange}
                       required
                       rows={6}
-                      className="textarea textarea-bordered w-full"
+                      className={`textarea textarea-bordered w-full ${submitted ? "opacity-60" : ""}`}
                       placeholder={t("contact.message") + "..."}
                       aria-invalid={!!errors.message}
-                      aria-describedby={
-                        errors.message ? "message-error" : undefined
-                      }
+                      aria-describedby={errors.message ? "message-error" : undefined}
+                      disabled={submitted}
                     ></textarea>
                     {errors.message && (
-                      <span
-                        id="message-error"
-                        className="label-text-alt text-error mt-1 inline-block"
-                      >
+                      <span id="message-error" className="label-text-alt text-error mt-1 inline-block">
                         {errors.message}
                       </span>
                     )}
                   </motion.div>
 
                   <div className="pt-2 flex justify-center">
-                    <motion.button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="btn btn-primary btn-lg rounded-full shadow-lg px-8"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.96 }}
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <span className="loading loading-spinner loading-sm mr-2"></span>
-                          {t("contact.sending")}
-                        </>
-                      ) : (
-                        <AnimatedText
-                          translationKey="contact.send"
-                          animated={false}
-                        />
-                      )}
-                    </motion.button>
+                    {submitted ? (
+                      <motion.div
+                        initial={{ opacity: 0, y: 6 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        className="text-base sm:text-lg md:text-xl text-base-content/80"
+                      >
+                        {t("contact.thanksMessage")}
+                      </motion.div>
+                    ) : (
+                      <motion.button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="btn btn-primary btn-lg rounded-full shadow-lg px-8"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.96 }}
+                        variants={listItemVariants}
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <span className="loading loading-spinner loading-sm mr-2"></span>
+                            {t("contact.sending")}
+                          </>
+                        ) : (
+                          <AnimatedText translationKey="contact.send" animated={false} />
+                        )}
+                      </motion.button>
+                    )}
                   </div>
-                </form>
+                </motion.form>
               </motion.div>
-            )}
-          </AnimatePresence>
-
-          <AnimatePresence>
-            {submitted && (
-              <motion.div
-                key="contact-thanks"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ duration: 0.5 }}
-                className="text-center"
-              >
-                <motion.h2
-                  className="text-3xl md:text-4xl font-bold mb-4"
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  {t("contact.thanksTitle")}
-                </motion.h2>
-                <motion.p
-                  className="text-base sm:text-lg md:text-xl text-base-content/80"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.1 }}
-                >
-                  {t("contact.thanksMessage")}
-                </motion.p>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
       </div>
       <AnimatePresence>
