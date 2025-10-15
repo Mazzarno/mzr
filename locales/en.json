@@ -88,7 +88,20 @@
     "project": "New project",
     "question": "General question",
     "other": "Other",
-    "open": "I'm always open to discussing new projects, creative ideas, or opportunities to collaborate."
+    "open": "I'm always open to discussing new projects, creative ideas, or opportunities to collaborate.",
+    "close": "Close",
+    "thanksTitle": "Thanks for your message!",
+    "thanksMessage": "I will get back to you as soon as possible. Have a great day!",
+    "validation": {
+      "nameRequired": "Name is required.",
+      "nameMin": "Name must be at least 2 characters.",
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Please enter a valid email.",
+      "subjectRequired": "Please select a subject.",
+      "messageRequired": "Message is required.",
+      "messageMin": "Message must be at least 10 characters.",
+      "formInvalid": "Please fix the form errors."
+    }
   },
   "notFound": {
     "title": "404",

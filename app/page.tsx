@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { RxCross2 } from "react-icons/rx";
 import AnimatedText from "../components/core/AnimatedText";
 import { useTranslations } from "next-intl";
 import TextType from "../components/shared/TextType";
@@ -402,6 +403,7 @@ const ProjectsSection = () => {
 */
 const ContactForm = () => {
   const t = useTranslations();
+
   const [formState, setFormState] = useState({
     name: "",
     email: "",
@@ -409,206 +411,333 @@ const ContactForm = () => {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState<null | boolean>(null);
+  const [toast, setToast] = useState<{
+    type: "success" | "error";
+    messageKey: string;
+  } | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    setFormState({ ...formState, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormState({ ...formState, [name]: value });
+    if (errors[name]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[name];
+        return next;
+      });
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validate = (data: typeof formState) => {
+    const nextErrors: Record<string, string> = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+
+    if (!data.name.trim()) {
+      nextErrors.name = t("contact.validation.nameRequired");
+    } else if (data.name.trim().length < 2) {
+      nextErrors.name = t("contact.validation.nameMin");
+    }
+
+    if (!data.email.trim()) {
+      nextErrors.email = t("contact.validation.emailRequired");
+    } else if (!emailRegex.test(data.email.trim())) {
+      nextErrors.email = t("contact.validation.emailInvalid");
+    }
+
+    if (!data.subject) {
+      nextErrors.subject = t("contact.validation.subjectRequired");
+    }
+
+    if (!data.message.trim()) {
+      nextErrors.message = t("contact.validation.messageRequired");
+    } else if (data.message.trim().length < 10) {
+      nextErrors.message = t("contact.validation.messageMin");
+    }
+
+    return nextErrors;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitSuccess(null);
-    setTimeout(() => {
+    setToast(null);
+    const validation = validate(formState);
+    if (Object.keys(validation).length > 0) {
+      setErrors(validation);
       setIsSubmitting(false);
-      setSubmitSuccess(true);
-      setFormState({ name: "", email: "", subject: "", message: "" });
-    }, 1200);
+      setToast({ type: "error", messageKey: "contact.validation.formInvalid" });
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "https://formsubmit.co/ajax/postmaster@alexis-germain.fr",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(formState),
+        }
+      );
+
+      if (response.ok) {
+        setFormState({ name: "", email: "", subject: "", message: "" });
+        setToast({ type: "success", messageKey: "contact.success" });
+        setSubmitted(true);
+      } else {
+        setToast({ type: "error", messageKey: "contact.error" });
+      }
+    } catch {
+      setToast({ type: "error", messageKey: "contact.error" });
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setToast(null), 4000);
+    }
   };
 
   return (
-    <section className="py-16 sm:py-20">
+    <section className="py-16 sm:py-20 relative overflow-hidden">
       <div className="container mx-auto px-6">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={fadeIn}
-          className="max-w-2xl mx-auto"
-        >
-          <motion.h2
-            className="text-3xl md:text-4xl font-bold mb-6 text-center"
-            variants={fadeIn}
-            custom={0}
-          >
-            <AnimatedText translationKey="home.ctaTitle" animated={true} />
-          </motion.h2>
-          <motion.p
-            className="text-base sm:text-lg md:text-xl text-base-content/70 max-w-2xl mx-auto mt-4 mb-8 text-center"
-            variants={fadeIn}
-            custom={1}
-          >
-            <AnimatedText translationKey="home.ctaText" animated={false} />
-          </motion.p>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label htmlFor="name" className="label">
-                  <span className="label-text">
-                    <AnimatedText
-                      translationKey="contact.name"
-                      animated={false}
-                    />
-                  </span>
-                </label>
-                <motion.input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formState.name}
-                  onChange={handleChange}
-                  required
-                  className="input input-bordered w-full"
-                  placeholder={t("contact.name") + "..."}
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                />
-              </div>
-              <div className="space-y-2">
-                <label htmlFor="email" className="label">
-                  <span className="label-text">
-                    <AnimatedText
-                      translationKey="contact.email"
-                      animated={false}
-                    />
-                  </span>
-                </label>
-                <motion.input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formState.email}
-                  onChange={handleChange}
-                  required
-                  className="input input-bordered w-full"
-                  placeholder={t("contact.email") + "..."}
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="subject" className="label">
-                <span className="label-text">
-                  <AnimatedText
-                    translationKey="contact.subject"
-                    animated={false}
-                  />
-                </span>
-              </label>
-              <motion.select
-                id="subject"
-                name="subject"
-                value={formState.subject}
-                onChange={handleChange}
-                required
-                className="select select-bordered w-full"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.2 }}
+        <div className="max-w-2xl mx-auto">
+          <AnimatePresence mode="wait">
+            {!submitted && (
+              <motion.div
+                key="contact-form"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.5 }}
               >
-                <option value="" disabled>
-                  {t("contact.subject")}
-                </option>
-                <option value="projet">{t("contact.project")}</option>
-                <option value="collaboration">
-                  {t("contact.collaborate")}
-                </option>
-                <option value="question">{t("contact.question")}</option>
-                <option value="autre">{t("contact.other")}</option>
-              </motion.select>
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="message" className="label">
-                <span className="label-text">
-                  <AnimatedText
-                    translationKey="contact.message"
-                    animated={false}
-                  />
-                </span>
-              </label>
-              <motion.textarea
-                id="message"
-                name="message"
-                value={formState.message}
-                onChange={handleChange}
-                required
-                rows={6}
-                className="textarea textarea-bordered w-full"
-                placeholder={t("contact.message") + "..."}
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.2 }}
-              ></motion.textarea>
-            </div>
-            <div className="pt-2 flex flex-col items-center">
-              <motion.button
-                type="submit"
-                disabled={isSubmitting}
-                className="btn btn-primary btn-lg px-8 rounded-full shadow-lg"
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                {isSubmitting ? (
-                  <>
-                    <span className="loading loading-spinner loading-sm mr-2"></span>
-                    {t("contact.sending")}
-                  </>
-                ) : (
-                  <AnimatedText
-                    translationKey="contact.send"
-                    animated={false}
-                  />
-                )}
-              </motion.button>
+                <motion.h2
+                  className="text-3xl md:text-4xl font-bold mb-6 text-center"
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <AnimatedText translationKey="home.ctaTitle" animated />
+                </motion.h2>
 
-              {submitSuccess === true && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 alert alert-success max-w-lg"
+                <motion.p
+                  className="text-base sm:text-lg md:text-xl text-base-content/70 mb-10 text-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
                 >
-                  <span>
-                    <AnimatedText
-                      translationKey="contact.success"
-                      animated={false}
+                  <AnimatedText translationKey="home.ctaText" animated={false} />
+                </motion.p>
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <label htmlFor="name" className="label">
+                        <span className="label-text">{t("contact.name")}</span>
+                      </label>
+                      <input
+                        id="name"
+                        name="name"
+                        value={formState.name}
+                        onChange={handleChange}
+                        required
+                        type="text"
+                        className="input input-bordered w-full"
+                        placeholder={t("contact.name") + "..."}
+                        aria-invalid={!!errors.name}
+                        aria-describedby={errors.name ? "name-error" : undefined}
+                      />
+                      {errors.name && (
+                        <span
+                          id="name-error"
+                          className="label-text-alt text-error mt-1 inline-block"
+                        >
+                          {errors.name}
+                        </span>
+                      )}
+                    </motion.div>
+
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <label htmlFor="email" className="label">
+                        <span className="label-text">{t("contact.email")}</span>
+                      </label>
+                      <input
+                        id="email"
+                        name="email"
+                        value={formState.email}
+                        onChange={handleChange}
+                        required
+                        type="email"
+                        className="input input-bordered w-full"
+                        placeholder={t("contact.email") + "..."}
+                        aria-invalid={!!errors.email}
+                        aria-describedby={errors.email ? "email-error" : undefined}
+                      />
+                      {errors.email && (
+                        <span
+                          id="email-error"
+                          className="label-text-alt text-error mt-1 inline-block"
+                        >
+                          {errors.email}
+                        </span>
+                      )}
+                    </motion.div>
+                  </div>
+
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <label htmlFor="subject" className="label">
+                      <span className="label-text">{t("contact.subject")}</span>
+                    </label>
+                    <input
+                      id="subject"
+                      name="subject"
+                      value={formState.subject}
+                      onChange={handleChange}
+                      required
+                      type="text"
+                      className="input input-bordered w-full"
+                      placeholder={t("contact.subject") + "..."}
+                      aria-invalid={!!errors.subject}
+                      aria-describedby={errors.subject ? "subject-error" : undefined}
                     />
-                  </span>
-                </motion.div>
-              )}
-              {submitSuccess === false && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
+                    {errors.subject && (
+                      <span
+                        id="subject-error"
+                        className="label-text-alt text-error mt-1 inline-block"
+                      >
+                        {errors.subject}
+                      </span>
+                    )}
+                  </motion.div>
+
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <label htmlFor="message" className="label">
+                      <span className="label-text">{t("contact.message")}</span>
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formState.message}
+                      onChange={handleChange}
+                      required
+                      rows={6}
+                      className="textarea textarea-bordered w-full"
+                      placeholder={t("contact.message") + "..."}
+                      aria-invalid={!!errors.message}
+                      aria-describedby={errors.message ? "message-error" : undefined}
+                    ></textarea>
+                    {errors.message && (
+                      <span
+                        id="message-error"
+                        className="label-text-alt text-error mt-1 inline-block"
+                      >
+                        {errors.message}
+                      </span>
+                    )}
+                  </motion.div>
+
+                  <div className="pt-2 flex justify-center">
+                    <motion.button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="btn btn-primary btn-lg rounded-full shadow-lg px-8"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.96 }}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <span className="loading loading-spinner loading-sm mr-2"></span>
+                          {t("contact.sending")}
+                        </>
+                      ) : (
+                        <AnimatedText
+                          translationKey="contact.send"
+                          animated={false}
+                        />
+                      )}
+                    </motion.button>
+                  </div>
+                </form>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {submitted && (
+              <motion.div
+                key="contact-thanks"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.5 }}
+                className="text-center"
+              >
+                <motion.h2
+                  className="text-3xl md:text-4xl font-bold mb-4"
+                  initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 alert alert-error max-w-lg"
+                  transition={{ duration: 0.4 }}
                 >
-                  <span>
-                    <AnimatedText
-                      translationKey="contact.error"
-                      animated={false}
-                    />
-                  </span>
-                </motion.div>
-              )}
-            </div>
-          </form>
-          <p className="text-xl text-base-content text-center mt-8 pt-6">
-            {t("contact.socialHint")}
-          </p>
-        </motion.div>
+                  {t("contact.thanksTitle")}
+                </motion.h2>
+                <motion.p
+                  className="text-base sm:text-lg md:text-xl text-base-content/80"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.1 }}
+                >
+                  {t("contact.thanksMessage")}
+                </motion.p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            key="toast"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ duration: 0.4 }}
+            className="toast toast-end toast-bottom z-50 mb-14 mr-6"
+          >
+            <div
+              className={`alert ${
+                toast.type === "success" ? "alert-success" : "alert-error"
+              } shadow-lg relative pr-10`}
+            >
+              <span className="text-white">{t(toast.messageKey)}</span>
+              <button
+                type="button"
+                aria-label={t("contact.close") ?? "Close"}
+                className="absolute top-2 right-2 p-1 rounded-full text-white/90 hover:text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
+                onClick={() => setToast(null)}
+              >
+                <RxCross2 size={16} />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };

@@ -23,7 +23,20 @@
     "project": "Nouveau projet",
     "question": "Question générale",
     "other": "Autre",
-    "open": "Je suis toujours ouvert à discuter de nouveaux projets, idées créatives ou opportunités de collaboration."
+    "open": "Je suis toujours ouvert à discuter de nouveaux projets, idées créatives ou opportunités de collaboration.",
+    "close": "Fermer",
+    "thanksTitle": "Merci pour votre message !",
+    "thanksMessage": "Je vous répondrai au plus vite. Bonne journée !",
+    "validation": {
+      "nameRequired": "Le nom est requis.",
+      "nameMin": "Le nom doit contenir au moins 2 caractères.",
+      "emailRequired": "L'email est requis.",
+      "emailInvalid": "Veuillez saisir un email valide.",
+      "subjectRequired": "Veuillez sélectionner un sujet.",
+      "messageRequired": "Le message est requis.",
+      "messageMin": "Le message doit contenir au moins 10 caractères.",
+      "formInvalid": "Veuillez corriger les erreurs du formulaire."
+    }
   },
   "home": {
     "ctaText": "Contactez-moi pour discuter de votre projet ou de vos idées.",
