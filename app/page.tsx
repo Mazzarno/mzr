@@ -477,7 +477,7 @@ const ContactForm = () => {
 
     try {
       const response = await fetch(
-        "https://formsubmit.co/ajax/postmaster@alexis-germain.fr",
+        "https://formsubmit.co/ajax/79c57c4cb9aa04a9834c34585be7a6d6",
         {
           method: "POST",
           headers: {
@@ -531,7 +531,10 @@ const ContactForm = () => {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
                 >
-                  <AnimatedText translationKey="home.ctaText" animated={false} />
+                  <AnimatedText
+                    translationKey="home.ctaText"
+                    animated={false}
+                  />
                 </motion.p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -553,7 +556,9 @@ const ContactForm = () => {
                         className="input input-bordered w-full"
                         placeholder={t("contact.name") + "..."}
                         aria-invalid={!!errors.name}
-                        aria-describedby={errors.name ? "name-error" : undefined}
+                        aria-describedby={
+                          errors.name ? "name-error" : undefined
+                        }
                       />
                       {errors.name && (
                         <span
@@ -582,7 +587,9 @@ const ContactForm = () => {
                         className="input input-bordered w-full"
                         placeholder={t("contact.email") + "..."}
                         aria-invalid={!!errors.email}
-                        aria-describedby={errors.email ? "email-error" : undefined}
+                        aria-describedby={
+                          errors.email ? "email-error" : undefined
+                        }
                       />
                       {errors.email && (
                         <span
@@ -612,7 +619,9 @@ const ContactForm = () => {
                       className="input input-bordered w-full"
                       placeholder={t("contact.subject") + "..."}
                       aria-invalid={!!errors.subject}
-                      aria-describedby={errors.subject ? "subject-error" : undefined}
+                      aria-describedby={
+                        errors.subject ? "subject-error" : undefined
+                      }
                     />
                     {errors.subject && (
                       <span
@@ -641,7 +650,9 @@ const ContactForm = () => {
                       className="textarea textarea-bordered w-full"
                       placeholder={t("contact.message") + "..."}
                       aria-invalid={!!errors.message}
-                      aria-describedby={errors.message ? "message-error" : undefined}
+                      aria-describedby={
+                        errors.message ? "message-error" : undefined
+                      }
                     ></textarea>
                     {errors.message && (
                       <span
