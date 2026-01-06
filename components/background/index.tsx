@@ -1,28 +1,41 @@
 "use client";
-import React, { useEffect, useMemo, Suspense, useState } from "react";
+import React, { useEffect, useMemo, Suspense, useState, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import {
   EffectComposer,
   ChromaticAberration,
   Noise,
+  Vignette,
 } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
 import { Vector2 } from "three";
 import ModelShapes from "./ModelShapes";
 import { Environment } from "@react-three/drei";
-import { useMotionValue, useSpring } from "framer-motion";
+import { useMotionValue, useSpring, useScroll } from "framer-motion";
 import { useTheme } from "next-themes";
 
-export default function Background() {
+interface BackgroundProps {
+  onShapesReady?: () => void;
+}
+
+export default function Background({ onShapesReady }: BackgroundProps) {
   const { theme, resolvedTheme } = useTheme();
   const currentTheme = theme === "system" ? resolvedTheme : theme;
   const [isMobile, setIsMobile] = useState(false);
+  const frameCount = useRef(0);
+
+  const { scrollYProgress } = useScroll();
+
+  const scrollProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+  });
 
   useEffect(() => {
     const checkMobile = () => {
-      const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(
-        navigator.userAgent
-      );
+      const isMobileDevice =
+        /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
+        window.innerWidth < 768;
       setIsMobile(isMobileDevice);
     };
     checkMobile();
@@ -51,7 +64,6 @@ export default function Background() {
   };
 
   useEffect(() => {
-    // Handler for mouse movement on desktop
     const handleMouseMove = (e: MouseEvent) => {
       const { innerWidth, innerHeight } = window;
       const x = e.clientX / innerWidth;
@@ -60,17 +72,17 @@ export default function Background() {
       mouse.y.set(y);
     };
 
-    // Handler for device orientation on mobile
     const handleOrientation = (e: DeviceOrientationEvent) => {
       if (e.beta === null || e.gamma === null) return;
 
-      // Clamp values for a more subtle effect
+      frameCount.current++;
+      if (frameCount.current % 2 !== 0) return;
+
       const clamp = (val: number, min: number, max: number) =>
         Math.max(Math.min(val, max), min);
-      const beta = clamp(e.beta, -45, 45); // front-to-back tilt
-      const gamma = clamp(e.gamma, -45, 45); // left-to-right tilt
+      const beta = clamp(e.beta, -45, 45);
+      const gamma = clamp(e.gamma, -45, 45);
 
-      // Normalize to 0-1 range
       const x = (gamma + 45) / 90;
       const y = (beta + 45) / 90;
 
@@ -79,7 +91,6 @@ export default function Background() {
     };
 
     const requestOrientationPermission = () => {
-      // iOS 13+ requires user permission for DeviceOrientation events
       const doe = DeviceOrientationEvent as unknown as {
         requestPermission?: () => Promise<"granted" | "denied">;
       };
@@ -94,70 +105,70 @@ export default function Background() {
           })
           .catch(console.error);
       } else {
-        // Non-iOS 13+ devices
         window.addEventListener("deviceorientation", handleOrientation);
       }
     };
 
     if (isMobile) {
-      // For mobile, we need a user gesture to request permission.
-      // We'll listen for the first click/touch on the body.
-      document.body.addEventListener("click", requestOrientationPermission, {
-        once: true,
-      });
-      document.body.addEventListener("touchend", requestOrientationPermission, {
-        once: true,
-      });
+      document.body.addEventListener("click", requestOrientationPermission, { once: true });
+      document.body.addEventListener("touchend", requestOrientationPermission, { once: true });
 
       return () => {
         window.removeEventListener("deviceorientation", handleOrientation);
-        document.body.removeEventListener(
-          "click",
-          requestOrientationPermission
-        );
-        document.body.removeEventListener(
-          "touchend",
-          requestOrientationPermission
-        );
+        document.body.removeEventListener("click", requestOrientationPermission);
+        document.body.removeEventListener("touchend", requestOrientationPermission);
       };
     } else {
-      // For desktop, use mouse move with throttling
-      const throttledMouseMove = (e: MouseEvent) => {
-        requestAnimationFrame(() => handleMouseMove(e));
-      };
-      window.addEventListener("mousemove", throttledMouseMove);
+      window.addEventListener("mousemove", handleMouseMove, { passive: true });
       return () => {
-        window.removeEventListener("mousemove", throttledMouseMove);
+        window.removeEventListener("mousemove", handleMouseMove);
       };
     }
   }, [isMobile, mouse.x, mouse.y]);
+
+  const chromaticOffset = useMemo(() => new Vector2(0.0005, 0.0005), []);
 
   return (
     <Canvas
       orthographic
       camera={{ position: [0, 0, 200], zoom: 10 }}
       frameloop="always"
-      performance={{ min: 0.5 }}
+      dpr={[1, 2]}
       gl={{
-        antialias: false,
+        antialias: true,
         powerPreference: "high-performance",
+        stencil: false,
+        depth: true,
+        alpha: true,
       }}
     >
       <Suspense fallback={null}>
-        <EffectComposer enableNormalPass={false}>
+        <EffectComposer enableNormalPass={false} multisampling={0}>
           <ChromaticAberration
             blendFunction={BlendFunction.NORMAL}
-            offset={new Vector2(0.0005, 0.0005)}
+            offset={chromaticOffset}
+            radialModulation={false}
+            modulationOffset={0}
           />
           <Noise
             premultiply
             blendFunction={BlendFunction.SOFT_LIGHT}
-            opacity={0.01}
+            opacity={0.015}
+          />
+          <Vignette
+            offset={0.5}
+            darkness={0.3}
+            blendFunction={BlendFunction.NORMAL}
           />
         </EffectComposer>
-        <ModelShapes mouse={smoothMouse} currentTheme={currentTheme} />
-        {/* <ModelNuage mouse={smoothMouse} currentTheme={currentTheme} /> */}
-        <Environment preset="city" background={false} />
+        <ModelShapes
+          mouse={smoothMouse}
+          currentTheme={currentTheme}
+          scrollProgress={scrollProgress}
+          isMobile={isMobile}
+          onShapesReady={onShapesReady}
+        />
+        <Environment preset="city" background={false} environmentIntensity={0.8} />
       </Suspense>
     </Canvas>
   );

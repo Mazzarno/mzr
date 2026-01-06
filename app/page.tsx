@@ -1,11 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import AnimatedText from "../components/core/AnimatedText";
 import { useTranslations } from "next-intl";
 import TextType from "../components/shared/TextType";
 import BlurText from "../components/shared/BlurText";
 import LogoLoop from "../components/shared/LogoLoop";
+import { useAnimationContext } from "./ClientLayout";
 import {
   SiHtml5,
   SiCss3,
@@ -29,8 +30,10 @@ import {
   SiGraphql,
   SiAngular,
   SiStrapi,
+  SiWordpress,
 } from "react-icons/si";
 import CardSwap, { Card } from "../components/shared/CardSwap";
+import ProjectInfo, { Project } from "../components/shared/ProjectInfo";
 export default function HomePage() {
   return (
     <main className="text-base-content relative">
@@ -38,7 +41,7 @@ export default function HomePage() {
       <QuickAbout />
       <SkillsSection />
       <ExperienceSection />
-      {/* ProjectsSection */}
+      <ProjectsSection />
       <ContactForm />
     </main>
   );
@@ -78,60 +81,64 @@ const listItemVariants = {
 
 const HeroSection = () => {
   const t = useTranslations("home");
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15, delayChildren: 0.2 },
-    },
-  };
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { type: "spring", stiffness: 100, damping: 12 },
-    },
+  const { shapesReady } = useAnimationContext();
+  const [showTextType, setShowTextType] = useState(false);
+  const [canShowHero, setCanShowHero] = useState(false);
+
+  // Show hero when shapes are ready OR after fallback timeout
+  useEffect(() => {
+    if (shapesReady) {
+      setCanShowHero(true);
+      return;
+    }
+    // Fallback: show hero after 2.5s even if shapesReady isn't triggered
+    const fallbackTimer = setTimeout(() => {
+      setCanShowHero(true);
+    }, 2500);
+    return () => clearTimeout(fallbackTimer);
+  }, [shapesReady]);
+
+  const handleBlurTextComplete = () => {
+    setShowTextType(true);
   };
 
   return (
     <section className="min-h-screen flex flex-col justify-center items-center px-4 relative overflow-hidden">
-      <div
-        className="text-center z-10 relative"
-      
-      >
-        <motion.h1
-          variants={itemVariants}
-          className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
-        >
+      <div className="text-center z-10 relative">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
           <span className="inline-block">
             <span className="relative inline-block">
-              <BlurText
-                text={t("heroTitle")}
-                delay={500}
-                animateBy="words"
-                direction="top"
-                className="content-title"
-              />
+              {canShowHero && (
+                <BlurText
+                  text={t("heroTitle")}
+                  delay={150}
+                  animateBy="words"
+                  direction="top"
+                  className="content-title"
+                  onAnimationComplete={handleBlurTextComplete}
+                />
+              )}
             </span>
           </span>
-        </motion.h1>
+        </h1>
 
-        <TextType
-          translationKeys={[
-            "home.phrases.0",
-            "home.phrases.1",
-            "home.phrases.2",
-            "home.phrases.3",
-            "home.phrases.4",
-            "home.phrases.5",
-            "home.phrases.6",
-          ]}
-          typingSpeed={50}
-          pauseDuration={1000}
-          showCursor={true}
-          cursorCharacter="|"
-        />
+        {showTextType && (
+          <TextType
+            translationKeys={[
+              "home.phrases.0",
+              "home.phrases.1",
+              "home.phrases.2",
+              "home.phrases.3",
+              "home.phrases.4",
+              "home.phrases.5",
+              "home.phrases.6",
+            ]}
+            typingSpeed={50}
+            pauseDuration={1000}
+            showCursor={true}
+            cursorCharacter="|"
+          />
+        )}
       </div>
     </section>
   );
@@ -343,55 +350,133 @@ const ExperienceSection = () => {
     </section>
   );
 };
-/*
+const projects: Project[] = [
+  {
+    id: "pba",
+    title: "Asus - Pro Business Alliance",
+    description:
+      "Site vitrine pour la gamme Pro Business ASUS. Développement d'une interface moderne avec animations fluides et design responsive pour mettre en valeur les produits professionnels.",
+    technologies: [
+      { icon: <SiReact />, name: "React" },
+      { icon: <SiNextdotjs />, name: "Next.js" },
+      { icon: <SiTailwindcss />, name: "Tailwind" },
+      { icon: <SiFramer />, name: "Framer Motion" },
+    ],
+    headerTitle: "Asus - PBA",
+    headerLogoSrc: "/favpba.png",
+    imageSrc: "/pba.png",
+  },
+  {
+    id: "maximecaro",
+    title: "Maxime Caro - Portfolio",
+    description:
+      "Portfolio créatif pour un artiste audiovisuel. Design immersif avec intégration de galeries médias et animations sur-mesure pour une expérience utilisateur unique.",
+    technologies: [
+      { icon: <SiVuedotjs />, name: "Vue.js" },
+      { icon: <SiNuxtdotjs />, name: "Nuxt.js" },
+      { icon: <SiGreensock />, name: "GSAP" },
+      { icon: <SiTailwindcss />, name: "Tailwind" },
+    ],
+    headerTitle: "Maxime Caro",
+    headerLogoSrc: "/favmax.png",
+    imageSrc: "/maximecaro.png",
+  },
+  {
+    id: "asuszen",
+    title: "Asus - Zenphone 10",
+    description:
+      "Landing page produit pour le lancement du Zenphone 10. Animations 3D interactives et scroll-based storytelling pour présenter les fonctionnalités du smartphone.",
+    technologies: [
+      { icon: <SiReact />, name: "React" },
+      { icon: <SiThreedotjs />, name: "Three.js" },
+      { icon: <SiGreensock />, name: "GSAP" },
+    ],
+    headerTitle: "Asus - Zenphone 10",
+    headerLogoSrc: "/favasus.png",
+    imageSrc: "/asuszen.png",
+  },
+  {
+    id: "barbincps",
+    title: "Barbin CPS",
+    description:
+      "Site institutionnel pour une entreprise de services. Interface claire et professionnelle avec formulaire de contact et présentation des services.",
+    technologies: [
+      { icon: <SiWordpress />, name: "WordPress" },
+      { icon: <SiCss3 />, name: "CSS3" },
+      { icon: <SiJavascript />, name: "JavaScript" },
+    ],
+    headerTitle: "Barbin CPS",
+    headerLogoSrc: "/favcps.png",
+    imageSrc: "/barbncps.png",
+  },
+  {
+    id: "gamins",
+    title: "Les Gamins du Marais",
+    description:
+      "Site vitrine pour une association locale. Design chaleureux et accessible avec galerie photos et informations pratiques pour les familles.",
+    technologies: [
+      { icon: <SiWordpress />, name: "WordPress" },
+      { icon: <SiCss3 />, name: "CSS3" },
+      { icon: <SiJavascript />, name: "JavaScript" },
+    ],
+    headerTitle: "Les Gamins Marais",
+    headerLogoSrc: "/favgamins.png",
+    imageSrc: "/gamins.jpg",
+  },
+];
+
 const ProjectsSection = () => {
   const t = useTranslations("work");
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
-    <section className="pt-16 md:pt-20 pb-0 md:pb-0">
-      <div className="container px-5 mx-auto">
-        <motion.h2 className="content-title mb-12" variants={listItemVariants}>
-          {t("selectedWorks")}
-        </motion.h2>
-        <div className="flex flex-wrap -mx-4 text-center">
-          <div className="sm:w-1/2 px-4 text-center">
-            <motion.p className="content-text" variants={listItemVariants}>
-              {t("discover")}
-            </motion.p>
+    <section className="py-16 md:py-20 overflow-hidden">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={listContainerVariants}
+          className="text-center mb-8 md:mb-12"
+        >
+          <motion.h2
+            className="content-title mb-4 md:mb-6"
+            variants={listItemVariants}
+          >
+            {t("selectedWorks")}
+          </motion.h2>
+          <motion.p className="content-text" variants={listItemVariants}>
+            {t("discover")}
+          </motion.p>
+        </motion.div>
+
+        {/* Layout: Mobile (cards top, text bottom) | Desktop (text left, cards right) */}
+        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+          {/* Text Block - Left on desktop */}
+          <div className="w-full md:w-1/2 text-center md:text-left px-4 md:px-0 order-2 md:order-1">
+            <ProjectInfo project={projects[activeIndex]} />
           </div>
-          <div className="sm:w-1/2 px-4 relative h-[500px] sm:h-[600px] md:h-[700px] lg:h-[800px]">
+
+          {/* Cards Block - Right on desktop */}
+          <div className="w-full md:w-1/2 relative h-[380px] sm:h-[450px] md:h-[550px] flex justify-center items-center order-1 md:order-2">
             <CardSwap
+              width={450}
+              height={340}
               placement="center"
-              cardDistance={100}
-              verticalDistance={80}
+              cardDistance={60}
+              verticalDistance={50}
               delay={5000}
               pauseOnHover={true}
+              onActiveIndexChange={setActiveIndex}
             >
-              <Card
-                headerTitle="Asus - PBA"
-                headerLogoSrc="/favpba.png"
-                imageSrc="/pba.png"
-              />
-              <Card
-                headerTitle="Maxime Caro"
-                headerLogoSrc="/favmax.png"
-                imageSrc="/maximecaro.png"
-              />
-              <Card
-                headerTitle="Asus - Zenphone 10"
-                headerLogoSrc="/favasus.png"
-                imageSrc="/asuszen.png"
-              />
-              <Card
-                headerTitle="Barbin CPS"
-                headerLogoSrc="/favcps.png"
-                imageSrc="/barbncps.png"
-              />
-
-              <Card
-                headerTitle="Les Gamins Marais"
-                headerLogoSrc="/favgamins.png"
-                imageSrc="/gamins.jpg"
-              />
+              {projects.map((p) => (
+                <Card
+                  key={p.id}
+                  headerTitle={p.headerTitle}
+                  headerLogoSrc={p.headerLogoSrc}
+                  imageSrc={p.imageSrc}
+                />
+              ))}
             </CardSwap>
           </div>
         </div>
@@ -399,8 +484,6 @@ const ProjectsSection = () => {
     </section>
   );
 };
-*/
-
 const ContactForm = () => {
   const t = useTranslations();
   const [formState, setFormState] = useState({

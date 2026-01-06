@@ -10,7 +10,7 @@ interface LoadingProps {
   onLoadComplete?: () => void;
 }
 const Loading: React.FC<LoadingProps> = ({
-  duration = 1.5,
+  duration = 0.8,
   onLoadComplete,
 }) => {
   const [progress, setProgress] = useState(0);
@@ -30,14 +30,14 @@ const Loading: React.FC<LoadingProps> = ({
 
     const interval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 50) {
+        if (prev >= 60) {
           clearInterval(interval);
           setPhase("wait");
-          return 50;
+          return 60;
         }
-        return prev + 1;
+        return prev + 2;
       });
-    }, 30);
+    }, 25);
 
     return () => clearInterval(interval);
   }, [phase, isTitleAnimationComplete]);
@@ -65,7 +65,7 @@ const Loading: React.FC<LoadingProps> = ({
 
       const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
 
-      const newProgress = 50 + eased * 50;
+      const newProgress = 60 + eased * 40;
       setProgress(newProgress);
 
       if (t < 1) {
@@ -73,7 +73,7 @@ const Loading: React.FC<LoadingProps> = ({
       } else {
         setIsComplete(true);
         setPhase("done");
-        if (onLoadComplete) setTimeout(onLoadComplete, 300);
+        if (onLoadComplete) setTimeout(onLoadComplete, 200);
       }
     };
 

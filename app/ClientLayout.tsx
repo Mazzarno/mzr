@@ -1,8 +1,17 @@
 "use client";
 
-import React, { useState, useEffect, useRef, memo } from "react";
+import React, { useState, useEffect, useRef, memo, createContext, useContext } from "react";
 import Loading from "../components/core/Loading";
 import TransitionLink from "../components/core/TransitionLink";
+
+// Context for animation orchestration
+interface AnimationContextType {
+  shapesReady: boolean;
+}
+
+const AnimationContext = createContext<AnimationContextType>({ shapesReady: false });
+
+export const useAnimationContext = () => useContext(AnimationContext);
 import {
   motion,
   useMotionValue,
@@ -33,6 +42,32 @@ const FaviconUpdater = dynamic(() => import("../components/core/FaviconUpdater")
   ssr: false,
 });
 
+const gridContainerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const gridColumnVariants = {
+  hidden: {
+    opacity: 0,
+    scaleY: 0,
+  },
+  visible: {
+    opacity: 1,
+    scaleY: 1,
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 const MemoizedGrid = memo(function Grid() {
   return (
     <>
@@ -45,21 +80,15 @@ const MemoizedGrid = memo(function Grid() {
         pointer-events-none
         opacity-30
       "
-        initial={{ opacity: 0, filter: "blur(0.25px) brightness(0.5)" }}
-        animate={{
-          opacity: [0.5, 0.7, 1, 0.7, 0.5],
-          filter: "blur(0px) brightness(1)",
-        }}
-        transition={{
-          duration: 2.5,
-          ease: "easeInOut",
-          repeat: Infinity,
-          repeatType: "reverse",
-        }}
+        variants={gridContainerVariants}
+        initial="hidden"
+        animate="visible"
       >
         {[...Array(11)].map((_, i) => (
-          <div
+          <motion.div
             key={i}
+            variants={gridColumnVariants}
+            style={{ originY: 0 }}
             className={`
             ${i >= 2 ? "hidden sm:block" : ""}
             ${i >= 3 ? "hidden md:block" : ""}
@@ -323,6 +352,11 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const [showLoader, setShowLoader] = useState(true);
   const isInitialRender = useRef(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [shapesReady, setShapesReady] = useState(false);
+
+  const handleShapesReady = () => {
+    setShapesReady(true);
+  };
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -338,7 +372,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         const hasVisited = typeof window !== "undefined" &&
           window.localStorage.getItem("hasVisited") === "true";
         setShowLoader(!hasVisited);
-      } catch (_) {
+      } catch {
         // Fallback: show loader if localStorage is not accessible
         setShowLoader(true);
       }
@@ -370,7 +404,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             if (typeof window !== "undefined") {
               window.localStorage.setItem("hasVisited", "true");
             }
-          } catch (_) {}
+          } catch {}
           setShowLoader(false);
         }}
       />
@@ -416,7 +450,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         ref={constraintsRef}
       >
         <div className="absolute h-full w-full pointer-events-none z-10">
-          <Background />
+          <Background onShapesReady={handleShapesReady} />
         </div>
         <MemoizedGrid />
         <motion.main
@@ -596,7 +630,9 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                   <SmoothScroll />
                   <div className="lenis-content">
                     <Noise />
-                    <div>{children}</div>
+                    <AnimationContext.Provider value={{ shapesReady }}>
+                      <div>{children}</div>
+                    </AnimationContext.Provider>
                   </div>
                 </motion.div>
               </>

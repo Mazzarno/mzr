@@ -1,3 +1,4 @@
+"use client";
 import React, {
   Children,
   cloneElement,
@@ -5,13 +6,18 @@ import React, {
   isValidElement,
   ReactElement,
   ReactNode,
-  RefObject,
+  useCallback,
   useEffect,
+  useImperativeHandle,
   useMemo,
   useRef,
 } from "react";
 import gsap from "gsap";
 import Image from "next/image";
+
+// ============================================================================
+// Types & Interfaces
+// ============================================================================
 
 export interface CardSwapProps {
   width?: number | string;
@@ -21,10 +27,15 @@ export interface CardSwapProps {
   delay?: number;
   pauseOnHover?: boolean;
   onCardClick?: (idx: number) => void;
+  onActiveIndexChange?: (idx: number) => void;
   skewAmount?: number;
   easing?: "linear" | "elastic";
   placement?: "right" | "center";
   children: ReactNode;
+}
+
+export interface CardSwapHandle {
+  bringToFront: (targetIdx: number) => void;
 }
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -36,6 +47,26 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   imageSrc?: string;
   imageAlt?: string;
 }
+
+interface Slot {
+  x: number;
+  y: number;
+  z: number;
+  zIndex: number;
+}
+
+interface AnimConfig {
+  ease: string;
+  durDrop: number;
+  durMove: number;
+  durReturn: number;
+  promoteOverlap: number;
+  returnDelay: number;
+}
+
+// ============================================================================
+// Card Component
+// ============================================================================
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
   (
@@ -56,9 +87,9 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       ref={ref}
       {...rest}
       className={[
-        "absolute rounded-4xl top-1/2 left-1/2 [transform-style:preserve-3d] [will-change:transform] [backface-visibility:hidden]",
+        "absolute rounded-4xl top-1/2 left-1/2 [transform-style:preserve-3d] [will-change:transform] [backface-visibility:hidden] cursor-pointer",
         variant === "client"
-          ? "bg-neutral/10 backdrop-blur-xs scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)] will-change-transform will-change-opacity"
+          ? "bg-neutral/10 backdrop-blur-xs scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)]"
           : "",
         customClass ?? "",
         rest.className ?? "",
@@ -66,7 +97,6 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         .filter(Boolean)
         .join(" ")}
     >
-      {/* Vignette sweep like ClientLayout */}
       {variant === "client" && (
         <div
           className="absolute inset-0 pointer-events-none rounded-4xl"
@@ -79,39 +109,18 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       )}
       <div className="relative rounded-4xl w-full h-full">
         {(headerTitle || headerLogoSrc) && (
-          <div className="absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between text-neutral-content bg-neutral pr-2 pl-1 rounded-br-[20px] z-70 cursor-grab">
+          <div className="absolute top-0 left-0 w-auto h-[47px] flex items-center justify-between text-neutral-content bg-neutral pr-2 pl-1 rounded-br-[20px] z-70">
             <div className="flex items-center transition-all duration-100 z-70 pl-2">
-              {/* CustomBorderRadius Nav right Border */}
               <div className="absolute top-3 -right-5 z-70">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
-                    fill="var(--color-neutral)"
-                  ></path>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z" fill="var(--color-neutral)" />
                 </svg>
               </div>
-              {/* CustomBorderRadius Nav left Border */}
               <div className="absolute -bottom-5 left-3 z-70">
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
-                    fill="var(--color-neutral)"
-                  ></path>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z" fill="var(--color-neutral)" />
                 </svg>
               </div>
-
               {headerLogoSrc && (
                 <Image
                   className="w-5 h-5 mr-1"
@@ -131,52 +140,33 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
             </div>
           </div>
         )}
-        <div className="absolute w-full h-3 bottom-0 bg-neutral z-[999] touch-none" />
-        <div className="absolute h-full w-3 right-0 bg-neutral z-[999] touch-none" />
-        <div className="absolute h-full w-3 left-0 bg-neutral z-[999] touch-none" />
-        <div className="absolute w-full h-3 top-0 bg-neutral z-[999] touch-none" />
-        {/* Bottom-left corner */}
+        <div className="absolute w-full h-3 bottom-0 bg-neutral/80 z-[999] touch-none rounded-b-2xl" />
+        <div className="absolute h-full w-3 right-0 bg-neutral/80 z-[999] touch-none rounded-r-2xl" />
+        <div className="absolute h-full w-3 left-0 bg-neutral/80 z-[999] touch-none rounded-l-2xl" />
+        <div className="absolute w-full h-3 top-0 bg-neutral/80 z-[999] touch-none rounded-t-2xl" />
         <div className="absolute bottom-3 left-3 -rotate-90 z-70">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
-              fill="var(--color-neutral)"
-            ></path>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z" fill="var(--color-neutral)" />
           </svg>
         </div>
-        {/* Top-right corner (hidden on xs like layout) */}
         <div className="absolute top-3 right-3 rotate-90 hidden sm:block z-70">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z"
-              fill="var(--color-neutral)"
-            ></path>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 0L0 20C0 8.95431 8.95431 0 20 0L0 0Z" fill="var(--color-neutral)" />
           </svg>
         </div>
-        {/* Content slot */}
-        <div className="relative w-full h-full rounded-4xl overflow-hidden">
+        <div className="relative w-full h-full rounded-2xl overflow-hidden">
           {imageSrc && (
-            <Image
-              src={imageSrc}
-              alt={imageAlt}
-              fill
-              unoptimized
-              sizes="(max-width: 768px) 75vw, 500px"
-              className="object-cover select-none pointer-events-none"
-              priority={false}
-            />
+            <div className="absolute inset-3 rounded-xl overflow-hidden">
+              <Image
+                src={imageSrc}
+                alt={imageAlt}
+                fill
+                unoptimized
+                sizes="(max-width: 768px) 90vw, 500px"
+                className="object-cover object-center select-none pointer-events-none"
+                priority={false}
+              />
+            </div>
           )}
           <div className="relative z-10 w-full h-full">{children}</div>
         </div>
@@ -186,225 +176,368 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
 );
 Card.displayName = "Card";
 
-type CardRef = RefObject<HTMLDivElement | null>;
-interface Slot {
-  x: number;
-  y: number;
-  z: number;
-  zIndex: number;
-}
+// ============================================================================
+// Utility Functions
+// ============================================================================
 
-const makeSlot = (
-  i: number,
-  distX: number,
-  distY: number,
-  total: number
-): Slot => ({
+const makeSlot = (i: number, distX: number, distY: number, total: number): Slot => ({
   x: i * distX,
   y: -i * distY,
   z: -i * distX * 1.5,
   zIndex: total - i,
 });
 
-const placeNow = (el: HTMLElement, slot: Slot, skew: number) =>
-  gsap.set(el, {
-    x: slot.x,
-    y: slot.y,
-    z: slot.z,
-    xPercent: -50,
-    yPercent: -50,
-    skewY: skew,
-    transformOrigin: "center center",
-    zIndex: slot.zIndex,
-    force3D: true,
-  });
+const getAnimConfig = (easing: "linear" | "elastic"): AnimConfig =>
+  easing === "elastic"
+    ? {
+        ease: "elastic.out(0.6,0.9)",
+        durDrop: 1.5,
+        durMove: 1.5,
+        durReturn: 1.5,
+        promoteOverlap: 0.85,
+        returnDelay: 0.05,
+      }
+    : {
+        ease: "power2.inOut",
+        durDrop: 0.6,
+        durMove: 0.6,
+        durReturn: 0.6,
+        promoteOverlap: 0.5,
+        returnDelay: 0.15,
+      };
 
-const CardSwap: React.FC<CardSwapProps> = ({
-  width = 500,
-  height = 400,
-  cardDistance = 60,
-  verticalDistance = 70,
-  delay = 5000,
-  pauseOnHover = false,
-  onCardClick,
-  skewAmount = 6,
-  easing = "elastic",
-  placement = "right",
-  children,
-}) => {
-  const config = useMemo(
-    () =>
-      easing === "elastic"
-        ? {
-            ease: "elastic.out(0.6,0.9)",
-            durDrop: 2,
-            durMove: 2,
-            durReturn: 2,
-            promoteOverlap: 0.9,
-            returnDelay: 0.05,
-          }
-        : {
-            ease: "power1.inOut",
-            durDrop: 0.8,
-            durMove: 0.8,
-            durReturn: 0.8,
-            promoteOverlap: 0.45,
-            returnDelay: 0.2,
-          },
-    [easing]
-  );
+// ============================================================================
+// CardSwap Component
+// ============================================================================
 
-  const childArr = useMemo(
-    () => Children.toArray(children) as ReactElement<CardProps>[],
-    [children]
-  );
-  const refs = useMemo<CardRef[]>(
-    () => childArr.map(() => React.createRef<HTMLDivElement>()),
-    [childArr]
-  );
+const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(
+  (
+    {
+      width = 500,
+      height = 400,
+      cardDistance = 60,
+      verticalDistance = 70,
+      delay = 5000,
+      pauseOnHover = false,
+      onCardClick,
+      onActiveIndexChange,
+      skewAmount = 6,
+      easing = "elastic",
+      placement = "right",
+      children,
+    },
+    ref
+  ) => {
+    // ========== Memoized Values ==========
+    const config = useMemo(() => getAnimConfig(easing), [easing]);
 
-  const order = useRef<number[]>(
-    Array.from({ length: childArr.length }, (_, i) => i)
-  );
-
-  const tlRef = useRef<gsap.core.Timeline | null>(null);
-  const intervalRef = useRef<number | undefined>(undefined);
-  const container = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const total = refs.length;
-    refs.forEach((r, i) =>
-      placeNow(
-        r.current!,
-        makeSlot(i, cardDistance, verticalDistance, total),
-        skewAmount
-      )
+    const childArr = useMemo(
+      () => Children.toArray(children) as ReactElement<CardProps>[],
+      [children]
     );
 
-    const swap = () => {
-      if (order.current.length < 2) return;
+    const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-      const [front, ...rest] = order.current;
-      const elFront = refs[front].current!;
-      const tl = gsap.timeline();
-      tlRef.current = tl;
+    // ========== State & Refs ==========
+    const orderRef = useRef<number[]>(childArr.map((_, i) => i));
+    const containerRef = useRef<HTMLDivElement>(null);
+    const timelineRef = useRef<gsap.core.Timeline | null>(null);
+    const intervalRef = useRef<number | null>(null);
+    const isAnimatingRef = useRef(false);
+    const isPausedRef = useRef(false);
+    const hoveredCardRef = useRef<number | null>(null);
+    const hoverTweenRef = useRef<gsap.core.Tween | null>(null);
 
-      tl.to(elFront, {
-        y: "+=500",
-        duration: config.durDrop,
-        ease: config.ease,
+    // ========== Position Cards ==========
+    const positionCards = useCallback(() => {
+      const total = orderRef.current.length;
+      orderRef.current.forEach((cardIdx, slotIdx) => {
+        const el = cardRefs.current[cardIdx];
+        if (!el) return;
+        const slot = makeSlot(slotIdx, cardDistance, verticalDistance, total);
+        gsap.set(el, {
+          x: slot.x,
+          y: slot.y,
+          z: slot.z,
+          xPercent: -50,
+          yPercent: -50,
+          skewY: skewAmount,
+          transformOrigin: "center center",
+          zIndex: slot.zIndex,
+          force3D: true,
+        });
       });
+    }, [cardDistance, verticalDistance, skewAmount]);
 
-      tl.addLabel("promote", `-=${config.durDrop * config.promoteOverlap}`);
-      rest.forEach((idx, i) => {
-        const el = refs[idx].current!;
-        const slot = makeSlot(i, cardDistance, verticalDistance, refs.length);
-        tl.set(el, { zIndex: slot.zIndex }, "promote");
+    // ========== Core Animation ==========
+    const animateToNewOrder = useCallback(
+      (newOrder: number[], newActiveIdx: number) => {
+        if (isAnimatingRef.current) return;
+        isAnimatingRef.current = true;
+
+        // Kill any existing animation
+        timelineRef.current?.kill();
+        hoverTweenRef.current?.kill();
+
+        const currentOrder = orderRef.current;
+        const oldFrontIdx = currentOrder[0];
+        const oldFrontEl = cardRefs.current[oldFrontIdx];
+        const total = newOrder.length;
+
+        const tl = gsap.timeline({
+          onComplete: () => {
+            orderRef.current = newOrder;
+            isAnimatingRef.current = false;
+          },
+        });
+        timelineRef.current = tl;
+
+        // Notify text change IMMEDIATELY when animation starts
+        onActiveIndexChange?.(newActiveIdx);
+
+        if (!oldFrontEl) {
+          isAnimatingRef.current = false;
+          return;
+        }
+
+        // 1. Drop old front card
+        tl.to(oldFrontEl, {
+          y: "+=500",
+          duration: config.durDrop,
+          ease: config.ease,
+        });
+
+        // 2. Promote all cards except the one going to back
+        tl.addLabel("promote", `-=${config.durDrop * config.promoteOverlap}`);
+
+        newOrder.forEach((cardIdx, slotIdx) => {
+          // Skip the card going to back (last in new order)
+          if (slotIdx === total - 1 && cardIdx === oldFrontIdx) return;
+
+          const el = cardRefs.current[cardIdx];
+          if (!el) return;
+
+          const slot = makeSlot(slotIdx, cardDistance, verticalDistance, total);
+
+          tl.set(el, { zIndex: slot.zIndex }, "promote");
+          tl.to(
+            el,
+            {
+              x: slot.x,
+              y: slot.y,
+              z: slot.z,
+              duration: config.durMove,
+              ease: config.ease,
+            },
+            `promote+=${slotIdx * 0.1}`
+          );
+        });
+
+        // 3. Return old front to back
+        const backSlot = makeSlot(total - 1, cardDistance, verticalDistance, total);
+
+        tl.addLabel("return", `promote+=${config.durMove * config.returnDelay}`);
+        tl.set(oldFrontEl, { zIndex: backSlot.zIndex }, "return");
+        tl.set(oldFrontEl, { x: backSlot.x, z: backSlot.z }, "return");
         tl.to(
-          el,
+          oldFrontEl,
           {
-            x: slot.x,
-            y: slot.y,
-            z: slot.z,
-            duration: config.durMove,
+            y: backSlot.y,
+            duration: config.durReturn,
             ease: config.ease,
           },
-          `promote+=${i * 0.15}`
+          "return"
         );
-      });
+      },
+      [config, cardDistance, verticalDistance, onActiveIndexChange]
+    );
 
-      const backSlot = makeSlot(
-        refs.length - 1,
-        cardDistance,
-        verticalDistance,
-        refs.length
-      );
-      tl.addLabel("return", `promote+=${config.durMove * config.returnDelay}`);
-      tl.call(
-        () => {
-          gsap.set(elFront, { zIndex: backSlot.zIndex });
-        },
-        undefined,
-        "return"
-      );
-      tl.set(elFront, { x: backSlot.x, z: backSlot.z }, "return");
-      tl.to(
-        elFront,
-        {
-          y: backSlot.y,
-          duration: config.durReturn,
-          ease: config.ease,
-        },
-        "return"
-      );
+    // ========== Swap (Autoplay) ==========
+    const swap = useCallback(() => {
+      if (isAnimatingRef.current || isPausedRef.current) return;
 
-      tl.call(() => {
-        order.current = [...rest, front];
-      });
-    };
+      const currentOrder = orderRef.current;
+      if (currentOrder.length < 2) return;
 
-    swap();
-    intervalRef.current = window.setInterval(swap, delay);
+      const [oldFront, ...rest] = currentOrder;
+      const newOrder = [...rest, oldFront];
+      const newActiveIdx = rest[0];
 
-    if (pauseOnHover) {
-      const node = container.current!;
-      const pause = () => {
-        tlRef.current?.pause();
+      animateToNewOrder(newOrder, newActiveIdx);
+    }, [animateToNewOrder]);
+
+    // ========== Bring To Front ==========
+    const bringToFront = useCallback(
+      (targetIdx: number) => {
+        if (isAnimatingRef.current) return;
+
+        const currentOrder = orderRef.current;
+        const posInOrder = currentOrder.indexOf(targetIdx);
+
+        // Already at front
+        if (posInOrder === 0) return;
+
+        // Clear autoplay interval, will restart after animation
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+
+        const oldFront = currentOrder[0];
+        const newOrder = [
+          targetIdx,
+          ...currentOrder.filter((i) => i !== targetIdx && i !== oldFront),
+          oldFront,
+        ];
+
+        animateToNewOrder(newOrder, targetIdx);
+
+        // Restart autoplay after animation completes
+        setTimeout(() => {
+          if (!isPausedRef.current && !intervalRef.current) {
+            intervalRef.current = window.setInterval(swap, delay);
+          }
+        }, (config.durDrop + config.durMove + config.durReturn) * 1000);
+      },
+      [animateToNewOrder, swap, delay, config]
+    );
+
+    // ========== Hover Effect ==========
+    const handleCardHover = useCallback(
+      (cardIdx: number, isEntering: boolean) => {
+        // Don't hover the front card or during animation
+        const currentFront = orderRef.current[0];
+        if (cardIdx === currentFront || isAnimatingRef.current) return;
+
+        const el = cardRefs.current[cardIdx];
+        if (!el) return;
+
+        hoverTweenRef.current?.kill();
+
+        if (isEntering) {
+          hoveredCardRef.current = cardIdx;
+          hoverTweenRef.current = gsap.to(el, {
+            y: "-=25",
+            scale: 1.02,
+            duration: 0.3,
+            ease: "power2.out",
+          });
+        } else {
+          hoveredCardRef.current = null;
+          // Return to slot position
+          const slotIdx = orderRef.current.indexOf(cardIdx);
+          const slot = makeSlot(slotIdx, cardDistance, verticalDistance, orderRef.current.length);
+          hoverTweenRef.current = gsap.to(el, {
+            y: slot.y,
+            scale: 1,
+            duration: 0.3,
+            ease: "power2.out",
+          });
+        }
+      },
+      [cardDistance, verticalDistance]
+    );
+
+    // ========== Pause/Resume ==========
+    const pause = useCallback(() => {
+      isPausedRef.current = true;
+      timelineRef.current?.pause();
+      if (intervalRef.current) {
         clearInterval(intervalRef.current);
-      };
-      const resume = () => {
-        tlRef.current?.play();
+        intervalRef.current = null;
+      }
+    }, []);
+
+    const resume = useCallback(() => {
+      isPausedRef.current = false;
+      timelineRef.current?.play();
+      if (!intervalRef.current) {
         intervalRef.current = window.setInterval(swap, delay);
-      };
-      node.addEventListener("mouseenter", pause);
-      node.addEventListener("mouseleave", resume);
+      }
+    }, [swap, delay]);
+
+    // ========== Expose Methods ==========
+    useImperativeHandle(
+      ref,
+      () => ({
+        bringToFront,
+      }),
+      [bringToFront]
+    );
+
+    // ========== Initialize ==========
+    useEffect(() => {
+      // Initialize refs array
+      cardRefs.current = cardRefs.current.slice(0, childArr.length);
+
+      // Position cards initially
+      positionCards();
+
+      // Notify initial active index
+      onActiveIndexChange?.(orderRef.current[0]);
+
+      // Start autoplay
+      intervalRef.current = window.setInterval(swap, delay);
+
+      // Pause on hover
+      if (pauseOnHover && containerRef.current) {
+        const node = containerRef.current;
+        node.addEventListener("mouseenter", pause);
+        node.addEventListener("mouseleave", resume);
+
+        return () => {
+          node.removeEventListener("mouseenter", pause);
+          node.removeEventListener("mouseleave", resume);
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          timelineRef.current?.kill();
+        };
+      }
+
       return () => {
-        node.removeEventListener("mouseenter", pause);
-        node.removeEventListener("mouseleave", resume);
-        clearInterval(intervalRef.current);
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        timelineRef.current?.kill();
       };
-    }
-    return () => clearInterval(intervalRef.current);
-  }, [
-    cardDistance,
-    verticalDistance,
-    delay,
-    pauseOnHover,
-    skewAmount,
-    config,
-    refs,
-  ]);
+    }, [childArr.length, positionCards, swap, delay, pauseOnHover, pause, resume, onActiveIndexChange]);
 
-  const rendered = childArr.map((child, i) =>
-    isValidElement<CardProps>(child)
-      ? cloneElement(child, {
-          key: i,
-          ref: refs[i],
-          style: { width, height, ...(child.props.style ?? {}) },
-          onClick: (e) => {
-            child.props.onClick?.(e as React.MouseEvent<HTMLDivElement>);
-            onCardClick?.(i);
-          },
-        } as CardProps & React.RefAttributes<HTMLDivElement>)
-      : child
-  );
+    // ========== Render Cards ==========
+    const renderedCards = childArr.map((child, i) =>
+      isValidElement<CardProps>(child)
+        ? cloneElement(child, {
+            key: i,
+            ref: (el: HTMLDivElement | null) => {
+              cardRefs.current[i] = el;
+            },
+            style: { width, height, ...(child.props.style ?? {}) },
+            onClick: (e: React.MouseEvent<HTMLDivElement>) => {
+              child.props.onClick?.(e);
+              onCardClick?.(i);
+              bringToFront(i);
+            },
+            onMouseEnter: () => handleCardHover(i, true),
+            onMouseLeave: () => handleCardHover(i, false),
+          } as CardProps & React.RefAttributes<HTMLDivElement>)
+        : child
+    );
 
-  return (
-    <div
-      ref={container}
-      className={[
-        "absolute perspective-[900px] overflow-visible",
-        placement === "right"
-          ? "bottom-0 right-0 transform translate-x-[5%] translate-y-[20%] origin-bottom-right max-[768px]:translate-x-[25%] max-[768px]:translate-y-[25%] max-[768px]:scale-[0.75] max-[480px]:translate-x-[25%] max-[480px]:translate-y-[25%] max-[480px]:scale-[0.55]"
-          : "left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 origin-center max-[768px]:scale-[0.8] max-[480px]:scale-[0.65]",
-      ]
-        .filter(Boolean)
-        .join(" ")}
-      style={{ width, height }}
-    >
-      {rendered}
-    </div>
-  );
-};
+    return (
+      <div
+        ref={containerRef}
+        className={[
+          "absolute perspective-[900px] overflow-visible",
+          placement === "right"
+            ? "bottom-0 right-0 transform translate-x-[5%] translate-y-[20%] origin-bottom-right md:scale-100 sm:scale-[0.75] scale-[0.6]"
+            : "left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 origin-center md:scale-100 sm:scale-[0.85] scale-[0.7]",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+        style={{ width, height }}
+      >
+        {renderedCards}
+      </div>
+    );
+  }
+);
+
+CardSwap.displayName = "CardSwap";
 
 export default CardSwap;

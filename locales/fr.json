@@ -120,5 +120,21 @@
       "other": "Autre",
       "open": "Je suis toujours ouvert à discuter de nouveaux projets, idées créatives ou opportunités de collaboration."
     }
+  },
+  "work": {
+    "title": "TRAVAUX",
+    "projects": "Projets",
+    "realizations": "Réalisations",
+    "experiences": "Expériences",
+    "selectedWorks": "Travaux Sélectionnés",
+    "viewProject": "Voir mes projets",
+    "allProjects": "Tous les projets",
+    "technologies": "Technologies",
+    "client": "Client",
+    "duration": "Durée",
+    "role": "Rôle",
+    "viewLive": "Voir en ligne",
+    "viewCode": "Voir le code",
+    "discover": "Découvrez quelques-unes de mes réalisations récentes"
   }
 }
