@@ -11,7 +11,7 @@ import { BlendFunction } from "postprocessing";
 import { Vector2 } from "three";
 import ModelShapes from "./ModelShapes";
 import { Environment } from "@react-three/drei";
-import { useMotionValue, useSpring, useScroll } from "framer-motion";
+import { useMotionValue, useSpring, useScroll, useReducedMotion } from "framer-motion";
 import { useTheme } from "next-themes";
 
 interface BackgroundProps {
@@ -22,6 +22,7 @@ export default function Background({ onShapesReady }: BackgroundProps) {
   const { theme, resolvedTheme } = useTheme();
   const currentTheme = theme === "system" ? resolvedTheme : theme;
   const [isMobile, setIsMobile] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
   const frameCount = useRef(0);
 
   const { scrollYProgress } = useScroll();
@@ -64,6 +65,7 @@ export default function Background({ onShapesReady }: BackgroundProps) {
   };
 
   useEffect(() => {
+    if (prefersReducedMotion) return;
     const handleMouseMove = (e: MouseEvent) => {
       const { innerWidth, innerHeight } = window;
       const x = e.clientX / innerWidth;
@@ -124,51 +126,57 @@ export default function Background({ onShapesReady }: BackgroundProps) {
         window.removeEventListener("mousemove", handleMouseMove);
       };
     }
-  }, [isMobile, mouse.x, mouse.y]);
+  }, [isMobile, mouse.x, mouse.y, prefersReducedMotion]);
 
   const chromaticOffset = useMemo(() => new Vector2(0.0005, 0.0005), []);
+
+  const enableEffects = !prefersReducedMotion && !isMobile;
+  const dpr = prefersReducedMotion || isMobile ? 1 : 2;
 
   return (
     <Canvas
       orthographic
       camera={{ position: [0, 0, 200], zoom: 10 }}
-      frameloop="always"
-      dpr={[1, 2]}
+      frameloop={prefersReducedMotion ? "demand" : "always"}
+      dpr={dpr}
       gl={{
-        antialias: true,
-        powerPreference: "high-performance",
+        antialias: !prefersReducedMotion && !isMobile,
+        powerPreference: prefersReducedMotion || isMobile ? "low-power" : "high-performance",
         stencil: false,
         depth: true,
         alpha: true,
       }}
     >
       <Suspense fallback={null}>
-        <EffectComposer enableNormalPass={false} multisampling={0}>
-          <ChromaticAberration
-            blendFunction={BlendFunction.NORMAL}
-            offset={chromaticOffset}
-            radialModulation={false}
-            modulationOffset={0}
-          />
-          <Noise
-            premultiply
-            blendFunction={BlendFunction.SOFT_LIGHT}
-            opacity={0.015}
-          />
-          <Vignette
-            offset={0.5}
-            darkness={0.3}
-            blendFunction={BlendFunction.NORMAL}
-          />
-        </EffectComposer>
+        {enableEffects && (
+          <EffectComposer enableNormalPass={false} multisampling={0}>
+            <ChromaticAberration
+              blendFunction={BlendFunction.NORMAL}
+              offset={chromaticOffset}
+              radialModulation={false}
+              modulationOffset={0}
+            />
+            <Noise
+              premultiply
+              blendFunction={BlendFunction.SOFT_LIGHT}
+              opacity={0.015}
+            />
+            <Vignette
+              offset={0.5}
+              darkness={0.3}
+              blendFunction={BlendFunction.NORMAL}
+            />
+          </EffectComposer>
+        )}
         <ModelShapes
           mouse={smoothMouse}
           currentTheme={currentTheme}
           scrollProgress={scrollProgress}
           isMobile={isMobile}
+          isReducedMotion={Boolean(prefersReducedMotion)}
           onShapesReady={onShapesReady}
         />
-        <Environment preset="city" background={false} environmentIntensity={0.8} />
+        <Environment preset="city" background={false} environmentIntensity={0.25} />
       </Suspense>
     </Canvas>
   );

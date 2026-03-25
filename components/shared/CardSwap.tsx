@@ -14,6 +14,7 @@ import React, {
 } from "react";
 import gsap from "gsap";
 import Image from "next/image";
+import { useReducedMotion } from "framer-motion";
 
 // ============================================================================
 // Types & Interfaces
@@ -157,15 +158,14 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         <div className="relative w-full h-full rounded-2xl overflow-hidden">
           {imageSrc && (
             <div className="absolute inset-3 rounded-xl overflow-hidden">
-              <Image
-                src={imageSrc}
-                alt={imageAlt}
-                fill
-                unoptimized
-                sizes="(max-width: 768px) 90vw, 500px"
-                className="object-cover object-center select-none pointer-events-none"
-                priority={false}
-              />
+                <Image
+                  src={imageSrc}
+                  alt={imageAlt}
+                  fill
+                  sizes="(max-width: 768px) 90vw, 500px"
+                  className="object-cover object-center select-none pointer-events-none"
+                  priority={false}
+                />
             </div>
           )}
           <div className="relative z-10 w-full h-full">{children}</div>
@@ -228,6 +228,7 @@ const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(
     },
     ref
   ) => {
+    const prefersReducedMotion = useReducedMotion();
     // ========== Memoized Values ==========
     const config = useMemo(() => getAnimConfig(easing), [easing]);
 
@@ -274,6 +275,14 @@ const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(
       (newOrder: number[], newActiveIdx: number) => {
         if (isAnimatingRef.current) return;
         isAnimatingRef.current = true;
+
+        if (prefersReducedMotion) {
+          orderRef.current = newOrder;
+          onActiveIndexChange?.(newActiveIdx);
+          positionCards();
+          isAnimatingRef.current = false;
+          return;
+        }
 
         // Kill any existing animation
         timelineRef.current?.kill();
@@ -349,12 +358,19 @@ const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(
           "return"
         );
       },
-      [config, cardDistance, verticalDistance, onActiveIndexChange]
+      [
+        config,
+        cardDistance,
+        verticalDistance,
+        onActiveIndexChange,
+        prefersReducedMotion,
+        positionCards,
+      ]
     );
 
     // ========== Swap (Autoplay) ==========
     const swap = useCallback(() => {
-      if (isAnimatingRef.current || isPausedRef.current) return;
+      if (isAnimatingRef.current || isPausedRef.current || prefersReducedMotion) return;
 
       const currentOrder = orderRef.current;
       if (currentOrder.length < 2) return;
@@ -364,7 +380,7 @@ const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(
       const newActiveIdx = rest[0];
 
       animateToNewOrder(newOrder, newActiveIdx);
-    }, [animateToNewOrder]);
+    }, [animateToNewOrder, prefersReducedMotion]);
 
     // ========== Bring To Front ==========
     const bringToFront = useCallback(
@@ -393,13 +409,15 @@ const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(
         animateToNewOrder(newOrder, targetIdx);
 
         // Restart autoplay after animation completes
-        setTimeout(() => {
-          if (!isPausedRef.current && !intervalRef.current) {
-            intervalRef.current = window.setInterval(swap, delay);
-          }
-        }, (config.durDrop + config.durMove + config.durReturn) * 1000);
+        if (!prefersReducedMotion) {
+          setTimeout(() => {
+            if (!isPausedRef.current && !intervalRef.current) {
+              intervalRef.current = window.setInterval(swap, delay);
+            }
+          }, (config.durDrop + config.durMove + config.durReturn) * 1000);
+        }
       },
-      [animateToNewOrder, swap, delay, config]
+      [animateToNewOrder, swap, delay, config, prefersReducedMotion]
     );
 
     // ========== Hover Effect ==========
@@ -407,7 +425,7 @@ const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(
       (cardIdx: number, isEntering: boolean) => {
         // Don't hover the front card or during animation
         const currentFront = orderRef.current[0];
-        if (cardIdx === currentFront || isAnimatingRef.current) return;
+        if (cardIdx === currentFront || isAnimatingRef.current || prefersReducedMotion) return;
 
         const el = cardRefs.current[cardIdx];
         if (!el) return;
@@ -435,7 +453,7 @@ const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(
           });
         }
       },
-      [cardDistance, verticalDistance]
+      [cardDistance, verticalDistance, prefersReducedMotion]
     );
 
     // ========== Pause/Resume ==========
@@ -477,10 +495,12 @@ const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(
       onActiveIndexChange?.(orderRef.current[0]);
 
       // Start autoplay
-      intervalRef.current = window.setInterval(swap, delay);
+      if (!prefersReducedMotion) {
+        intervalRef.current = window.setInterval(swap, delay);
+      }
 
       // Pause on hover
-      if (pauseOnHover && containerRef.current) {
+      if (pauseOnHover && containerRef.current && !prefersReducedMotion) {
         const node = containerRef.current;
         node.addEventListener("mouseenter", pause);
         node.addEventListener("mouseleave", resume);
@@ -497,7 +517,31 @@ const CardSwap = forwardRef<CardSwapHandle, CardSwapProps>(
         if (intervalRef.current) clearInterval(intervalRef.current);
         timelineRef.current?.kill();
       };
-    }, [childArr.length, positionCards, swap, delay, pauseOnHover, pause, resume, onActiveIndexChange]);
+    }, [
+      childArr.length,
+      positionCards,
+      swap,
+      delay,
+      pauseOnHover,
+      pause,
+      resume,
+      onActiveIndexChange,
+      prefersReducedMotion,
+    ]);
+
+    useEffect(() => {
+      if (prefersReducedMotion) return;
+      const handleVisibilityChange = () => {
+        const isVisible = document.visibilityState === "visible";
+        if (!isVisible) {
+          pause();
+        } else {
+          resume();
+        }
+      };
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+      return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+    }, [pause, resume, prefersReducedMotion]);
 
     // ========== Render Cards ==========
     const renderedCards = childArr.map((child, i) =>

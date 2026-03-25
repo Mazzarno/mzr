@@ -41,34 +41,6 @@ const despairs = localFont({
   preload: true,
 });
 
-const inter = localFont({
-  src: [
-    {
-      path: "../public/fonts/Inter/Inter_Light.ttf",
-      weight: "100",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/Inter/Inter_Regular.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/Inter/Inter_Bold.ttf",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/Inter/Inter_Black.ttf",
-      weight: "900",
-      style: "normal",
-    },
-  ],
-  display: "swap",
-  variable: "--font-inter",
-  preload: true,
-});
-
 const figTree = localFont({
   src: [
     {
@@ -130,7 +102,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${dmSans.variable} ${despairs.variable} ${inter.variable} ${figTree.variable} font-figtree font-normal antialiased select-none`}
+        className={`${dmSans.variable} ${despairs.variable} ${figTree.variable} font-figtree font-normal antialiased select-none`}
       >
         <NextThemesProvider
           attribute="data-theme"

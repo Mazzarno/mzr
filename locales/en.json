@@ -66,7 +66,35 @@
     "role": "Role",
     "viewLive": "View Live",
     "viewCode": "View Code",
-    "discover": "Discover some of my recent work"
+    "discover": "Discover some of my recent work",
+    "navigationHint": "Use left/right arrows",
+    "projectsData": {
+      "pba": {
+        "title": "Asus - Pro Business Alliance",
+        "description": "Showcase site for the ASUS Pro Business range. Modern interface with smooth animations and a responsive design to highlight professional products.",
+        "headerTitle": "Asus - PBA"
+      },
+      "maximecaro": {
+        "title": "Maxime Caro - Portfolio",
+        "description": "Creative portfolio for an audiovisual artist. Immersive design with media galleries and custom animations for a unique user experience.",
+        "headerTitle": "Maxime Caro"
+      },
+      "asuszen": {
+        "title": "Asus - Zenphone 10",
+        "description": "Product landing page for the Zenphone 10 launch. Interactive 3D animations and scroll-based storytelling to highlight the smartphone's features.",
+        "headerTitle": "Asus - Zenphone 10"
+      },
+      "barbincps": {
+        "title": "Barbin CPS",
+        "description": "Corporate website for a service company. Clear, professional interface with a contact form and service overview.",
+        "headerTitle": "Barbin CPS"
+      },
+      "gamins": {
+        "title": "Les Gamins du Marais",
+        "description": "Showcase site for a local association. Warm, accessible design with a photo gallery and practical information for families.",
+        "headerTitle": "Les Gamins Marais"
+      }
+    }
   },
   "contact": {
     "title": "CONTACT",
@@ -81,6 +109,9 @@
     "success": "Message sent successfully!",
     "error": "An error occurred. Please try again.",
     "socialHint": "Feel free to connect on social media as well.",
+    "copy": "Copy email",
+    "copied": "Copied",
+    "copyError": "Copy failed",
     "subject": "Subject",
     "social": "Social",
     "follow": "Follow Me",

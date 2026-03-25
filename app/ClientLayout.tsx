@@ -1,6 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useRef, memo, createContext, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  memo,
+  createContext,
+  useContext,
+} from "react";
 import Loading from "../components/core/Loading";
 import TransitionLink from "../components/core/TransitionLink";
 
@@ -18,6 +25,7 @@ import {
   useDragControls,
   animate,
   DragControls,
+  useReducedMotion,
 } from "framer-motion";
 import ThemeSwitcher from "../components/core/ThemeSwitch";
 import Logo from "../components/core/Logo";
@@ -28,6 +36,7 @@ import LanguageSwitcher from "../components/core/LanguageSwitcher";
 import Transition from "../components/core/Transition";
 import SmoothScroll from "../components/core/SmoothScroll";
 import Noise from "../components/shared/Noise";
+import ScrollProgress from "../components/shared/ScrollProgress";
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -68,33 +77,53 @@ const gridColumnVariants = {
   },
 };
 
+const getGridColumns = (width: number) => {
+  if (width < 640) return 2;
+  if (width < 768) return 3;
+  if (width < 1024) return 5;
+  if (width < 1280) return 7;
+  if (width < 1536) return 9;
+  return 11;
+};
+
 const MemoizedGrid = memo(function Grid() {
+  const [columns, setColumns] = useState(() =>
+    typeof window !== "undefined" ? getGridColumns(window.innerWidth) : 2
+  );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setColumns(getGridColumns(window.innerWidth));
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <>
       <motion.div
         className="
         fixed inset-0
-        grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5
-        lg:grid-cols-7 xl:grid-cols-9 2xl:grid-cols-11
-        divide-x-2 divide-dashed
+        min-h-[100dvh] h-[100dvh]
+        grid
+        divide-x-2 divide-dashed divide-base-content/35
         pointer-events-none
-        opacity-30
+        opacity-45
+        z-10
       "
+        style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
         variants={gridContainerVariants}
         initial="hidden"
         animate="visible"
       >
-        {[...Array(11)].map((_, i) => (
+        {Array.from({ length: columns }).map((_, i) => (
           <motion.div
             key={i}
             variants={gridColumnVariants}
             style={{ originY: 0 }}
             className={`
-            ${i >= 2 ? "hidden sm:block" : ""}
-            ${i >= 3 ? "hidden md:block" : ""}
-            ${i >= 5 ? "hidden lg:block" : ""}
-            ${i >= 7 ? "hidden xl:block" : ""}
-            ${i >= 9 ? "hidden 2xl:block" : ""}
+            h-full
           `}
           />
         ))}
@@ -197,120 +226,69 @@ const MemoizedFooter = memo(function Footer({
       {/* Socials */}
       <div className="flex items-center space-x-6">
         {/* Github */}
-        <div className="relative overflow-hidden h-5 group">
-          <div
-            className="transition-transform duration-300 transform group-hover:-translate-y-6"
-            style={{ transformStyle: "preserve-3d" }}
+        <div className="relative h-5 w-5 overflow-hidden group">
+          <a
+            href="https://github.com/Mazzarno"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute inset-0 flex h-5 w-5 items-center justify-center leading-none text-neutral-content transition-transform duration-300 group-hover:-translate-y-5"
+            aria-label="GitHub"
           >
-            <div className="block">
-              <a
-                href="https://github.com/Mazzarno"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neutral-content hover:text-primary transition-colors"
-              >
-                <button
-                  className="text-sm text-neutral-content focus:outline-none"
-                  aria-label="GitHub"
-                >
-                  <Github size={18} />
-                </button>
-              </a>
-            </div>
-            <div className="block">
-              <a
-                href="https://github.com/Mazzarno"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neutral-content hover:text-primary transition-colors"
-              >
-                <button
-                  className="text-sm text-neutral-content focus:outline-none"
-                  aria-label="GitHub"
-                >
-                  <Github size={18} className="text-indigo-500" />
-                </button>
-              </a>
-            </div>
-          </div>
+            <Github size={18} />
+          </a>
+          <a
+            href="https://github.com/Mazzarno"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute inset-0 flex h-5 w-5 items-center justify-center leading-none text-indigo-500 transition-transform duration-300 translate-y-5 group-hover:translate-y-0"
+            aria-label="GitHub"
+          >
+            <Github size={18} />
+          </a>
         </div>
         {/* Linkedin */}
-        <div className="relative overflow-hidden h-5 group">
-          <div
-            className="transition-transform duration-300 transform group-hover:-translate-y-6"
-            style={{ transformStyle: "preserve-3d" }}
+        <div className="relative h-5 w-5 overflow-hidden group">
+          <a
+            href="https://www.linkedin.com/in/alexis-germain/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute inset-0 flex h-5 w-5 items-center justify-center leading-none text-neutral-content transition-transform duration-300 group-hover:-translate-y-5"
+            aria-label="LinkedIn"
           >
-            <div className="block">
-              <a
-                href="https://www.linkedin.com/in/alexis-germain/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neutral-content hover:text-primary transition-colors"
-              >
-                <button
-                  className="text-sm text-neutral-content focus:outline-none"
-                  aria-label="Linkedin"
-                >
-                  <Linkedin size={18} />
-                </button>
-              </a>
-            </div>
-            <div className="block">
-              <a
-                href="https://www.linkedin.com/in/alexis-germain/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neutral-content hover:text-primary transition-colors"
-              >
-                <button
-                  className="text-sm text-neutral-content focus:outline-none"
-                  aria-label="Linkedin"
-                >
-                  <Linkedin size={18} className="text-indigo-500" />
-                </button>
-              </a>
-            </div>
-          </div>
+            <Linkedin size={18} />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/alexis-germain/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute inset-0 flex h-5 w-5 items-center justify-center leading-none text-indigo-500 transition-transform duration-300 translate-y-5 group-hover:translate-y-0"
+            aria-label="LinkedIn"
+          >
+            <Linkedin size={18} />
+          </a>
         </div>
 
         {/* Mail */}
 
-        <div className="relative overflow-hidden h-5 group">
-          <div
-            className="transition-transform duration-300 transform group-hover:-translate-y-6"
-            style={{ transformStyle: "preserve-3d" }}
+        <div className="relative h-5 w-5 overflow-hidden group">
+          <a
+            href="mailto:contact@alexis-germain.fr"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute inset-0 flex h-5 w-5 items-center justify-center leading-none text-neutral-content transition-transform duration-300 group-hover:-translate-y-5"
+            aria-label="Email"
           >
-            <div className="block">
-              <a
-                href="mailto:contact@alexis-germain.fr"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neutral-content hover:text-primary transition-colors"
-              >
-                <button
-                  className="text-sm text-neutral-content focus:outline-none"
-                  aria-label="Mail"
-                >
-                  <Mail size={18} />
-                </button>
-              </a>
-            </div>
-            <div className="block">
-              <a
-                href="mailto:contact@alexis-germain.fr"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neutral-content hover:text-primary transition-colors"
-              >
-                <button
-                  className="text-sm text-neutral-content focus:outline-none"
-                  aria-label="Mail"
-                >
-                  <Mail size={18} className="text-indigo-500" />
-                </button>
-              </a>
-            </div>
-          </div>
+            <Mail size={18} />
+          </a>
+          <a
+            href="mailto:contact@alexis-germain.fr"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute inset-0 flex h-5 w-5 items-center justify-center leading-none text-indigo-500 transition-transform duration-300 translate-y-5 group-hover:translate-y-0"
+            aria-label="Email"
+          >
+            <Mail size={18} />
+          </a>
         </div>
       </div>
     </div>
@@ -353,6 +331,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const isInitialRender = useRef(true);
   const [isMobile, setIsMobile] = useState(false);
   const [shapesReady, setShapesReady] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   const handleShapesReady = () => {
     setShapesReady(true);
@@ -404,7 +383,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             if (typeof window !== "undefined") {
               window.localStorage.setItem("hasVisited", "true");
             }
-          } catch {}
+          } catch { }
           setShowLoader(false);
         }}
       />
@@ -412,50 +391,49 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   }
   return (
     <>
-      {!isMobile && (
-        <>
-          <FaviconUpdater />
-          <AnimatedCursor
-            innerSize={4}
-            outerSize={30}
-            innerScale={1.5}
-            outerScale={1.5}
-            outerAlpha={0}
-            innerStyle={{
-              backgroundColor: "var(--color-base-content)",
-            }}
-            outerStyle={{
-              border: "1px solid var(--color-base-content)",
-            }}
-            trailingSpeed={10}
-            clickables={[
-              "a",
-              "button",
-              ".link",
-              'input[type="text"]',
-              'input[type="email"]',
-              'input[type="number"]',
-              'input[type="submit"]',
-              'input[type="image"]',
-              "label[for]",
-              "select",
-              "textarea",
-              ".cursor-grab",
-            ]}
-          />
-        </>
+      <FaviconUpdater />
+      {!isMobile && !prefersReducedMotion && (
+        <AnimatedCursor
+          innerSize={4}
+          outerSize={30}
+          innerScale={1.5}
+          outerScale={1.5}
+          outerAlpha={0}
+          innerStyle={{
+            backgroundColor: "var(--color-base-content)",
+          }}
+          outerStyle={{
+            border: "1px solid var(--color-base-content)",
+          }}
+          trailingSpeed={10}
+          clickables={[
+            "a",
+            "img",
+            "button",
+            ".link",
+            'input[type="text"]',
+            'input[type="email"]',
+            'input[type="number"]',
+            'input[type="submit"]',
+            'input[type="image"]',
+            "label[for]",
+            "select",
+            "textarea",
+            ".cursor-grab",
+          ]}
+        />
       )}
       <div
         className="flex items-center justify-center min-h-[100dvh] bg-gradient-to-bl from-content-200 to-content-100"
         ref={constraintsRef}
       >
-        <div className="absolute h-full w-full pointer-events-none z-10">
+        <div className="absolute h-full w-full pointer-events-none z-0">
           <Background onShapesReady={handleShapesReady} />
         </div>
         <MemoizedGrid />
         <motion.main
           className={
-            "relative overflow-hidden z-10 bg-neutral/10 backdrop-blur-xs scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)] shadowz will-change-transform will-change-opacity"
+            "relative overflow-hidden z-20 bg-neutral/10 backdrop-blur-xs scrollbar-hide shadow-[0px_0px_10px_6px_rgba(0,_0,_0,_0.1)] shadowz will-change-transform will-change-opacity"
           }
           initial={{ opacity: 0.5, width: "0vw", height: "0vh" }}
           animate={{
@@ -584,40 +562,33 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                       </div>
                     </div>
                   </div>
-                  <div className="relative overflow-hidden h-5 group">
-                    <div
-                      key={isReduced ? "reduced" : "expanded"}
-                      className="transition-transform duration-300 transform group-hover:-translate-y-5"
-                      style={{ transformStyle: "preserve-3d" }}
+                  <div className="relative h-5 w-5 m-2 pb-6">
+                    <button
+                      aria-label={
+                        isReduced
+                          ? "Passer en plein écran"
+                          : "Réduire la fenêtre"
+                      }
+                      onClick={onToggleResize}
+                      className="group relative h-5 w-5 overflow-hidden focus:outline-none"
                     >
-                      <div className="block position-top px-2 pl-2">
-                        <button
-                          aria-label={isReduced ? "Maximiser" : "Réduire"}
-                          onClick={onToggleResize}
-                          className="focus:outline-none"
-                        >
+                      <span className="flex flex-col transition-transform duration-300 transform group-hover:-translate-y-5">
+                        <span className="flex h-5 w-5 items-center justify-center leading-none">
                           {isReduced ? (
                             <Minimize size={17} className="text-base-content" />
                           ) : (
                             <Maximize size={17} className="text-base-content" />
                           )}
-                        </button>
-                      </div>
-
-                      <div className="block position-bottom px-1">
-                        <button
-                          onClick={onToggleResize}
-                          className="focus:outline-none"
-                          aria-label={!isReduced ? "Maximiser" : "Réduire"}
-                        >
+                        </span>
+                        <span className="flex h-5 w-5 items-center justify-center leading-none">
                           {isReduced ? (
                             <Maximize size={17} className="text-base-content" />
                           ) : (
                             <Minimize size={17} className="text-base-content" />
                           )}
-                        </button>
-                      </div>
-                    </div>
+                        </span>
+                      </span>
+                    </button>
                   </div>
                 </div>
 
@@ -630,6 +601,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
                   <SmoothScroll />
                   <div className="lenis-content">
                     <Noise />
+                    <ScrollProgress />
                     <AnimationContext.Provider value={{ shapesReady }}>
                       <div>{children}</div>
                     </AnimationContext.Provider>

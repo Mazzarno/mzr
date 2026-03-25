@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import Image from "next/image";
+import { useReducedMotion } from "framer-motion";
 
 export type LogoItem =
   | {
@@ -125,7 +126,8 @@ const useAnimationLoop = (
   targetVelocity: number,
   seqWidth: number,
   isHovered: boolean,
-  pauseOnHover: boolean
+  pauseOnHover: boolean,
+  isVisible: boolean
 ) => {
   const rafRef = useRef<number | null>(null);
   const lastTimestampRef = useRef<number | null>(null);
@@ -154,6 +156,16 @@ const useAnimationLoop = (
       };
     }
 
+    if (!isVisible) {
+      return () => {
+        if (rafRef.current !== null) {
+          cancelAnimationFrame(rafRef.current);
+          rafRef.current = null;
+        }
+        lastTimestampRef.current = null;
+      };
+    }
+
     const animate = (timestamp: number) => {
       if (lastTimestampRef.current === null) {
         lastTimestampRef.current = timestamp;
@@ -163,7 +175,7 @@ const useAnimationLoop = (
         Math.max(0, timestamp - lastTimestampRef.current) / 1000;
       lastTimestampRef.current = timestamp;
 
-      const target = pauseOnHover && isHovered ? 0 : targetVelocity;
+      const target = !isVisible || (pauseOnHover && isHovered) ? 0 : targetVelocity;
 
       const easingFactor =
         1 - Math.exp(-deltaTime / ANIMATION_CONFIG.SMOOTH_TAU);
@@ -190,7 +202,7 @@ const useAnimationLoop = (
       }
       lastTimestampRef.current = null;
     };
-  }, [targetVelocity, seqWidth, isHovered, pauseOnHover, trackRef]);
+  }, [targetVelocity, seqWidth, isHovered, pauseOnHover, isVisible, trackRef]);
 };
 
 export const LogoLoop = React.memo<LogoLoopProps>(
@@ -218,13 +230,15 @@ export const LogoLoop = React.memo<LogoLoopProps>(
       ANIMATION_CONFIG.MIN_COPIES
     );
     const [isHovered, setIsHovered] = useState<boolean>(false);
+    const [isPageVisible, setIsPageVisible] = useState(true);
+    const prefersReducedMotion = useReducedMotion();
 
     const targetVelocity = useMemo(() => {
-      const magnitude = Math.abs(speed);
+      const magnitude = Math.abs(prefersReducedMotion ? 0 : speed);
       const directionMultiplier = direction === "left" ? 1 : -1;
       const speedMultiplier = speed < 0 ? -1 : 1;
       return magnitude * directionMultiplier * speedMultiplier;
-    }, [speed, direction]);
+    }, [speed, direction, prefersReducedMotion]);
 
     const updateDimensions = useCallback(() => {
       const containerWidth = containerRef.current?.clientWidth ?? 0;
@@ -249,8 +263,17 @@ export const LogoLoop = React.memo<LogoLoopProps>(
       targetVelocity,
       seqWidth,
       isHovered,
-      pauseOnHover
+      pauseOnHover,
+      isPageVisible
     );
+
+    useEffect(() => {
+      const handleVisibilityChange = () => {
+        setIsPageVisible(document.visibilityState === "visible");
+      };
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+      return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+    }, []);
 
     const cssVariables = useMemo(
       () =>

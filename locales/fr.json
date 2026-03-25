@@ -12,6 +12,9 @@
     "success": "Message envoyé avec succès!",
     "error": "Une erreur est survenue. Veuillez réessayer.",
     "socialHint": "Vous pouvez aussi me retrouver sur les réseaux sociaux.",
+    "copy": "Copier l'email",
+    "copied": "Email copié",
+    "copyError": "Copie impossible",
     "subject": "Sujet",
     "phone": "06.08.53.52.80",
     "address": "Bruyères-sur-Oise, 95820",
@@ -24,6 +27,14 @@
     "question": "Question générale",
     "other": "Autre",
     "open": "Je suis toujours ouvert à discuter de nouveaux projets, idées créatives ou opportunités de collaboration."
+  },
+  "notFound": {
+    "title": "404",
+    "page": "Page",
+    "not": "Non",
+    "found": "Trouvée",
+    "goHome": "Retour à l'accueil",
+    "sorry": "Désolé, la page que vous recherchez n'existe pas."
   },
   "home": {
     "ctaText": "Contactez-moi pour discuter de votre projet ou de vos idées.",
@@ -135,6 +146,34 @@
     "role": "Rôle",
     "viewLive": "Voir en ligne",
     "viewCode": "Voir le code",
-    "discover": "Découvrez quelques-unes de mes réalisations récentes"
+    "discover": "Découvrez quelques-unes de mes réalisations récentes",
+    "navigationHint": "Utilisez les flèches gauche/droite",
+    "projectsData": {
+      "pba": {
+        "title": "Asus - Pro Business Alliance",
+        "description": "Site vitrine pour la gamme Pro Business ASUS. Développement d'une interface moderne avec animations fluides et design responsive pour mettre en valeur les produits professionnels.",
+        "headerTitle": "Asus - PBA"
+      },
+      "maximecaro": {
+        "title": "Maxime Caro - Portfolio",
+        "description": "Portfolio créatif pour un artiste audiovisuel. Design immersif avec intégration de galeries médias et animations sur-mesure pour une expérience utilisateur unique.",
+        "headerTitle": "Maxime Caro"
+      },
+      "asuszen": {
+        "title": "Asus - Zenphone 10",
+        "description": "Landing page produit pour le lancement du Zenphone 10. Animations 3D interactives et scroll-based storytelling pour présenter les fonctionnalités du smartphone.",
+        "headerTitle": "Asus - Zenphone 10"
+      },
+      "barbincps": {
+        "title": "Barbin CPS",
+        "description": "Site institutionnel pour une entreprise de services. Interface claire et professionnelle avec formulaire de contact et présentation des services.",
+        "headerTitle": "Barbin CPS"
+      },
+      "gamins": {
+        "title": "Les Gamins du Marais",
+        "description": "Site vitrine pour une association locale. Design chaleureux et accessible avec galerie photos et informations pratiques pour les familles.",
+        "headerTitle": "Les Gamins Marais"
+      }
+    }
   }
 }

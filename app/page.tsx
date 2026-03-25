@@ -1,5 +1,11 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import { motion } from "framer-motion";
 import AnimatedText from "../components/core/AnimatedText";
 import { useTranslations } from "next-intl";
@@ -7,15 +13,15 @@ import TextType from "../components/shared/TextType";
 import BlurText from "../components/shared/BlurText";
 import LogoLoop from "../components/shared/LogoLoop";
 import { useAnimationContext } from "./ClientLayout";
+import { ChevronLeft, ChevronRight, Check, Copy } from "lucide-react";
 import {
   SiHtml5,
-  SiCss3,
+  SiNuxt,
   SiJavascript,
   SiTypescript,
   SiReact,
   SiVuedotjs,
   SiNextdotjs,
-  SiNuxtdotjs,
   SiTailwindcss,
   SiFramer,
   SiThreedotjs,
@@ -24,15 +30,18 @@ import {
   SiGit,
   SiGithub,
   SiFigma,
-  SiAdobephotoshop,
   SiBlender,
   SiMysql,
   SiGraphql,
   SiAngular,
   SiStrapi,
   SiWordpress,
+  SiOpenai,
+  SiClaude,
+  SiPostman,
 } from "react-icons/si";
-import CardSwap, { Card } from "../components/shared/CardSwap";
+import { DiCss3, DiPhotoshop, } from "react-icons/di"
+import CardSwap, { Card, CardSwapHandle } from "../components/shared/CardSwap";
 import ProjectInfo, { Project } from "../components/shared/ProjectInfo";
 export default function HomePage() {
   return (
@@ -178,7 +187,7 @@ const QuickAbout = () => {
 const SkillsSection = () => {
   const techLogo1 = [
     { node: <SiHtml5 />, title: "HTML5", href: "https://html.com" },
-    { node: <SiCss3 />, title: "CSS3", href: "https://css.com" },
+    { node: <DiCss3 />, title: "CSS3", href: "https://css.com" },
     {
       node: <SiJavascript />,
       title: "JavaScript",
@@ -200,9 +209,24 @@ const SkillsSection = () => {
     { node: <SiFigma />, title: "Figma", href: "https://figma.com" },
     { node: <SiBlender />, title: "Blender", href: "https://www.blender.org" },
     {
-      node: <SiAdobephotoshop />,
+      node: <DiPhotoshop />,
       title: "Adobe Photoshop",
       href: "https://www.adobe.com/products/photoshop.html",
+    },
+    {
+      node: <SiPostman />,
+      title: "Postman",
+      href: "https://www.postman.com/",
+    },
+    {
+      node: <SiOpenai />,
+      title: "Codex",
+      href: "https://openai.com/codex/",
+    },
+    {
+      node: <SiClaude />,
+      title: "Claude Code",
+      href: "https://claude.com/product/claude-code",
     },
   ];
   const techLogo2 = [
@@ -213,7 +237,7 @@ const SkillsSection = () => {
     },
     { node: <SiVuedotjs />, title: "Vue.js", href: "https://vuejs.org" },
     { node: <SiReact />, title: "React", href: "https://react.dev" },
-    { node: <SiNuxtdotjs />, title: "Nuxt.js", href: "https://nuxtjs.org" },
+    { node: <SiNuxt />, title: "Nuxt.js", href: "https://nuxtjs.org" },
     { node: <SiNextdotjs />, title: "Next.js", href: "https://nextjs.org" },
     { node: <SiAngular />, title: "Angular", href: "https://angular.io" },
     { node: <SiStrapi />, title: "Strapi", href: "https://strapi.io" },
@@ -350,87 +374,201 @@ const ExperienceSection = () => {
     </section>
   );
 };
-const projects: Project[] = [
-  {
-    id: "pba",
-    title: "Asus - Pro Business Alliance",
-    description:
-      "Site vitrine pour la gamme Pro Business ASUS. Développement d'une interface moderne avec animations fluides et design responsive pour mettre en valeur les produits professionnels.",
-    technologies: [
-      { icon: <SiReact />, name: "React" },
-      { icon: <SiNextdotjs />, name: "Next.js" },
-      { icon: <SiTailwindcss />, name: "Tailwind" },
-      { icon: <SiFramer />, name: "Framer Motion" },
-    ],
-    headerTitle: "Asus - PBA",
-    headerLogoSrc: "/favpba.png",
-    imageSrc: "/pba.png",
-  },
-  {
-    id: "maximecaro",
-    title: "Maxime Caro - Portfolio",
-    description:
-      "Portfolio créatif pour un artiste audiovisuel. Design immersif avec intégration de galeries médias et animations sur-mesure pour une expérience utilisateur unique.",
-    technologies: [
-      { icon: <SiVuedotjs />, name: "Vue.js" },
-      { icon: <SiNuxtdotjs />, name: "Nuxt.js" },
-      { icon: <SiGreensock />, name: "GSAP" },
-      { icon: <SiTailwindcss />, name: "Tailwind" },
-    ],
-    headerTitle: "Maxime Caro",
-    headerLogoSrc: "/favmax.png",
-    imageSrc: "/maximecaro.png",
-  },
-  {
-    id: "asuszen",
-    title: "Asus - Zenphone 10",
-    description:
-      "Landing page produit pour le lancement du Zenphone 10. Animations 3D interactives et scroll-based storytelling pour présenter les fonctionnalités du smartphone.",
-    technologies: [
-      { icon: <SiReact />, name: "React" },
-      { icon: <SiThreedotjs />, name: "Three.js" },
-      { icon: <SiGreensock />, name: "GSAP" },
-    ],
-    headerTitle: "Asus - Zenphone 10",
-    headerLogoSrc: "/favasus.png",
-    imageSrc: "/asuszen.png",
-  },
-  {
-    id: "barbincps",
-    title: "Barbin CPS",
-    description:
-      "Site institutionnel pour une entreprise de services. Interface claire et professionnelle avec formulaire de contact et présentation des services.",
-    technologies: [
-      { icon: <SiWordpress />, name: "WordPress" },
-      { icon: <SiCss3 />, name: "CSS3" },
-      { icon: <SiJavascript />, name: "JavaScript" },
-    ],
-    headerTitle: "Barbin CPS",
-    headerLogoSrc: "/favcps.png",
-    imageSrc: "/barbncps.png",
-  },
-  {
-    id: "gamins",
-    title: "Les Gamins du Marais",
-    description:
-      "Site vitrine pour une association locale. Design chaleureux et accessible avec galerie photos et informations pratiques pour les familles.",
-    technologies: [
-      { icon: <SiWordpress />, name: "WordPress" },
-      { icon: <SiCss3 />, name: "CSS3" },
-      { icon: <SiJavascript />, name: "JavaScript" },
-    ],
-    headerTitle: "Les Gamins Marais",
-    headerLogoSrc: "/favgamins.png",
-    imageSrc: "/gamins.jpg",
-  },
-];
-
 const ProjectsSection = () => {
   const t = useTranslations("work");
+  const projects: Project[] = useMemo(
+    () => [
+      {
+        id: "pba",
+        title: t("projectsData.pba.title"),
+        description: t("projectsData.pba.description"),
+        technologies: [
+          { icon: <SiReact />, name: "React" },
+          { icon: <SiNextdotjs />, name: "Next.js" },
+          { icon: <SiTailwindcss />, name: "Tailwind" },
+          { icon: <SiFramer />, name: "Framer Motion" },
+        ],
+        headerTitle: t("projectsData.pba.headerTitle"),
+        headerLogoSrc: "/favpba.png",
+        imageSrc: "/pba.png",
+      },
+      {
+        id: "maximecaro",
+        title: t("projectsData.maximecaro.title"),
+        description: t("projectsData.maximecaro.description"),
+        technologies: [
+          { icon: <SiVuedotjs />, name: "Vue.js" },
+          { icon: <SiNuxt />, name: "Nuxt.js" },
+          { icon: <SiGreensock />, name: "GSAP" },
+          { icon: <SiTailwindcss />, name: "Tailwind" },
+        ],
+        headerTitle: t("projectsData.maximecaro.headerTitle"),
+        headerLogoSrc: "/favmax.png",
+        imageSrc: "/maximecaro.png",
+      },
+      {
+        id: "asuszen",
+        title: t("projectsData.asuszen.title"),
+        description: t("projectsData.asuszen.description"),
+        technologies: [
+          { icon: <SiReact />, name: "React" },
+          { icon: <SiThreedotjs />, name: "Three.js" },
+          { icon: <SiGreensock />, name: "GSAP" },
+        ],
+        headerTitle: t("projectsData.asuszen.headerTitle"),
+        headerLogoSrc: "/favasus.png",
+        imageSrc: "/asuszen.png",
+      },
+      {
+        id: "barbincps",
+        title: t("projectsData.barbincps.title"),
+        description: t("projectsData.barbincps.description"),
+        technologies: [
+          { icon: <SiWordpress />, name: "WordPress" },
+          { icon: <DiCss3 />, name: "CSS3" },
+          { icon: <SiJavascript />, name: "JavaScript" },
+        ],
+        headerTitle: t("projectsData.barbincps.headerTitle"),
+        headerLogoSrc: "/favcps.png",
+        imageSrc: "/barbncps.png",
+      },
+      {
+        id: "gamins",
+        title: t("projectsData.gamins.title"),
+        description: t("projectsData.gamins.description"),
+        technologies: [
+          { icon: <SiWordpress />, name: "WordPress" },
+          { icon: <DiCss3 />, name: "CSS3" },
+          { icon: <SiJavascript />, name: "JavaScript" },
+        ],
+        headerTitle: t("projectsData.gamins.headerTitle"),
+        headerLogoSrc: "/favgamins.png",
+        imageSrc: "/gamins.jpg",
+      },
+    ],
+    [t]
+  );
   const [activeIndex, setActiveIndex] = useState(0);
+  const cardSwapRef = useRef<CardSwapHandle>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [isProjectsInView, setIsProjectsInView] = useState(false);
+  const [cardLayout, setCardLayout] = useState({
+    width: 450,
+    height: 340,
+    cardDistance: 60,
+    verticalDistance: 50,
+    containerHeight: 380,
+  });
+  const totalProjects = projects.length;
+
+  const handlePrev = useCallback(() => {
+    const prevIndex = (activeIndex - 1 + totalProjects) % totalProjects;
+    cardSwapRef.current?.bringToFront(prevIndex);
+  }, [activeIndex, totalProjects]);
+
+  const handleNext = useCallback(() => {
+    const nextIndex = (activeIndex + 1) % totalProjects;
+    cardSwapRef.current?.bringToFront(nextIndex);
+  }, [activeIndex, totalProjects]);
+
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsProjectsInView(entry.isIntersecting);
+      },
+      { threshold: 0.35 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isProjectsInView) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (
+        target &&
+        (target.closest("input, textarea, select") || target.isContentEditable)
+      ) {
+        return;
+      }
+      if (event.key === "ArrowLeft") {
+        handlePrev();
+      }
+      if (event.key === "ArrowRight") {
+        handleNext();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isProjectsInView, handleNext, handlePrev]);
+
+  useEffect(() => {
+    const updateLayout = () => {
+      if (typeof window === "undefined") return;
+      const viewport = window.innerWidth;
+      if (viewport < 360) {
+        const width = Math.max(240, viewport - 64);
+        const height = Math.round(width * 0.78);
+        setCardLayout({
+          width,
+          height,
+          cardDistance: 38,
+          verticalDistance: 30,
+          containerHeight: height + 120,
+        });
+        return;
+      }
+      if (viewport < 480) {
+        const width = Math.min(340, viewport - 64);
+        const height = Math.round(width * 0.76);
+        setCardLayout({
+          width,
+          height,
+          cardDistance: 46,
+          verticalDistance: 36,
+          containerHeight: height + 140,
+        });
+        return;
+      }
+      if (viewport < 768) {
+        setCardLayout({
+          width: 380,
+          height: 300,
+          cardDistance: 52,
+          verticalDistance: 42,
+          containerHeight: 420,
+        });
+        return;
+      }
+      if (viewport < 1024) {
+        setCardLayout({
+          width: 420,
+          height: 320,
+          cardDistance: 56,
+          verticalDistance: 46,
+          containerHeight: 480,
+        });
+        return;
+      }
+      setCardLayout({
+        width: 450,
+        height: 340,
+        cardDistance: 60,
+        verticalDistance: 50,
+        containerHeight: 550,
+      });
+    };
+
+    updateLayout();
+    window.addEventListener("resize", updateLayout);
+    return () => window.removeEventListener("resize", updateLayout);
+  }, []);
 
   return (
-    <section className="py-16 md:py-20 overflow-hidden">
+    <section ref={sectionRef} className="py-16 md:py-20 overflow-hidden">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -455,16 +593,46 @@ const ProjectsSection = () => {
           {/* Text Block - Left on desktop */}
           <div className="w-full md:w-1/2 text-center md:text-left px-4 md:px-0 order-2 md:order-1">
             <ProjectInfo project={projects[activeIndex]} />
+            <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm text-base-content/70">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handlePrev}
+                  className="btn btn-sm btn-ghost"
+                  aria-label="Previous project"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  className="btn btn-sm btn-ghost"
+                  aria-label="Next project"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+              <span className="text-xs uppercase tracking-[0.3em]">
+                {activeIndex + 1} / {totalProjects}
+              </span>
+              <span className="text-xs text-base-content/50 hidden sm:inline">
+                {t("navigationHint")}
+              </span>
+            </div>
           </div>
 
           {/* Cards Block - Right on desktop */}
-          <div className="w-full md:w-1/2 relative h-[380px] sm:h-[450px] md:h-[550px] flex justify-center items-center order-1 md:order-2">
+          <div
+            className="w-full md:w-1/2 relative flex justify-center items-center order-1 md:order-2"
+            style={{ height: cardLayout.containerHeight }}
+          >
             <CardSwap
-              width={450}
-              height={340}
+              ref={cardSwapRef}
+              width={cardLayout.width}
+              height={cardLayout.height}
               placement="center"
-              cardDistance={60}
-              verticalDistance={50}
+              cardDistance={cardLayout.cardDistance}
+              verticalDistance={cardLayout.verticalDistance}
               delay={5000}
               pauseOnHover={true}
               onActiveIndexChange={setActiveIndex}
@@ -494,6 +662,11 @@ const ContactForm = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState<null | boolean>(null);
+  const [copyState, setCopyState] = useState<"idle" | "copied" | "error">(
+    "idle"
+  );
+  const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const contactEmail = "contact@alexis-germain.fr";
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -513,6 +686,27 @@ const ContactForm = () => {
       setFormState({ name: "", email: "", subject: "", message: "" });
     }, 1200);
   };
+
+  const handleCopyEmail = useCallback(async () => {
+    if (copyTimeoutRef.current) {
+      clearTimeout(copyTimeoutRef.current);
+    }
+    try {
+      await navigator.clipboard.writeText(contactEmail);
+      setCopyState("copied");
+    } catch {
+      setCopyState("error");
+    }
+    copyTimeoutRef.current = setTimeout(() => setCopyState("idle"), 2000);
+  }, [contactEmail]);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <section className="py-16 sm:py-20">
@@ -688,9 +882,34 @@ const ContactForm = () => {
               )}
             </div>
           </form>
-          <p className="text-xl text-base-content text-center mt-8 pt-6">
-            {t("contact.socialHint")}
-          </p>
+          <div className="mt-8 pt-6 flex flex-col items-center gap-3 text-center">
+            <p className="text-base sm:text-lg md:text-xl text-base-content/70">
+              {t("contact.socialHint")}
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-base-content/70">
+              <span className="font-semibold text-base-content">
+                {contactEmail}
+              </span>
+              <button
+                type="button"
+                onClick={handleCopyEmail}
+                className="btn btn-outline btn-xs gap-2"
+                aria-live="polite"
+              >
+                {copyState === "copied" ? (
+                  <Check size={14} />
+                ) : (
+                  <Copy size={14} />
+                )}
+                {copyState === "copied"
+                  ? t("contact.copied")
+                  : t("contact.copy")}
+              </button>
+            </div>
+            {copyState === "error" && (
+              <span className="text-xs text-error">{t("contact.copyError")}</span>
+            )}
+          </div>
         </motion.div>
       </div>
     </section>

@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from "react";
+import { useReducedMotion } from "framer-motion";
 
 interface NoiseProps {
   patternSize?: number;
@@ -16,6 +17,8 @@ const Noise: React.FC<NoiseProps> = ({
   patternAlpha = 1,
 }) => {
   const grainRef = useRef<HTMLCanvasElement | null>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const isVisibleRef = useRef(true);
 
   useEffect(() => {
     const canvas = grainRef.current;
@@ -25,35 +28,37 @@ const Noise: React.FC<NoiseProps> = ({
     if (!ctx) return;
 
     let frame = 0;
-    let animationId: number;
-
-    const canvasSize = 1024;
+    let animationId: number | null = null;
 
     const resize = () => {
       if (!canvas) return;
-      canvas.width = canvasSize;
-      canvas.height = canvasSize;
-
+      const width = Math.max(1, Math.round(patternSize * patternScaleX));
+      const height = Math.max(1, Math.round(patternSize * patternScaleY));
+      canvas.width = width;
+      canvas.height = height;
       canvas.style.width = "100vw";
       canvas.style.height = "100vh";
     };
 
     const drawGrain = () => {
-      const imageData = ctx.createImageData(canvasSize, canvasSize);
+      const { width, height } = canvas;
+      const imageData = ctx.createImageData(width, height);
       const data = imageData.data;
+      const alpha = Math.max(0, Math.min(255, patternAlpha));
 
       for (let i = 0; i < data.length; i += 4) {
         const value = Math.random() * 255;
         data[i] = value;
         data[i + 1] = value;
         data[i + 2] = value;
-        data[i + 3] = patternAlpha;
+        data[i + 3] = alpha;
       }
 
       ctx.putImageData(imageData, 0, 0);
     };
 
     const loop = () => {
+      if (!isVisibleRef.current || prefersReducedMotion) return;
       if (frame % patternRefreshInterval === 0) {
         drawGrain();
       }
@@ -61,13 +66,28 @@ const Noise: React.FC<NoiseProps> = ({
       animationId = window.requestAnimationFrame(loop);
     };
 
+    const handleVisibilityChange = () => {
+      isVisibleRef.current = document.visibilityState === "visible";
+      if (isVisibleRef.current && !prefersReducedMotion) {
+        animationId = window.requestAnimationFrame(loop);
+      }
+    };
+
     window.addEventListener("resize", resize);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
     resize();
-    loop();
+    drawGrain();
+
+    if (!prefersReducedMotion) {
+      animationId = window.requestAnimationFrame(loop);
+    }
 
     return () => {
       window.removeEventListener("resize", resize);
-      window.cancelAnimationFrame(animationId);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      if (animationId) {
+        window.cancelAnimationFrame(animationId);
+      }
     };
   }, [
     patternSize,
@@ -75,6 +95,7 @@ const Noise: React.FC<NoiseProps> = ({
     patternScaleY,
     patternRefreshInterval,
     patternAlpha,
+    prefersReducedMotion,
   ]);
 
   return (
