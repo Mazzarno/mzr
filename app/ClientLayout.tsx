@@ -24,8 +24,9 @@ import {
   useMotionValue,
   useDragControls,
   animate,
-  DragControls,
   useReducedMotion,
+  type DragControls,
+  type Variants,
 } from "framer-motion";
 import ThemeSwitcher from "../components/core/ThemeSwitch";
 import Logo from "../components/core/Logo";
@@ -51,7 +52,7 @@ const FaviconUpdater = dynamic(() => import("../components/core/FaviconUpdater")
   ssr: false,
 });
 
-const gridContainerVariants = {
+const gridContainerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -62,7 +63,9 @@ const gridContainerVariants = {
   },
 };
 
-const gridColumnVariants = {
+const easeOutCustom: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+const gridColumnVariants: Variants = {
   hidden: {
     opacity: 0,
     scaleY: 0,
@@ -72,7 +75,7 @@ const gridColumnVariants = {
     scaleY: 1,
     transition: {
       duration: 0.6,
-      ease: [0.22, 1, 0.36, 1],
+      ease: easeOutCustom,
     },
   },
 };
@@ -437,7 +440,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
           }
           initial={{ opacity: 0.5, width: "0vw", height: "0vh" }}
           animate={{
-            transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+            transition: { duration: 0.5, ease: easeOutCustom },
             opacity: 1,
             width: isReduced ? "90vw" : "100vw",
             height: isReduced ? "90dvh" : "100dvh",

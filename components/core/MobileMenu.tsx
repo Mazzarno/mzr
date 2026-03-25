@@ -196,22 +196,30 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
                     animate={{ opacity: 1, y: 0 }}
                     exit={
                       selectedLink === link.href
-                        ? { scale: 1.2, opacity: 0, y: -20 }
-                        : { opacity: 0, y: 20 }
+                        ? {
+                          scale: 1.2,
+                          opacity: 0,
+                          y: -20,
+                          transition: { duration: 0.2 },
+                        }
+                        : {
+                          opacity: 0,
+                          y: 20,
+                          transition: { duration: 0.2 },
+                        }
                     }
                     transition={{
                       delay: 0.2 + index * 0.1,
                       duration: 0.3,
-                      exit: { duration: 0.2 },
+                      ease: "easeOut",
                     }}
                   >
                     <button
                       onClick={() => handleLinkClick(link.href)}
                       className={`w-full flex items-center justify-center p-3 rounded-lg text-xl font-medium 
-                        ${
-                          selectedLink === link.href
-                            ? "bg-primary text-primary-content"
-                            : "bg-base-200 text-base-content hover:bg-base-300"
+                        ${selectedLink === link.href
+                          ? "bg-primary text-primary-content"
+                          : "bg-base-200 text-base-content hover:bg-base-300"
                         } transition-colors`}
                       disabled={isClosing}
                       style={

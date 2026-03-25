@@ -186,19 +186,22 @@ const Transition: React.FC<TransitionProps> = ({
                   }}
                   initial={{ y: "100vh", opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: "100vh", opacity: 0 }}
+                  exit={{
+                    y: "100vh",
+                    opacity: 0,
+                    transition: {
+                      type: "tween",
+                      ease: "easeIn",
+                      delay: pixel.delay * 0.3,
+                      duration: animationDuration,
+                    },
+                  }}
                   transition={{
                     type: "spring",
                     stiffness: 260,
                     damping: 20,
                     duration: animationDuration,
                     delay: pixel.delay,
-                    exit: {
-                      type: "tween",
-                      ease: "easeIn",
-                      delay: pixel.delay * 0.3,
-                      duration: animationDuration,
-                    },
                   }}
                 />
               ))}
@@ -217,13 +220,20 @@ const Transition: React.FC<TransitionProps> = ({
               <motion.span
                 initial={{ scale: 0.8, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
-                exit={{ scale: 1.2, opacity: 0, y: -20 }}
+                exit={{
+                  scale: 1.2,
+                  opacity: 0,
+                  y: -20,
+                  transition: {
+                    delay: 0.1,
+                    duration: 0.3,
+                  },
+                }}
                 transition={{
                   type: "spring",
                   stiffness: 300,
                   damping: 20,
                   delay: 0.1,
-                  exit: { delay: 0.1, duration: 0.3 },
                 }}
                 className="text-2xl sm:text-4xl md:text-5xl font-bold text-base-content drop-shadow-lg pointer-events-none text-center px-4 py-2 rounded-lg"
                 style={{

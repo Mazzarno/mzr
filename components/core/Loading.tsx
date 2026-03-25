@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useProgress } from "@react-three/drei";
 import BlurText from "../shared/BlurText";
+import type { Variants, Transition } from "framer-motion";
 
 interface LoadingProps {
   duration?: number;
@@ -80,21 +81,30 @@ const Loading: React.FC<LoadingProps> = ({
     requestAnimationFrame(animate);
   }, [phase, domLoaded, r3fProgress, duration, onLoadComplete]);
 
-  const commonTransition = { duration: 0.5, ease: [0.22, 1, 0.36, 1] };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: commonTransition },
-    exit: { opacity: 0, transition: { ...commonTransition, duration: 0.6 } },
+  const easeOutCustom = [0.22, 1, 0.36, 1] as const;
+
+  const commonTransition: Transition = {
+    duration: 0.5,
+    ease: easeOutCustom,
   };
 
-  const itemVariants = {
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: commonTransition },
+    exit: {
+      opacity: 0,
+      transition: { ...commonTransition, duration: 0.6 },
+    },
+  };
+
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 10 },
     visible: { opacity: 1, y: 0, transition: commonTransition },
     exit: { opacity: 0, y: -10, transition: commonTransition },
   };
 
-  const barContainerVariants = {
+  const barContainerVariants: Variants = {
     hidden: { scaleX: 0, opacity: 0 },
     visible: {
       scaleX: 1,
@@ -103,7 +113,7 @@ const Loading: React.FC<LoadingProps> = ({
     },
   };
 
-  const progressVariants = {
+  const progressVariants: Variants = {
     hidden: { width: "0%" },
     visible: {
       width: `${progress}%`,

@@ -6,18 +6,23 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import AnimatedText from "../components/core/AnimatedText";
 
+import type { Variants } from "framer-motion";
+
 // Animation variants
-const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i = 0) => ({
+const fadeIn: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+  },
+  visible: (i: number = 0) => ({
     opacity: 1,
     y: 0,
     transition: {
       delay: i * 0.1,
       duration: 0.7,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  })
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  }),
 };
 
 export default function NotFound() {
@@ -31,7 +36,7 @@ export default function NotFound() {
         <div className="absolute top-20 right-20 w-96 h-96 rounded-full bg-primary/5 blur-[100px]"></div>
         <div className="absolute bottom-20 left-20 w-96 h-96 rounded-full bg-secondary/5 blur-[100px]"></div>
       </div>
-      
+
       <motion.div
         initial="hidden"
         animate="visible"
@@ -42,7 +47,7 @@ export default function NotFound() {
             <AnimatedText translationKey="notFound.title" />
           </h1>
         </motion.div>
-        
+
         <motion.div variants={fadeIn} custom={1} className="mb-8">
           <h2 className="text-4xl md:text-5xl font-bold mb-2">
             <AnimatedText translationKey="notFound.page" /> <AnimatedText translationKey="notFound.not" /> <AnimatedText translationKey="notFound.found" />
@@ -51,16 +56,16 @@ export default function NotFound() {
             {t("notFound.sorry")}
           </p>
         </motion.div>
-        
+
         <motion.div variants={fadeIn} custom={2}>
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="group relative overflow-hidden btn border-0 bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 text-white btn-lg px-8 rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
           >
             <span className="relative z-10">
               <AnimatedText translationKey="notFound.goHome" />
             </span>
-            <motion.span 
+            <motion.span
               className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"
               initial={{ x: "-100%" }}
               whileHover={{ x: 0 }}

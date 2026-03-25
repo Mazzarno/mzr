@@ -6,6 +6,7 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
+import type { Variants } from "framer-motion";
 import { motion } from "framer-motion";
 import AnimatedText from "../components/core/AnimatedText";
 import { useTranslations } from "next-intl";
@@ -43,6 +44,9 @@ import {
 import { DiCss3, DiPhotoshop, } from "react-icons/di"
 import CardSwap, { Card, CardSwapHandle } from "../components/shared/CardSwap";
 import ProjectInfo, { Project } from "../components/shared/ProjectInfo";
+
+const easeOutCustom: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
 export default function HomePage() {
   return (
     <main className="text-base-content relative">
@@ -56,20 +60,24 @@ export default function HomePage() {
   );
 }
 
-const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i = 0) => ({
+
+const fadeIn: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+  },
+  visible: (i: number = 0) => ({
     opacity: 1,
     y: 0,
     transition: {
       delay: i * 0.1,
       duration: 0.7,
-      ease: [0.22, 1, 0.36, 1],
+      ease: easeOutCustom,
     },
   }),
 };
 
-const listContainerVariants = {
+const listContainerVariants: Variants = {
   visible: {
     transition: {
       staggerChildren: 0.15,
@@ -79,12 +87,15 @@ const listContainerVariants = {
   hidden: {},
 };
 
-const listItemVariants = {
+const listItemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { ease: [0.22, 1, 0.36, 1], duration: 0.7 },
+    transition: {
+      ease: easeOutCustom,
+      duration: 0.7,
+    },
   },
 };
 

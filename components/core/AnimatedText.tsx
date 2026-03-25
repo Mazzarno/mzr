@@ -3,24 +3,25 @@
 import { useEffect, useState, useRef, memo } from "react";
 import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
+import type { Variants } from "framer-motion";
 
 type AnimatedTextProps = {
   translationKey?: string;
   text?: string;
   className?: string;
-  animated?: boolean; 
+  animated?: boolean;
 };
 
-const AnimatedText = memo(({ 
-  translationKey, 
-  text, 
+const AnimatedText = memo(({
+  translationKey,
+  text,
   className = "",
-  animated = true 
+  animated = true
 }: AnimatedTextProps) => {
   const t = useTranslations();
   const [displayText, setDisplayText] = useState("");
   const prevTextRef = useRef("");
-  
+
   useEffect(() => {
     let newText = "";
     if (translationKey) {
@@ -39,30 +40,32 @@ const AnimatedText = memo(({
   }
 
   const words = displayText.split(" ");
-  
-  const wordVariants = {
-    hidden: { 
+
+
+
+  const wordVariants: Variants = {
+    hidden: {
       opacity: 0,
       y: 3,
-      scale: 0.98
+      scale: 0.98,
     },
-    visible: (i: number) => ({ 
+    visible: (i: number = 0) => ({
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { 
+      transition: {
         duration: 0.2,
         ease: "easeOut",
-        delay: Math.min(i * 0.03, 0.15)
-      }
+        delay: Math.min(i * 0.03, 0.15),
+      },
     }),
     exit: {
       opacity: 0,
       transition: {
         duration: 0.1,
-        ease: "easeIn"
-      }
-    }
+        ease: "easeIn",
+      },
+    },
   };
 
   return (
@@ -78,7 +81,7 @@ const AnimatedText = memo(({
             animate="visible"
             exit="exit"
             className="inline-block text-base-content"
-            style={{ 
+            style={{
               display: "inline-block",
               marginRight: "0.3em",
               position: "relative",

@@ -1,6 +1,7 @@
 "use client";
 import React, { ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 
 export interface Project {
   id: string;
@@ -17,7 +18,9 @@ interface ProjectInfoProps {
 }
 
 // Animation synced with CardSwap timing
-const containerVariants = {
+const easeOutCustom: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+const containerVariants: Variants = {
   initial: { opacity: 0 },
   animate: {
     opacity: 1,
@@ -34,14 +37,14 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   initial: { opacity: 0, y: 20 },
   animate: {
     opacity: 1,
     y: 0,
     transition: {
       duration: 0.5,
-      ease: [0.22, 1, 0.36, 1],
+      ease: easeOutCustom,
     },
   },
   exit: {
@@ -53,7 +56,7 @@ const itemVariants = {
   },
 };
 
-const techVariants = {
+const techVariants: Variants = {
   initial: { opacity: 0, scale: 0.8 },
   animate: {
     opacity: 1,

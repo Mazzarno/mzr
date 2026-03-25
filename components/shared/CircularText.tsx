@@ -3,10 +3,9 @@ import {
   motion,
   useAnimation,
   useMotionValue,
-  MotionValue,
-  Transition,
   useTransform,
 } from "framer-motion";
+import type { MotionValue, Transition } from "framer-motion";
 interface CircularTextProps {
   text: string;
   spinDuration?: number;
